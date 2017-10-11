@@ -1,0 +1,56 @@
+html {
+  background-image: url("../assets/books.jpg");
+  background-position: stretch;
+}
+
+h2 {
+  font-family: cursive, sans-serif;
+  font-weight: bold;
+  font-size: 40px;
+}
+
+form {
+}
+
+label {
+  color: #7f6654;
+  display: inline-block;
+  width: 200px;
+  text-align: left;
+  font-size: 20px;
+  font-family: sans-serif;
+  font-weight: lighter;
+  margin-right: 10px;
+}
+
+input {
+  background-color: #eee;
+  padding: 5px 10px;
+  height: 30px;
+  width: 300px;
+  margin: 15px 0px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.button-submit {
+  margin: 10px 0px;
+  padding: 10px;
+  border: none;
+  color: white;
+  width: 150px;
+  font-size: 20px;
+  border-radius: 5px;
+  background-color: #7f6654;
+}
+
+.button-submit:hover {
+  background-color: brown;
+  cursor: pointer;
+}
+
+.center-content {
+  display: table;
+  margin: auto;
+}
