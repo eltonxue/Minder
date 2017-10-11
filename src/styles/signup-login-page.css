@@ -9,9 +9,6 @@ h2 {
   font-size: 40px;
 }
 
-form {
-}
-
 label {
   color: #7f6654;
   display: inline-block;
@@ -46,7 +43,7 @@ input {
 }
 
 .button-submit:hover {
-  background-color: brown;
+  background-color: #bb9062;
   cursor: pointer;
 }
 
