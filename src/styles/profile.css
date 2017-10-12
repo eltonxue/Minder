@@ -16,15 +16,6 @@ h1 {
   margin: 10px 0px;
 }
 
-h2 {
-  color: #7f6654;
-  text-align: left;
-  font-size: 20px;
-  font-family: sans-serif;
-  font-weight: lighter;
-  margin-right: 10px;
-}
-
 .profile-picture {
   display: table;
   margin: 50px auto 0px auto;
@@ -41,6 +32,15 @@ h2 {
   margin-bottom: 10px;
   width: 500px;
   box-shadow: 4px 4px 4px #7f6654;
+}
+
+.info h2 {
+  color: #7f6654;
+  text-align: left;
+  font-size: 20px;
+  font-family: sans-serif;
+  font-weight: lighter;
+  margin-right: 10px;
 }
 
 .tag {
