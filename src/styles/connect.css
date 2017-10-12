@@ -1,0 +1,35 @@
+textarea {
+  resize: none;
+  height: 200px;
+  width: 700px;
+  border: none;
+  font-size: 25px;
+  padding: 10px;
+}
+
+p {
+  font-family: sans-serif;
+  text-align: center;
+  font-weight: 400;
+}
+
+h2 {
+  color: #7f6654;
+  text-align: left;
+  font-size: 25px;
+  font-family: sans-serif;
+  font-weight: lighter;
+  margin-right: 10px;
+}
+
+#back {
+  width: 50px;
+  float: left;
+  margin: 20px;
+}
+
+#invite {
+  width: 50px;
+  float: right;
+  margin: 20px;
+}

@@ -1,9 +1,41 @@
+html {
+  background-image: url("../assets/books.jpg");
+  background-position: stretch;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin: 30px 0px 0px 10px;
+}
+
+li {
+  display: inline;
+  text-align: center;
+  background-color: #7f6654;
+  padding: 15px;
+  margin: none;
+}
+a {
+  text-decoration: none;
+  color: white;
+  font-family: sans-serif;
+  font-size: 15px;
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
+}
+
 .center-content {
   display: table;
   margin: auto;
 }
 
 .button-submit {
+  text-align: center;
   margin: 0px 0px 25px 0px;
   padding: 10px;
   border: none;
@@ -16,4 +48,32 @@
 .button-submit:hover {
   background-color: #bb9062;
   cursor: pointer;
+}
+
+.match-info {
+  width: 400px;
+  margin: 30px 15px;
+  float: left;
+  padding: 10px 10px 10px 30px;
+  border-radius: 10px;
+}
+
+.profile {
+  background-color: #bb9062;
+  border-radius: 10px;
+  width: 100px;
+  float: left;
+  margin: 10px;
+}
+
+.profile:hover {
+  color: white;
+  cursor: pointer;
+}
+
+.profile-image {
+  height: 100px;
+  width: 100px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
