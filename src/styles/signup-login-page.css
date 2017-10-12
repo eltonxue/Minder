@@ -30,24 +30,3 @@ input {
   border-radius: 5px;
   font-size: 20px;
 }
-
-.button-submit {
-  margin: 10px 0px;
-  padding: 10px;
-  border: none;
-  color: white;
-  width: 150px;
-  font-size: 20px;
-  border-radius: 5px;
-  background-color: #7f6654;
-}
-
-.button-submit:hover {
-  background-color: #bb9062;
-  cursor: pointer;
-}
-
-.center-content {
-  display: table;
-  margin: auto;
-}

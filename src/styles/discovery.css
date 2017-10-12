@@ -1,0 +1,69 @@
+html {
+  background-image: url("../assets/books.jpg");
+  background-position: stretch;
+}
+
+h2 {
+  color: #7f6654;
+  text-align: left;
+  font-size: 30px;
+  font-family: sans-serif;
+  font-weight: lighter;
+  margin: 10px 0px;
+}
+
+p {
+  text-align: center;
+  font-weight: 500;
+  font-family: sans-serif;
+}
+
+#search-bar {
+  height: 40px;
+  width: 500px;
+  padding: 5px;
+  font-size: 30px;
+  float: left;
+}
+
+#search {
+  height: 33px;
+  line-height: 33px;
+  font-size: 15px !important;
+  text-align: center;
+  margin: 0px 20px;
+  font-family: sans-serif;
+  float: left;
+}
+
+#title-header {
+  margin-top: 50px;
+}
+
+.match-info {
+  width: 400px;
+  margin: 50px auto;
+  float: left;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.profile {
+  background-color: #bb9062;
+  border-radius: 10px;
+  width: 100px;
+  float: left;
+  margin: 10px;
+}
+
+.profile:hover {
+  background-color: #bb9092;
+  cursor: pointer;
+}
+
+.profile-image {
+  height: 100px;
+  width: 100px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
