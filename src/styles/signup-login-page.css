@@ -1,7 +1,9 @@
 h2 {
-  font-family: cursive, sans-serif;
-  font-weight: bold;
-  font-size: 40px;
+  font-family: 'Pacifico', sans-serif;
+  font-weight: lighter;
+  font-size: 60px;
+  margin: 10px 0px;
+  color: #313131;
 }
 
 label {
@@ -10,7 +12,6 @@ label {
   width: 200px;
   text-align: left;
   font-size: 20px;
-  font-family: sans-serif;
   font-weight: lighter;
   margin-right: 10px;
 }

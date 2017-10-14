@@ -2,7 +2,6 @@ h2 {
   color: #7f6654;
   text-align: left;
   font-size: 30px;
-  font-family: sans-serif;
   font-weight: lighter;
   margin: 10px 0px;
 }
@@ -10,7 +9,6 @@ h2 {
 p {
   text-align: center;
   font-weight: 400;
-  font-family: sans-serif;
 }
 
 #search-bar {
@@ -27,7 +25,6 @@ p {
   font-size: 15px !important;
   text-align: center;
   margin: 0px 20px;
-  font-family: sans-serif;
   float: left;
 }
 
