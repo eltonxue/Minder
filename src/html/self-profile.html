@@ -19,13 +19,17 @@
       <li><a class="button-submit" href="discovery.html">Notifications</a></li>
       <li><a class="button-submit" href="signup-login-page.html">Logout</a></li>
     </ul>
-    <image class="profile-picture" src="../assets/profile-pic.jpg" />
+
+    <img id="profile-picture" src="../assets/profile-pic.jpg"></img>
+    <canvas class="hidden"></canvas>
+    <div class="center-content">
+      <div id="edit-profile-picture" class="button-submit">Edit Photo</div>
+      <canvas class="hidden"></canvas>
+    </div>
     <div class="center-content">
       <h1>Elton Xue</h1>
     </div>
-    <div class="center-content">
-      <div id="discover" class="button-submit">Discover</div>
-    </div>
+
     <div>
     <div class="center-content">
       <div class="split-page">
@@ -47,9 +51,7 @@
       <div class="center-content">
         <div class="split-page">
           <div id="tags" class="info">
-            <h2 id="ec-tags">Tags <span id="edit-tags" class="edit">(Edit)</span></h2>
-
-
+            <h2 id="ec-tags">Tags <span id="edit-tags" class="edit">(Add)</span></h2>
           </div>
           <div id="location" class="info">
             <h2 id="ec-location">Location <span id="edit-location" class="edit">(Edit)</span></h2>

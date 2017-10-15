@@ -1,6 +1,19 @@
-document.getElementById('discover').onclick = function() {
-  window.location.href = 'discovery.html';
-};
+function takeSelfie() {
+  var hiddenCanvas = document.querySelector('canvas'),
+    video = document.getElementById('profile-picture'),
+    width = video.videoWidth,
+    height = video.videoHeight,
+    context = hiddenCanvas.getContext('2d');
+
+  hiddenCanvas.width = width;
+  hiddenCanvas.height = height;
+
+  context.drawImage(video, 0, 0, width, height);
+
+  // Get image URL
+  var imageDataURL = hiddenCanvas.toDataURL('image/png');
+  return imageDataURL;
+}
 
 function addTag(value) {
   var newTag = document.createElement('span');
@@ -30,10 +43,111 @@ function appendTag(event, input) {
   }
 }
 
+const editPhoto = document.getElementById('edit-profile-picture');
 const editDescription = document.getElementById('edit-description');
 const editEducation = document.getElementById('edit-education');
 const editTags = document.getElementById('edit-tags');
 const editLocation = document.getElementById('edit-location');
+
+editPhoto.addEventListener('click', function(event) {
+  // Multiple browser support
+  navigator.getMedia =
+    navigator.getUserMedia ||
+    navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia ||
+    navigator.msGetUserMedia;
+
+  // Replace <img> element with new <video> element
+  var profilePicture = document.getElementById('profile-picture');
+
+  var video = document.createElement('video');
+  video.id = 'profile-picture';
+
+  profilePicture.parentElement.replaceChild(video, profilePicture);
+
+  // Replace "Edit Photo" with "Take Photo" and "Cancel"
+
+  var cancel = document.createElement('div');
+  cancel.className = 'button-submit';
+  cancel.innerHTML = 'Cancel';
+
+  var takePhoto = document.createElement('div');
+  takePhoto.className = 'button-submit';
+  takePhoto.innerHTML = 'Take Photo';
+
+  editPhoto.parentElement.replaceChild(takePhoto, editPhoto);
+  takePhoto.insertAdjacentElement('afterend', cancel);
+
+  navigator.getUserMedia(
+    {
+      video: true
+    },
+    function(stream) {
+      video.src = window.URL.createObjectURL(stream);
+
+      video.play();
+    },
+    function(err) {
+      console.error(err);
+    }
+  );
+
+  // Take photo
+
+  takePhoto.onclick = function() {
+    var imageURL = takeSelfie(); // returns new image URL
+
+    // Buttons:
+    // Replace "takePhoto" with new "usePhoto"
+    var usePhoto = document.createElement('div');
+    usePhoto.className = 'button-submit';
+    usePhoto.innerHTML = 'Use Photo';
+
+    takePhoto.parentElement.replaceChild(usePhoto, takePhoto);
+
+    // Create new <img> element and preview it
+    var newProfilePicture = document.createElement('img');
+    newProfilePicture.id = 'profile-picture';
+
+    newProfilePicture.setAttribute('src', imageURL);
+
+    video.parentElement.replaceChild(newProfilePicture, video);
+
+    // Handle "Use Photo" onclick
+
+    usePhoto.onclick = function() {
+      // Remove and replace buttons
+      usePhoto.parentElement.removeChild(cancel);
+      usePhoto.parentElement.replaceChild(editPhoto, usePhoto);
+    };
+
+    // Handle 'Cancel' onclick
+    cancel.onclick = function() {
+      // Replace <video> element with old <img> element w/o changed src
+      newProfilePicture.parentElement.replaceChild(
+        profilePicture,
+        newProfilePicture
+      );
+
+      // Remove and replace buttons
+      usePhoto.parentElement.removeChild(cancel);
+      usePhoto.parentElement.replaceChild(editPhoto, usePhoto);
+    };
+  };
+
+  // Cancel photo editting
+  cancel.onclick = function() {
+    // Replace <video> element with old <img> element w/o changed src
+    video.parentElement.replaceChild(profilePicture, video);
+
+    // Remove and replace buttons
+    takePhoto.parentElement.removeChild(cancel);
+    takePhoto.parentElement.replaceChild(editPhoto, takePhoto);
+  };
+
+  // Store photo
+  // Replace image src with new photo
+});
 
 editDescription.addEventListener('click', function(event) {
   var parentDT = document.getElementById('description-text-container');

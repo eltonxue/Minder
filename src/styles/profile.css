@@ -16,7 +16,7 @@ input {
 h1 {
   color: #7f6654;
   text-align: left;
-  font-size: 30px;
+  font-size: 40px;
   font-weight: lighter;
   margin: 10px 0px;
 }
@@ -32,16 +32,17 @@ h1 {
 #add-tags {
   width: 100px;
 }
+
 #add {
   font-size: 20px;
   padding: 5px;
   margin: 5px;
 }
 
-.profile-picture {
+#profile-picture {
   display: table;
-  margin: 50px auto 0px auto;
-  width: 300px;
+  margin: 50px auto 15px auto;
+  width: 400px;
   height: 300px;
   border-radius: 50%;
 }
@@ -91,4 +92,8 @@ h1 {
 .edit:hover {
   cursor: pointer;
   text-decoration: underline;
+}
+
+.hidden {
+  display: none;
 }
