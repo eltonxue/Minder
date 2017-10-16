@@ -16,9 +16,13 @@ input {
 h1 {
   color: #7f6654;
   text-align: left;
-  font-size: 40px;
+  font-size: 50px;
   font-weight: lighter;
-  margin: 10px 0px;
+  margin: 0px 0px 10px 0px;
+}
+
+.match-info > h1 {
+  font-size: 30px;
 }
 
 #description-textarea {
@@ -37,12 +41,13 @@ h1 {
   font-size: 20px;
   padding: 5px;
   margin: 5px;
+  border-radius: 0;
 }
 
 #profile-picture {
   display: table;
   margin: 50px auto 15px auto;
-  width: 400px;
+  width: 300px;
   height: 300px;
   border-radius: 50%;
 }
@@ -50,7 +55,6 @@ h1 {
 .info {
   background-color: white;
   padding: 0px 20px 15px 20px;
-  border-radius: 20px;
   border: 2px solid #7f6654;
   margin-bottom: 10px;
   width: 500px;
@@ -70,14 +74,15 @@ h1 {
   padding: 5px;
   line-height: 30px;
   font-size: 20px;
-  border: 2px solid #7f6654;
-  border-radius: 10px;
+  border: 1px solid #7f6654;
   background-color: white;
   margin: 5px 2px;
+  box-shadow: 4px 4px 4px #7f6654;
 }
 
 .remove-tag {
-  padding: 0px 4px !important;
+  padding: 0px 5px !important;
+  border-radius: 0 !important;
 }
 
 .split-page {
@@ -87,6 +92,9 @@ h1 {
 }
 
 .edit {
+  font-style: italic;
+  color: black;
+  font-size: 15px;
 }
 
 .edit:hover {

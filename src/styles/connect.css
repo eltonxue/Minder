@@ -31,3 +31,33 @@ h2 {
   float: right;
   margin: 20px;
 }
+
+.profile {
+  width: 150px !important;
+  background-color: #bb9062;
+}
+
+.profile:hover {
+  color: black !important;
+  cursor: default !important;
+}
+
+.profile-image {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+#pending-invites {
+  width: 860px;
+}
+
+.cancel-invite {
+  width: 70px;
+  padding: 5px !important;
+  font-size: 10px;
+  text-align: center;
+}
+
+.cancel-invite:hover {
+  background-color: #444 !important;
+}
