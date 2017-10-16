@@ -1,3 +1,4 @@
+console.log(document.getElementById('connect'));
 document.getElementById('connect').onclick = function() {
   window.location.href = 'connect.html';
 };

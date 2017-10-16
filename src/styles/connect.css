@@ -37,11 +37,6 @@ h2 {
   background-color: #bb9062;
 }
 
-.profile:hover {
-  color: black !important;
-  cursor: default !important;
-}
-
 .profile-image {
   width: 150px !important;
   height: 150px !important;

@@ -1,11 +1,10 @@
-textarea {
+input {
   height: 40px;
-  width: 690px;
+  width: 705px;
   font-size: 20px;
   margin: 0;
   padding: 0;
   border: none;
-  resize: none;
   border-radius: 10px;
   border: 1px solid darkgrey;
   padding: 5px;
@@ -14,6 +13,7 @@ textarea {
 #send {
   float: right;
   width: 80px;
+  margin-top: 5px;
 }
 
 .profile-image {
@@ -38,7 +38,7 @@ textarea {
   margin-top: 30px;
 }
 
-.flex-container {
+#flex-container {
   display: -webkit-flex;
   display: flex;
   width: 1000px;
@@ -46,7 +46,7 @@ textarea {
   margin-top: 20px;
 }
 
-.users-container {
+#users-container {
   width: 300px;
   height: 500px;
   margin: 10px;
@@ -61,13 +61,14 @@ textarea {
   margin: 10px 12px 10px 0px;
 }
 
-.messages-container {
-  width: 700px;
+#messages-container {
+  width: 750px;
   height: 500px;
   margin: 10px;
 }
 
-.messages {
+#messages {
+  padding-right: 15px;
   height: 420px;
   width: 700px;
   border: 1px solid darkgrey;
@@ -84,6 +85,7 @@ textarea {
 .profile-icon-image {
   height: 50px;
   width: 50px;
+  border: 1px solid darkgrey;
 }
 
 .message-text {
@@ -91,20 +93,14 @@ textarea {
   margin: 0px 10px;
 }
 
-.messages-input-container {
+#messages-input-container {
   height: 50px;
-  width: 700px;
+  width: 715px;
   margin-top: 10px;
 }
 
-.flex-container ul {
-  margin: 0px;
-  overflow: hidden;
-  overflow-y: scroll;
-  max-height: 600px;
-}
-
-.messages {
+#flex-container ul,
+#messages {
   margin: 0px;
   overflow: hidden;
   overflow-y: scroll;

@@ -22,137 +22,87 @@
     <div class="center-content">
       <div class="info">
         <div class="center-content">
-          <div class="flex-container">
-            <ul class="users-container">
+          <div id="flex-container">
+            <ul id="users-container">
               <li>
                 <div class="users-message">
-                  <image class="profile-image" src="../assets/user-profile-pic.jpg" />
+                  <img class="profile-image" src="../assets/sonia.jpg" />
                   <div class="message-preview">Hey, hows it going? I would like to connect!</div>
                 </div>
               </li>
               <li>
                 <div class="users-message">
-                  <image class="profile-image" src="../assets/user-profile-pic.jpg" />
+                  <img class="profile-image" src="../assets/sonia.jpg" />
                   <div class="message-preview">Hey, hows it going? I would like to connect!</div>
                 </div>
               </li>
               <li>
                 <div class="users-message">
-                  <image class="profile-image" src="../assets/user-profile-pic.jpg" />
+                  <img class="profile-image" src="../assets/sonia.jpg" />
                   <div class="message-preview">Hey, hows it going? I would like to connect!</div>
                 </div>
               </li>
               <li>
                 <div class="users-message">
-                  <image class="profile-image" src="../assets/user-profile-pic.jpg" />
+                  <img class="profile-image" src="../assets/sonia.jpg" />
                   <div class="message-preview">Hey, hows it going? I would like to connect!</div>
                 </div>
               </li>
               <li>
                 <div class="users-message">
-                  <image class="profile-image" src="../assets/user-profile-pic.jpg" />
+                  <img class="profile-image" src="../assets/sonia.jpg" />
                   <div class="message-preview">Hey, hows it going? I would like to connect!</div>
                 </div>
               </li>
               <li>
                 <div class="users-message">
-                  <image class="profile-image" src="../assets/user-profile-pic.jpg" />
+                  <img class="profile-image" src="../assets/sonia.jpg" />
                   <div class="message-preview">Hey, hows it going? I would like to connect!</div>
                 </div>
               </li>
               <li>
                 <div class="users-message">
-                  <image class="profile-image" src="../assets/user-profile-pic.jpg" />
+                  <img class="profile-image" src="../assets/sonia.jpg" />
                   <div class="message-preview">Hey, hows it going? I would like to connect!</div>
                 </div>
               </li>
             </ul>
-            <div class="messages-container">
-              <div class="messages">
+            <div id="messages-container">
+              <div id="messages">
                 <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/user-profile-pic.jpg"/>
+                  <img class="profile-icon-image" src="../assets/sonia.jpg"/>
                   <p class="message-text">
-                    Hey how's it going?
+                    heyyyyyy
                   </p>
                 </div>
                 <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/profile-pic.jpg"/>
+                  <img class="profile-icon-image" src="../assets/sonia.jpg"/>
                   <p class="message-text">
-                    Hey how's it going?
+                    there's this lantern festival thing coming up and i was wondering if you wanted to go?
                   </p>
                 </div>
                 <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/profile-pic.jpg"/>
+                  <img class="profile-icon-image" src="../assets/elton.jpg"/>
                   <p class="message-text">
-                    Hey how's it going?
+                    when and what time? I'm kinda interested
                   </p>
                 </div>
                 <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/user-profile-pic.jpg"/>
+                  <img class="profile-icon-image" src="../assets/sonia.jpg"/>
                   <p class="message-text">
-                    Hey how's it going?
+                    i think it's next Monday from 12pm to 5pm? Don't quote me cuz this is from memory haha
                   </p>
                 </div>
                 <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/profile-pic.jpg"/>
+                  <img class="profile-icon-image" src="../assets/elton.jpg"/>
                   <p class="message-text">
-                    Hey how's it going?
+                    hmmmmmmmm
                   </p>
                 </div>
-                <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/user-profile-pic.jpg"/>
-                  <p class="message-text">
-                    Hey how's it going?
-                  </p>
-                </div>
-                <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/profile-pic.jpg"/>
-                  <p class="message-text">
-                    Hey how's it going?
-                  </p>
-                </div>
-                <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/profile-pic.jpg"/>
-                  <p class="message-text">
-                    Hey how's it going?
-                  </p>
-                </div>
-                <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/profile-pic.jpg"/>
-                  <p class="message-text">
-                    Hey how's it going?
-                  </p>
-                </div>
-                <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/profile-pic.jpg"/>
-                  <p class="message-text">
-                    Hey how's it going?
-                  </p>
-                </div>
-                <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/user-profile-pic.jpg"/>
-                  <p class="message-text">
-                    Hey how's it going?
-                  </p>
-                </div>
-                <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/user-profile-pic.jpg"/>
-                  <p class="message-text">
-                    Hey how's it going?
-                  </p>
-                </div>
-                <div class="message-item">
-                  <image class="profile-icon-image" src="../assets/profile-pic.jpg"/>
-                  <p class="message-text">
-                    Hey how's it going?
-                  </p>
-                </div>
-
-
               </div>
 
-              <div class="messages-input-container">
-                <textarea></textarea>
+              <div id="messages-input-container">
+                <input id="message-box" onKeyPress="onSend(event, this)"></input>
                 <div id="send" class="button-submit">Send</div>
               </div>
 
@@ -166,7 +116,7 @@
   </body>
 
   <footer>
-    <script src="../scripts/user-profile.js"></script>
+    <script src="../scripts/messages.js"></script>
   </footer>
 
 </html>

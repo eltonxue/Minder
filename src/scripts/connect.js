@@ -15,3 +15,15 @@ for (var i = 0; i < cancelInvites.length; ++i) {
     toDelete.parentElement.removeChild(toDelete);
   };
 }
+
+var profiles = document.querySelectorAll('.profile');
+
+var redirect = function() {
+  window.location.href = 'user-profile.html';
+};
+
+for (var i = 0; i < profiles.length; ++i) {
+  profiles[i].onclick = function() {
+    redirect();
+  };
+}
