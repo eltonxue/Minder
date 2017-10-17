@@ -68,7 +68,7 @@ input:focus {
   width: 100px;
   float: left;
   margin: 10px;
-  box-shadow: 4px 4px 4px #7f6654;
+  box-shadow: 5px 5px 5px #7f6654;
 }
 
 .profile > p {

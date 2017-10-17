@@ -1,5 +1,5 @@
 document.getElementById('signup').onclick = function() {
-  window.location.href = 'edit-profile.html';
+  window.location.href = 'self-profile.html';
 };
 
 document.getElementById('login').onclick = function() {
