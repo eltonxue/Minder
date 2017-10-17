@@ -1,3 +1,35 @@
+API_KEY = 'AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8';
+
+function updateMap() {
+  var mapElement = document.getElementById('location-map');
+  var address = document.getElementById('current').innerHTML;
+  console.log(address);
+
+  var map = new google.maps.Map(mapElement, {
+    mapTypeId: google.maps.MapTypeId.TERRAIN,
+    zoom: 11
+  });
+
+  var geocoder = new google.maps.Geocoder();
+
+  geocoder.geocode(
+    {
+      address: address
+    },
+    function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        new google.maps.Marker({
+          position: results[0].geometry.location,
+          map: map
+        });
+        map.setCenter(results[0].geometry.location);
+      }
+    }
+  );
+}
+
+updateMap();
+
 function takeSelfie() {
   var hiddenCanvas = document.querySelector('canvas'),
     video = document.getElementById('profile-picture'),
@@ -262,24 +294,14 @@ editTags.addEventListener('click', function(event) {
 editLocation.addEventListener('click', function(event) {
   var parentLocation = document.getElementById('location');
   var parentEC = document.getElementById('ec-location');
-  var hometown = document.getElementById('hometown');
-  var past = document.getElementById('past');
   var current = document.getElementById('current');
 
-  var editHometownContainer = document.getElementById('edit-hometown');
-  var editPastContainer = document.getElementById('edit-past');
   var editCurrentContainer = document.getElementById('edit-current');
 
-  var editHometown = document.createElement('input');
-  var editPast = document.createElement('input');
   var editCurrent = document.createElement('input');
 
-  editHometown.setAttribute('value', hometown.innerHTML);
-  editPast.setAttribute('value', past.innerHTML);
   editCurrent.setAttribute('value', current.innerHTML);
 
-  editHometownContainer.replaceChild(editHometown, hometown);
-  editPastContainer.replaceChild(editPast, past);
   editCurrentContainer.replaceChild(editCurrent, current);
 
   var confirm = document.createElement('span');
@@ -289,14 +311,12 @@ editLocation.addEventListener('click', function(event) {
   parentEC.replaceChild(confirm, editLocation);
 
   confirm.addEventListener('click', function(event) {
-    hometown.innerHTML = editHometown.value;
-    past.innerHTML = editPast.value;
     current.innerHTML = editCurrent.value;
 
-    editHometownContainer.replaceChild(hometown, editHometown);
-    editPastContainer.replaceChild(past, editPast);
     editCurrentContainer.replaceChild(current, editCurrent);
 
     parentEC.replaceChild(editLocation, confirm);
+
+    updateMap();
   });
 });
