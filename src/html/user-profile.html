@@ -3,12 +3,17 @@
 <html>
   <head>
     <title>Minder</title>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+
     <link rel="stylesheet" type="text/css" href="../styles/profile.css">
     <link rel="stylesheet" type="text/css" href="../styles/reusable.css">
     <link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet">
+
+    <script src="http://maps.google.com/maps/api/js?libraries=places&key=AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8"
+           type="text/javascript"></script>
   </head>
 
   <body>
@@ -38,7 +43,10 @@
               located in Brea, CA as an Accounts Receivable Clerk. As you can probably
               tell already, I'm very into numbers.
               So if anyone needs mentoring with anything math/economics/accounting,
-              send me a invite! My rates are $100/hr because I'm expensive.
+              send me a invite! Outside my professional life, I love to sleep and
+              go hiking or lifting with my boyfriend. The coolest place we've been
+              to would probably have been the Four Mile Trail in Yosemite. We had
+              to hitchhike the way back down! By the way, my rates are $100/hr because I'm expensive.
             </p>
           </div>
         </div>
@@ -66,9 +74,11 @@
           </div>
           <div class="info">
             <h2>Location</h2>
-            <p><strong>Hometown: </strong>La Habra, CA 90683</p>
-            <p><strong>Past: </strong>Irvine, CA 92612</p>
-            <p><strong>Current: </strong>La Habra, CA 90683</p>
+            <p>
+              <strong>Current: </strong>
+              <span id="current">La Habra, CA 90683</span>
+              <div id="location-map"></div>
+            </p>
           </div>
         </div>
       </div>

@@ -1,0 +1,23 @@
+{
+  "name": "minder",
+  "version": "1.0.0",
+  "description": "Social media website dedicated to connecting mentors and mentees.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eltonxue/minder.git"
+  },
+  "author": "Elton Xue",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eltonxue/minder/issues"
+  },
+  "homepage": "https://github.com/eltonxue/minder#readme"
+}

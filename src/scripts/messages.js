@@ -1,5 +1,5 @@
 function onSend(event, textarea) {
-  var code = event.keyCode ? event.keyCode : event.which;
+  let code = event.keyCode ? event.keyCode : event.which;
   if (code == 13) {
     sendMessage();
   }
@@ -7,16 +7,16 @@ function onSend(event, textarea) {
 
 function sendMessage() {
   // Create HTML
-  var input = document.getElementById('message-box');
-  var message = document.createElement('p');
+  let input = document.getElementById('message-box');
+  let message = document.createElement('p');
   message.className = 'message-text';
   message.innerHTML = input.value;
 
-  var profileIcon = document.createElement('img');
+  let profileIcon = document.createElement('img');
   profileIcon.className = 'profile-icon-image';
   profileIcon.src = '../assets/elton.jpg';
 
-  var messageItem = document.createElement('div');
+  let messageItem = document.createElement('div');
   messageItem.className = 'message-item';
 
   messageItem.appendChild(profileIcon);
@@ -26,7 +26,7 @@ function sendMessage() {
 
   input.value = '';
 
-  var scroll = document.getElementById('messages');
+  let scroll = document.getElementById('messages');
   messages.scrollTop = messages.scrollHeight;
 }
 

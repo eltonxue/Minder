@@ -1,16 +1,26 @@
+// **********************
+// *** INITIALIZATION ***
+// **********************
+
 API_KEY = 'AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8';
 
+updateMap(); // Updates the initial map on the screen
+
+// ************************
+// *** HELPER FUNCTIONS ***
+// ************************
+
 function updateMap() {
-  var mapElement = document.getElementById('location-map');
-  var address = document.getElementById('current').innerHTML;
+  let mapElement = document.getElementById('location-map');
+  let address = document.getElementById('current').innerHTML;
   console.log(address);
 
-  var map = new google.maps.Map(mapElement, {
+  let map = new google.maps.Map(mapElement, {
     mapTypeId: google.maps.MapTypeId.TERRAIN,
     zoom: 11
   });
 
-  var geocoder = new google.maps.Geocoder();
+  let geocoder = new google.maps.Geocoder();
 
   geocoder.geocode(
     {
@@ -28,10 +38,8 @@ function updateMap() {
   );
 }
 
-updateMap();
-
 function takeSelfie() {
-  var hiddenCanvas = document.querySelector('canvas'),
+  let hiddenCanvas = document.querySelector('canvas'),
     video = document.getElementById('profile-picture'),
     width = video.videoWidth,
     height = video.videoHeight,
@@ -43,23 +51,23 @@ function takeSelfie() {
   context.drawImage(video, 0, 0, width, height);
 
   // Get image URL
-  var imageDataURL = hiddenCanvas.toDataURL('image/png');
+  let imageDataURL = hiddenCanvas.toDataURL('image/png');
   return imageDataURL;
 }
 
 function addTag(value) {
-  var newTag = document.createElement('span');
+  let newTag = document.createElement('span');
   newTag.className = 'tag';
   newTag.innerHTML = value + ' ';
   document.getElementById('add-tags').value = '';
 
-  var removeTag = document.createElement('span');
+  let removeTag = document.createElement('span');
   removeTag.className = 'button-submit remove-tag';
   removeTag.innerHTML = 'X';
 
   newTag.appendChild(removeTag);
 
-  var parentT = document.getElementById('tags');
+  let parentT = document.getElementById('tags');
 
   parentT.appendChild(newTag);
 
@@ -69,7 +77,7 @@ function addTag(value) {
 }
 
 function appendTag(event, input) {
-  var code = event.keyCode ? event.keyCode : event.which;
+  let code = event.keyCode ? event.keyCode : event.which;
   if (code == 13) {
     addTag(input.value);
   }
@@ -81,6 +89,10 @@ const editEducation = document.getElementById('edit-education');
 const editTags = document.getElementById('edit-tags');
 const editLocation = document.getElementById('edit-location');
 
+// ***********************
+// *** EVENT LISTENERS ***
+// ***********************
+
 editPhoto.addEventListener('click', function(event) {
   // Multiple browser support
   navigator.getMedia =
@@ -90,20 +102,20 @@ editPhoto.addEventListener('click', function(event) {
     navigator.msGetUserMedia;
 
   // Replace <img> element with new <video> element
-  var profilePicture = document.getElementById('profile-picture');
+  let profilePicture = document.getElementById('profile-picture');
 
-  var video = document.createElement('video');
+  let video = document.createElement('video');
   video.id = 'profile-picture';
 
   profilePicture.parentElement.replaceChild(video, profilePicture);
 
   // Replace "Edit Photo" with "Take Photo" and "Cancel"
 
-  var cancel = document.createElement('div');
+  let cancel = document.createElement('div');
   cancel.className = 'button-submit';
   cancel.innerHTML = 'Cancel';
 
-  var takePhoto = document.createElement('div');
+  let takePhoto = document.createElement('div');
   takePhoto.className = 'button-submit';
   takePhoto.innerHTML = 'Take Photo';
 
@@ -127,18 +139,18 @@ editPhoto.addEventListener('click', function(event) {
   // Take photo
 
   takePhoto.onclick = function() {
-    var imageURL = takeSelfie(); // returns new image URL
+    let imageURL = takeSelfie(); // returns new image URL
 
     // Buttons:
     // Replace "takePhoto" with new "usePhoto"
-    var usePhoto = document.createElement('div');
+    let usePhoto = document.createElement('div');
     usePhoto.className = 'button-submit';
     usePhoto.innerHTML = 'Use Photo';
 
     takePhoto.parentElement.replaceChild(usePhoto, takePhoto);
 
     // Create new <img> element and preview it
-    var newProfilePicture = document.createElement('img');
+    let newProfilePicture = document.createElement('img');
     newProfilePicture.id = 'profile-picture';
 
     newProfilePicture.setAttribute('src', imageURL);
@@ -182,18 +194,18 @@ editPhoto.addEventListener('click', function(event) {
 });
 
 editDescription.addEventListener('click', function(event) {
-  var parentDT = document.getElementById('description-text-container');
-  var descriptionText = document.getElementById('description-text');
-  var parentEC = document.getElementById('ec-description');
+  let parentDT = document.getElementById('description-text-container');
+  let descriptionText = document.getElementById('description-text');
+  let parentEC = document.getElementById('ec-description');
 
   if (descriptionText != null) {
-    var text = descriptionText.innerHTML;
+    let text = descriptionText.innerHTML;
 
-    var textArea = document.createElement('textarea');
+    let textArea = document.createElement('textarea');
     textArea.id = 'description-textarea';
     textArea.appendChild(document.createTextNode(text));
 
-    var confirm = document.createElement('span');
+    let confirm = document.createElement('span');
     confirm.className = 'edit';
     confirm.appendChild(document.createTextNode('(Confirm)'));
 
@@ -210,22 +222,22 @@ editDescription.addEventListener('click', function(event) {
 });
 
 editEducation.addEventListener('click', function(event) {
-  var parentEducation = document.getElementById('education');
-  var parentEC = document.getElementById('ec-education');
-  var school = document.getElementById('school');
-  var major = document.getElementById('major');
-  var minor = document.getElementById('minor');
-  var gpa = document.getElementById('gpa');
+  let parentEducation = document.getElementById('education');
+  let parentEC = document.getElementById('ec-education');
+  let school = document.getElementById('school');
+  let major = document.getElementById('major');
+  let minor = document.getElementById('minor');
+  let gpa = document.getElementById('gpa');
 
-  var editSchoolContainer = document.getElementById('edit-school');
-  var editMajorContainer = document.getElementById('edit-major');
-  var editMinorContainer = document.getElementById('edit-minor');
-  var editGPAContainer = document.getElementById('edit-gpa');
+  let editSchoolContainer = document.getElementById('edit-school');
+  let editMajorContainer = document.getElementById('edit-major');
+  let editMinorContainer = document.getElementById('edit-minor');
+  let editGPAContainer = document.getElementById('edit-gpa');
 
-  var editSchool = document.createElement('input');
-  var editMajor = document.createElement('input');
-  var editMinor = document.createElement('input');
-  var editGPA = document.createElement('input');
+  let editSchool = document.createElement('input');
+  let editMajor = document.createElement('input');
+  let editMinor = document.createElement('input');
+  let editGPA = document.createElement('input');
 
   editSchool.setAttribute('value', school.innerHTML);
   editMajor.setAttribute('value', major.innerHTML);
@@ -237,7 +249,7 @@ editEducation.addEventListener('click', function(event) {
   editMinorContainer.replaceChild(editMinor, minor);
   editGPAContainer.replaceChild(editGPA, gpa);
 
-  var confirm = document.createElement('span');
+  let confirm = document.createElement('span');
   confirm.className = 'edit';
   confirm.appendChild(document.createTextNode('(Confirm)'));
 
@@ -259,14 +271,14 @@ editEducation.addEventListener('click', function(event) {
 });
 
 editTags.addEventListener('click', function(event) {
-  var parentT = document.getElementById('tags');
-  var parentEC = document.getElementById('ec-tags');
+  let parentT = document.getElementById('tags');
+  let parentEC = document.getElementById('ec-tags');
 
-  var addTags = document.createElement('input');
+  let addTags = document.createElement('input');
   addTags.id = 'add-tags';
   addTags.setAttribute('onKeyPress', 'appendTag(event, this)');
 
-  var add = document.createElement('span');
+  let add = document.createElement('span');
   add.id = 'add';
   add.className = 'button-submit';
   add.appendChild(document.createTextNode('+'));
@@ -274,7 +286,7 @@ editTags.addEventListener('click', function(event) {
   parentEC.insertAdjacentElement('afterend', addTags);
   addTags.insertAdjacentElement('afterend', add);
 
-  var confirm = document.createElement('span');
+  let confirm = document.createElement('span');
   confirm.className = 'edit';
   confirm.appendChild(document.createTextNode('(Confirm)'));
 
@@ -292,19 +304,19 @@ editTags.addEventListener('click', function(event) {
 });
 
 editLocation.addEventListener('click', function(event) {
-  var parentLocation = document.getElementById('location');
-  var parentEC = document.getElementById('ec-location');
-  var current = document.getElementById('current');
+  let parentLocation = document.getElementById('location');
+  let parentEC = document.getElementById('ec-location');
+  let current = document.getElementById('current');
 
-  var editCurrentContainer = document.getElementById('edit-current');
+  let editCurrentContainer = document.getElementById('edit-current');
 
-  var editCurrent = document.createElement('input');
+  let editCurrent = document.createElement('input');
 
   editCurrent.setAttribute('value', current.innerHTML);
 
   editCurrentContainer.replaceChild(editCurrent, current);
 
-  var confirm = document.createElement('span');
+  let confirm = document.createElement('span');
   confirm.className = 'edit';
   confirm.appendChild(document.createTextNode('(Confirm)'));
 

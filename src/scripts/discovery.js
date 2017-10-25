@@ -1,10 +1,10 @@
-var profiles = document.querySelectorAll('.profile');
+let profiles = document.querySelectorAll('.profile');
 
-var redirect = function() {
+let redirect = function() {
   window.location.href = 'user-profile.html';
 };
 
-for (var i = 0; i < profiles.length; ++i) {
+for (let i = 0; i < profiles.length; ++i) {
   profiles[i].onclick = function() {
     redirect();
   };
