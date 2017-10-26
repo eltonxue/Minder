@@ -8,7 +8,22 @@ const PATCH_BASE_URL = 'http://thiman.me:1337/eltonxue/user';
 const DELETE_BASE_URL = 'http://thiman.me:1337/eltonxue/user';
 
 function postUser(name, email, password) {
-  let data = { name: name, email: email, password: password };
+  $button = $('#signup');
+  $button.removeAttr('id');
+  $button.attr('value', 'Signing up...');
+
+  let data = {
+    name: name,
+    email: email,
+    password: password,
+    description: "(i.e. Hey guys! I'm Elton and I love to code!)",
+    school: '(i.e. UC Irvine - Expected 2019)',
+    major: '(i.e. Computer Science)',
+    minor: '(i.e. What is your minor?)',
+    gpa: '(i.e. What is your GPA?)',
+    tags: 'Example',
+    location: '(i.e. Irvine, CA 92612)'
+  };
   $.get(GET_BASE_URL, function(getData, status) {
     console.log('GET Request:\nData: ' + getData + '\nStatus: ' + status);
     let exists = false;
@@ -23,9 +38,12 @@ function postUser(name, email, password) {
     if (!exists) {
       $.post(POST_BASE_URL, data, function(postData, status) {
         console.log('POST Request:\nData: ' + postData + '\nStatus: ' + status);
+        window.location.href = 'self-profile.html';
       });
     } else {
       $('#signup-email').after("<p class='error'>Email already exists</p>");
+      $button.attr('id', 'signup');
+      $button.attr('value', 'Signup');
     }
   });
 }
@@ -39,6 +57,11 @@ function validUserLogin() {
   let password = $('#login-password').val();
 
   let flag = true;
+
+  // Remove login button
+  $button = $('#login');
+  $button.removeAttr('id');
+  $button.attr('value', 'Logging in...');
 
   $.get(GET_BASE_URL, function(getData, status) {
     console.log('GET Request:\nData: ' + getData + '\nStatus: ' + status);
@@ -57,7 +80,14 @@ function validUserLogin() {
       $('#login-password').after("<p class='error'>Incorrect Password</p>");
       flag = false;
     }
-    alert(flag);
+
+    if (flag) {
+      window.location.href = 'self-profile.html';
+    } else {
+      // Place Login button back
+      $button.attr('id', 'login');
+      $button.attr('value', 'Login');
+    }
   });
 }
 
@@ -139,7 +169,6 @@ $('#signup-form').on('submit', function(event) {
   }
 
   // Clear inputs
-  $('#signup-name').val('');
   $('#signup-email').val('');
   $('#signup-password').val('');
   $('#signup-confirm-password').val('');

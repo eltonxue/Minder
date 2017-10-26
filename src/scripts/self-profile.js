@@ -2,9 +2,74 @@
 // *** INITIALIZATION ***
 // **********************
 
-API_KEY = 'AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8';
+const API_KEY = 'AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8';
+const USER_BASE_URL = 'http://thiman.me:1337/eltonxue/user/';
+const BASE_URL = 'http://thiman.me:1337/eltonxue/users';
 
-updateMap(); // Updates the initial map on the screen
+// Current User -> Elton Xue
+// Gather all data necessary and display it on the screen
+
+const sessionID = '59f197e5fc43e4398ba20d8b';
+
+function updateUserInfo(data) {
+  $.ajax({
+    headers: {
+      'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE'
+    },
+    url: USER_BASE_URL + sessionID,
+    type: 'PATCH',
+    data: data,
+    success: function(response, textStatus, jqXhr) {
+      console.log('Patch has been successful!');
+      console.log('Response: ' + response);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      // log the error to the console
+      console.log('Patch has failed. ERROR: ' + textStatus, errorThrown);
+    },
+    complete: function() {
+      console.log('Patching finished');
+    }
+  });
+}
+
+function getUserInfo() {
+  $.get(BASE_URL, function(data, status) {
+    let user = null;
+    for (let i = 0; i < data.length; ++i) {
+      if (data[i]._id == sessionID) {
+        user = data[i];
+        break;
+      }
+    }
+
+    console.log('Status: ' + status + ', Data: ' + data);
+
+    if (user == null) {
+      console.log('ERROR: User does not exist. Check getUserInfo()');
+    } else {
+      $('#name').text(user.name);
+      $('#description-text').text(user.description);
+      $('#school').text(user.school);
+      $('#major').text(user.major);
+      $('#minor').text(user.minor);
+      $('#gpa').text(user.gpa);
+
+      // Handle displaying tags
+      var split = user.tags.split(',');
+      for (let i = 0; i < split.length; ++i) {
+        if (split[i] != '') {
+          displayTag(split[i]);
+        }
+      }
+
+      $('#current').text(user.location);
+      updateMap(); // Updates the initial map on the screen
+    }
+  });
+}
+
+getUserInfo(); // Gathers data from API through AJAX GET call and displays it on the page
 
 // ************************
 // *** HELPER FUNCTIONS ***
@@ -55,39 +120,60 @@ function takeSelfie() {
   return imageDataURL;
 }
 
+function displayTag(value) {
+  let newTag = $('<span></span>', { class: 'tag' });
+  newTag.text(value + ' ');
+
+  let removeTag = $('<span></span>', { class: 'button-submit remove-tag' });
+  removeTag.text('X');
+
+  newTag.append(removeTag);
+
+  $('#tags').append(newTag);
+}
+
 function addTag(value) {
-  let newTag = document.createElement('span');
-  newTag.className = 'tag';
-  newTag.innerHTML = value + ' ';
-  document.getElementById('add-tags').value = '';
-
-  let removeTag = document.createElement('span');
-  removeTag.className = 'button-submit remove-tag';
-  removeTag.innerHTML = 'X';
-
-  newTag.appendChild(removeTag);
-
-  let parentT = document.getElementById('tags');
-
-  parentT.appendChild(newTag);
-
-  removeTag.onclick = function() {
-    parentT.removeChild(newTag);
-  };
+  if (value != '') {
+    displayTag(value);
+    $.get(USER_BASE_URL + sessionID, function(data, status) {
+      if (data.tags == '') {
+        updateUserInfo({ tags: value });
+      } else {
+        updateUserInfo({ tags: data.tags + ',' + value });
+      }
+    });
+  }
 }
 
 function appendTag(event, input) {
   let code = event.keyCode ? event.keyCode : event.which;
   if (code == 13) {
     addTag(input.value);
+    $('#add-tags').val('');
   }
 }
 
+function removeTag(value) {
+  $.get(USER_BASE_URL + sessionID, function(data, status) {
+    console.log(data);
+    let tags = data.tags.split(',');
+    let index = tags.indexOf(value);
+    if (index > -1) {
+      // -1 means that the value does not exist in the array
+      tags.splice(index, 1);
+    }
+
+    let updatedTags = tags.join(',');
+    console.log(updatedTags);
+    updateUserInfo({ tags: updatedTags });
+  });
+}
+
 const editPhoto = document.getElementById('edit-profile-picture');
-const editDescription = document.getElementById('edit-description');
-const editEducation = document.getElementById('edit-education');
-const editTags = document.getElementById('edit-tags');
-const editLocation = document.getElementById('edit-location');
+const editDescription = $('#edit-description');
+const editEducation = $('#edit-education');
+const editTags = $('#edit-tags');
+const editLocation = $('#edit-location');
 
 // ***********************
 // *** EVENT LISTENERS ***
@@ -193,141 +279,139 @@ editPhoto.addEventListener('click', function(event) {
   // Replace image src with new photo
 });
 
-editDescription.addEventListener('click', function(event) {
-  let parentDT = document.getElementById('description-text-container');
-  let descriptionText = document.getElementById('description-text');
-  let parentEC = document.getElementById('ec-description');
+$('#edit-description-container').on('click', '#edit-description', function(
+  event
+) {
+  let descriptionText = $('#description-text');
 
   if (descriptionText != null) {
-    let text = descriptionText.innerHTML;
+    let text = descriptionText.text();
 
-    let textArea = document.createElement('textarea');
-    textArea.id = 'description-textarea';
-    textArea.appendChild(document.createTextNode(text));
+    let textArea = $('<textarea></textarea>', { id: 'description-textarea' });
+    textArea.val(text);
 
-    let confirm = document.createElement('span');
-    confirm.className = 'edit';
-    confirm.appendChild(document.createTextNode('(Confirm)'));
+    let confirm = $('<span></span>', { class: 'edit' });
+    confirm.text('(Confirm)');
 
-    parentDT.replaceChild(textArea, descriptionText);
-    parentEC.replaceChild(confirm, editDescription);
+    descriptionText.replaceWith(textArea);
+    editDescription.replaceWith(confirm);
 
-    confirm.addEventListener('click', function(event) {
-      descriptionText.innerHTML = textArea.value;
+    confirm.on('click', function(event) {
+      confirm.replaceWith(editDescription);
 
-      parentDT.replaceChild(descriptionText, textArea);
-      parentEC.replaceChild(editDescription, confirm);
+      descriptionText.text(textArea.val());
+      textArea.replaceWith(descriptionText);
+
+      updateUserInfo({ description: textArea.val() });
     });
   }
 });
 
-editEducation.addEventListener('click', function(event) {
-  let parentEducation = document.getElementById('education');
-  let parentEC = document.getElementById('ec-education');
-  let school = document.getElementById('school');
-  let major = document.getElementById('major');
-  let minor = document.getElementById('minor');
-  let gpa = document.getElementById('gpa');
+$('#edit-education-container').on('click', '#edit-education', function(event) {
+  let school = $('#school');
+  let major = $('#major');
+  let minor = $('#minor');
+  let gpa = $('#gpa');
 
-  let editSchoolContainer = document.getElementById('edit-school');
-  let editMajorContainer = document.getElementById('edit-major');
-  let editMinorContainer = document.getElementById('edit-minor');
-  let editGPAContainer = document.getElementById('edit-gpa');
+  let editSchoolContainer = $('#edit-school');
+  let editMajorContainer = $('#edit-major');
+  let editMinorContainer = $('#edit-minor');
+  let editGPAContainer = $('#edit-gpa');
 
-  let editSchool = document.createElement('input');
-  let editMajor = document.createElement('input');
-  let editMinor = document.createElement('input');
-  let editGPA = document.createElement('input');
+  let editSchool = $('<input></input>', { value: school.text() });
+  let editMajor = $('<input></input>', { value: major.text() });
+  let editMinor = $('<input></input>', { value: minor.text() });
+  let editGPA = $('<input></input>', { value: gpa.text() });
 
-  editSchool.setAttribute('value', school.innerHTML);
-  editMajor.setAttribute('value', major.innerHTML);
-  editMinor.setAttribute('value', minor.innerHTML);
-  editGPA.setAttribute('value', gpa.innerHTML);
+  school.replaceWith(editSchool);
+  major.replaceWith(editMajor);
+  minor.replaceWith(editMinor);
+  gpa.replaceWith(editGPA);
 
-  editSchoolContainer.replaceChild(editSchool, school);
-  editMajorContainer.replaceChild(editMajor, major);
-  editMinorContainer.replaceChild(editMinor, minor);
-  editGPAContainer.replaceChild(editGPA, gpa);
+  let confirm = $('<span></span>', { class: 'edit' });
+  confirm.text('(Confirm)');
 
-  let confirm = document.createElement('span');
-  confirm.className = 'edit';
-  confirm.appendChild(document.createTextNode('(Confirm)'));
+  editEducation.replaceWith(confirm);
 
-  parentEC.replaceChild(confirm, editEducation);
+  confirm.on('click', function(event) {
+    school.text(editSchool.val());
+    major.text(editMajor.val());
+    minor.text(editMinor.val());
+    gpa.text(editGPA.val());
 
-  confirm.addEventListener('click', function(event) {
-    school.innerHTML = editSchool.value;
-    major.innerHTML = editMajor.value;
-    minor.innerHTML = editMinor.value;
-    gpa.innerHTML = editGPA.value;
+    editSchool.replaceWith(school);
+    editMajor.replaceWith(major);
+    editMinor.replaceWith(minor);
+    editGPA.replaceWith(gpa);
 
-    editSchoolContainer.replaceChild(school, editSchool);
-    editMajorContainer.replaceChild(major, editMajor);
-    editMinorContainer.replaceChild(minor, editMinor);
-    editGPAContainer.replaceChild(gpa, editGPA);
+    confirm.replaceWith(editEducation);
 
-    parentEC.replaceChild(editEducation, confirm);
+    updateUserInfo({
+      school: school.text(),
+      major: major.text(),
+      minor: minor.text(),
+      gpa: gpa.text()
+    });
   });
 });
 
-editTags.addEventListener('click', function(event) {
-  let parentT = document.getElementById('tags');
-  let parentEC = document.getElementById('ec-tags');
+$('#tags').on('click', '.remove-tag', function(event) {
+  let parent = $(this).parent();
+  $(this).remove();
+  removeTag(parent.text().trim());
+  parent.remove();
+});
 
-  let addTags = document.createElement('input');
-  addTags.id = 'add-tags';
-  addTags.setAttribute('onKeyPress', 'appendTag(event, this)');
-
-  let add = document.createElement('span');
-  add.id = 'add';
-  add.className = 'button-submit';
-  add.appendChild(document.createTextNode('+'));
-
-  parentEC.insertAdjacentElement('afterend', addTags);
-  addTags.insertAdjacentElement('afterend', add);
-
-  let confirm = document.createElement('span');
-  confirm.className = 'edit';
-  confirm.appendChild(document.createTextNode('(Confirm)'));
-
-  parentEC.replaceChild(confirm, editTags);
-
-  add.addEventListener('click', function(event) {
-    addTag(addTags.value);
+$('#edit-tags-container').on('click', '#edit-tags', function(event) {
+  let addTags = $('<input></input>', {
+    id: 'add-tags',
+    onKeyPress: 'appendTag(event, this)'
   });
 
-  confirm.addEventListener('click', function(event) {
-    parentT.removeChild(add);
-    parentT.removeChild(addTags);
-    parentEC.replaceChild(editTags, confirm);
+  let add = $('<span></span>', { id: 'add', class: 'button-submit' });
+  add.text('+');
+
+  addTags.insertAfter($('#edit-tags-container'));
+  add.insertAfter(addTags);
+
+  let confirm = $('<span></span>', { class: 'edit' });
+  confirm.text('(Confirm)');
+
+  editTags.replaceWith(confirm);
+
+  confirm.on('click', function(event) {
+    confirm.replaceWith(editTags);
+
+    add.remove();
+    addTags.remove();
+  });
+
+  add.on('click', function(event) {
+    addTag(addTags.val());
+    addTags.val('');
   });
 });
 
-editLocation.addEventListener('click', function(event) {
-  let parentLocation = document.getElementById('location');
-  let parentEC = document.getElementById('ec-location');
-  let current = document.getElementById('current');
+$('#edit-location-container').on('click', '#edit-location', function(event) {
+  let current = $('#current');
 
-  let editCurrentContainer = document.getElementById('edit-current');
+  let editCurrentContainer = $('#edit-current');
 
-  let editCurrent = document.createElement('input');
+  let editCurrent = $('<input></input>', { value: current.text() });
 
-  editCurrent.setAttribute('value', current.innerHTML);
+  let confirm = $('<span></span>', { class: 'edit' });
+  confirm.text('(Confirm)');
 
-  editCurrentContainer.replaceChild(editCurrent, current);
+  current.replaceWith(editCurrent);
+  editLocation.replaceWith(confirm);
 
-  let confirm = document.createElement('span');
-  confirm.className = 'edit';
-  confirm.appendChild(document.createTextNode('(Confirm)'));
+  confirm.on('click', function(event) {
+    current.text(editCurrent.val());
 
-  parentEC.replaceChild(confirm, editLocation);
+    editCurrent.replaceWith(current);
+    confirm.replaceWith(editLocation);
 
-  confirm.addEventListener('click', function(event) {
-    current.innerHTML = editCurrent.value;
-
-    editCurrentContainer.replaceChild(current, editCurrent);
-
-    parentEC.replaceChild(editLocation, confirm);
+    updateUserInfo({ location: current.text() });
 
     updateMap();
   });

@@ -28,9 +28,8 @@ input {
   font-size: 20px;
 }
 
-#login,
-#signup {
-  width: 100px;
+.button-submit {
+  width: 150px;
   height: 45px;
   margin-top: 10px;
 }
