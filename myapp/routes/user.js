@@ -32,36 +32,19 @@ router.patch('/:id', function(req, res, next) {
     if (err) {
       res.send(err);
     }
-
-    // Get user again after updating because 'user' is not updated in local scope
-    UserModel.findById(req.params.id, function(err, user) {
-      if (err) {
-        res.send(err);
-      }
-      res.send(user);
-    });
   });
-  // UserModel.find({ _id: req.params.id }, function(err, user) {
-  //   if (err) {
-  //     res.send(err);
-  //   }
-  //   for (var key in req.body) {
-  //     user[key] = req.body[key];
-  //   }
-  //
-  //   user.save(function(err) {
-  //     if (err) {
-  //       res.send(err);
-  //     }
-  //
-  //     res.send(user);
-  //   });
-  // });
+  // Get user again after updating because 'user' is not updated in local scope
+  UserModel.findById(req.params.id, function(err, user) {
+    if (err) {
+      res.send(err);
+    }
+    res.send(user);
+  });
 });
 
 /* DELETE user with ID */
 router.delete('/:id', function(req, res, next) {
-  UserModel.find({ _id: req.params.id }, function(err, user) {
+  UserModel.findByIdAndRemove(req.params.id, function(err, user) {
     if (err) {
       res.send(err);
     }
