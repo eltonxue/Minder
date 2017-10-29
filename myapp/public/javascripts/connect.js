@@ -1,9 +1,9 @@
 document.getElementById('back').onclick = function() {
-  window.location.href = 'user-profile.html';
+  window.location.href = 'user-profile';
 };
 
 document.getElementById('invite').onclick = function() {
-  window.location.href = 'discovery.html';
+  window.location.href = 'discovery';
 };
 
 let cancelInvites = document.getElementsByClassName('cancel-invite');

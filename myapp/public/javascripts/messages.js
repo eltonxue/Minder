@@ -14,7 +14,7 @@ function sendMessage() {
 
   let profileIcon = document.createElement('img');
   profileIcon.className = 'profile-icon-image';
-  profileIcon.src = '../assets/elton.jpg';
+  profileIcon.src = '../images/elton.jpg';
 
   let messageItem = document.createElement('div');
   messageItem.className = 'message-item';

@@ -8,7 +8,14 @@ var router = express.Router();
 
 var userSchema = mongoose.Schema({
   name: String,
-  email: String
+  email: String,
+  description: String,
+  school: String,
+  major: String,
+  minor: String,
+  gpa: String,
+  tags: String,
+  location: String
 });
 
 var UserModel = mongoose.model('user', userSchema);
@@ -18,7 +25,7 @@ var UserModel = mongoose.model('user', userSchema);
 
 /* GET user with ID */
 router.get('/:id', function(req, res, next) {
-  UserModel.find({ _id: req.params.id }, function(err, user) {
+  UserModel.findById(req.params.id, function(err, user) {
     if (err) {
       res.send(err);
     }
@@ -32,13 +39,13 @@ router.patch('/:id', function(req, res, next) {
     if (err) {
       res.send(err);
     }
-  });
-  // Get user again after updating because 'user' is not updated in local scope
-  UserModel.findById(req.params.id, function(err, user) {
-    if (err) {
-      res.send(err);
-    }
-    res.send(user);
+    // Get user again after updating because 'user' is not updated in local scope
+    UserModel.findById(req.params.id, function(err, user) {
+      if (err) {
+        res.send(err);
+      }
+      res.send(user);
+    });
   });
 });
 

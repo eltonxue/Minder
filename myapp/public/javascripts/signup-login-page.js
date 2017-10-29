@@ -2,10 +2,10 @@
 // *** AJAX ***
 // ************
 
-const GET_BASE_URL = 'http://thiman.me:1337/eltonxue/users';
-const POST_BASE_URL = 'http://thiman.me:1337/eltonxue/user';
-const PATCH_BASE_URL = 'http://thiman.me:1337/eltonxue/user';
-const DELETE_BASE_URL = 'http://thiman.me:1337/eltonxue/user';
+const GET_BASE_URL = 'http://localhost:3000/users';
+const POST_BASE_URL = 'http://localhost:3000/users';
+const PATCH_BASE_URL = 'http://localhost:3000/user';
+const DELETE_BASE_URL = 'http://localhost:3000/user';
 
 function postUser(name, email, password) {
   $button = $('#signup');
@@ -38,7 +38,7 @@ function postUser(name, email, password) {
     if (!exists) {
       $.post(POST_BASE_URL, data, function(postData, status) {
         console.log('POST Request:\nData: ' + postData + '\nStatus: ' + status);
-        window.location.href = 'self-profile.html';
+        window.location.href = 'self-profile';
       });
     } else {
       $('#signup-email').after("<p class='error'>Email already exists</p>");
@@ -82,7 +82,7 @@ function validUserLogin() {
     }
 
     if (flag) {
-      window.location.href = 'self-profile.html';
+      window.location.href = 'self-profile';
     } else {
       // Place Login button back
       $button.attr('id', 'login');

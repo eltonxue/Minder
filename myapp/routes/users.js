@@ -8,7 +8,15 @@ var router = express.Router();
 
 var userSchema = mongoose.Schema({
   name: String,
-  email: String
+  email: String,
+  password: String,
+  description: String,
+  school: String,
+  major: String,
+  minor: String,
+  gpa: String,
+  tags: String,
+  location: String
 });
 
 var UserModel = mongoose.model('users', userSchema);
@@ -34,7 +42,15 @@ router.post('/', function(req, res) {
 
   var newUser = new UserModel({
     name: req.body.name,
-    email: req.body.email
+    email: req.body.email,
+    password: req.body.password,
+    description: req.body.description,
+    school: req.body.school,
+    major: req.body.major,
+    minor: req.body.minor,
+    gpa: req.body.gpa,
+    tags: req.body.tags,
+    location: req.body.location
   });
 
   newUser.save(function(err, user) {

@@ -3,13 +3,13 @@
 // **********************
 
 const API_KEY = 'AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8';
-const USER_BASE_URL = 'http://thiman.me:1337/eltonxue/user/';
-const BASE_URL = 'http://thiman.me:1337/eltonxue/users';
+const USER_BASE_URL = 'http://localhost:3000/user/';
+const BASE_URL = 'http://localhost:3000/users';
 
 // Current User -> Elton Xue
 // Gather all data necessary and display it on the screen
 
-const sessionID = '59f197e5fc43e4398ba20d8b';
+const sessionID = '59f57c10388cf52e0a6ac5bc';
 
 function updateUserInfo(data) {
   $.ajax({
