@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var session = require('client-sessions');
 
 var index = require('./routes/index');
 var user = require('./routes/user');
@@ -13,7 +14,7 @@ var users = require('./routes/users');
 var app = express();
 
 // Mongoose
-// Connects to the "test" database in MongoDB
+// Connects to the "users" database in MongoDB
 mongoose.connect('mongodb://localhost/users');
 
 var db = mongoose.connection;
@@ -28,6 +29,18 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(
+  session({
+    cookieName: 'session',
+    secret: 'eg[isfd-8yF9-7w2315df{}+Ijsli;;to8',
+    duration: 30 * 60 * 1000,
+    activeDuration: 5 * 60 * 1000,
+    httpOnly: true,
+    secure: true,
+    ephemeral: true
+  })
+);
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

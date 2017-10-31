@@ -39,3 +39,9 @@ input {
   font-weight: lighter;
   text-shadow: 1px 1px 1px white;
 }
+
+.success {
+  color: green;
+  font-weight: lighter;
+  text-shadow: 1px 1px 1px white;
+}

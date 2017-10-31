@@ -9,7 +9,8 @@ const BASE_URL = 'http://localhost:3000/users';
 // Current User -> Elton Xue
 // Gather all data necessary and display it on the screen
 
-const sessionID = '59f57c10388cf52e0a6ac5bc';
+// currentUser = user data that is currently in session
+const sessionID = currentUser._id;
 
 function updateUserInfo(data) {
   $.ajax({
@@ -34,39 +35,23 @@ function updateUserInfo(data) {
 }
 
 function getUserInfo() {
-  $.get(BASE_URL, function(data, status) {
-    let user = null;
-    for (let i = 0; i < data.length; ++i) {
-      if (data[i]._id == sessionID) {
-        user = data[i];
-        break;
-      }
+  $('#name').text(currentUser.name);
+  $('#description-text').text(currentUser.description);
+  $('#school').text(currentUser.school);
+  $('#major').text(currentUser.major);
+  $('#minor').text(currentUser.minor);
+  $('#gpa').text(currentUser.gpa);
+
+  // Handle displaying tags
+  var split = currentUser.tags.split(',');
+  for (let i = 0; i < split.length; ++i) {
+    if (split[i] != '') {
+      displayTag(split[i]);
     }
+  }
 
-    console.log('Status: ' + status + ', Data: ' + data);
-
-    if (user == null) {
-      console.log('ERROR: User does not exist. Check getUserInfo()');
-    } else {
-      $('#name').text(user.name);
-      $('#description-text').text(user.description);
-      $('#school').text(user.school);
-      $('#major').text(user.major);
-      $('#minor').text(user.minor);
-      $('#gpa').text(user.gpa);
-
-      // Handle displaying tags
-      var split = user.tags.split(',');
-      for (let i = 0; i < split.length; ++i) {
-        if (split[i] != '') {
-          displayTag(split[i]);
-        }
-      }
-
-      $('#current').text(user.location);
-      updateMap(); // Updates the initial map on the screen
-    }
-  });
+  $('#current').text(currentUser.location);
+  updateMap(); // Updates the initial map on the screen
 }
 
 getUserInfo(); // Gathers data from API through AJAX GET call and displays it on the page

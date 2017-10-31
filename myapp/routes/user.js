@@ -4,21 +4,8 @@
 
 var express = require('express');
 var mongoose = require('mongoose');
+var UserModel = require('./model');
 var router = express.Router();
-
-var userSchema = mongoose.Schema({
-  name: String,
-  email: String,
-  description: String,
-  school: String,
-  major: String,
-  minor: String,
-  gpa: String,
-  tags: String,
-  location: String
-});
-
-var UserModel = mongoose.model('user', userSchema);
 
 // req -> what we're RECEIVING to the server, the data
 // res -> what we're SENDING BACK to the client

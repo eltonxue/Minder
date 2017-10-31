@@ -24,6 +24,7 @@ function postUser(name, email, password) {
     tags: 'Example',
     location: '(i.e. Irvine, CA 92612)'
   };
+
   $.get(GET_BASE_URL, function(getData, status) {
     console.log('GET Request:\nData: ' + getData + '\nStatus: ' + status);
     let exists = false;
@@ -38,7 +39,13 @@ function postUser(name, email, password) {
     if (!exists) {
       $.post(POST_BASE_URL, data, function(postData, status) {
         console.log('POST Request:\nData: ' + postData + '\nStatus: ' + status);
-        window.location.href = 'self-profile';
+
+        // window.location.href = 'self-profile';
+
+        $button.attr('id', 'signup');
+        $button.attr('value', 'Signup');
+
+        $button.after('<p class="success">SIGNUP SUCCESS</p>');
       });
     } else {
       $('#signup-email').after("<p class='error'>Email already exists</p>");
@@ -63,32 +70,25 @@ function validUserLogin() {
   $button.removeAttr('id');
   $button.attr('value', 'Logging in...');
 
-  $.get(GET_BASE_URL, function(getData, status) {
-    console.log('GET Request:\nData: ' + getData + '\nStatus: ' + status);
+  let data = { email: email, password: password };
 
-    let user = null;
-    for (let i = 0; i < getData.length; ++i) {
-      if (getData[i].email == email) {
-        user = getData[i];
-        break;
-      }
-    }
-    if (user == null) {
-      $('#login-email').after("<p class='error'>Email does not exist</p>");
-      flag = false;
-    } else if (user.password != password) {
-      $('#login-password').after("<p class='error'>Incorrect Password</p>");
-      flag = false;
+  $.post('http://localhost:3000/login', data, function(res, status) {
+    console.log(res);
+
+    if (res.error == 'email') {
+      $('#login-email').after(res.code);
+    } else if (res.error == 'password') {
+      $('#login-password').after(res.code);
     }
 
-    if (flag) {
-      window.location.href = 'self-profile';
-    } else {
-      // Place Login button back
-      $button.attr('id', 'login');
-      $button.attr('value', 'Login');
+    // Login Successful, redirect to self-profile
+    if (res.redirect) {
+      window.location.href = res.redirect;
     }
   });
+
+  $button.attr('id', 'login');
+  $button.attr('value', 'Login');
 }
 
 $('#login-form').submit(function(event) {
@@ -156,6 +156,7 @@ $('#signup-form').on('submit', function(event) {
   $('#signup-email').next().remove();
   $('#signup-password').next().remove();
   $('#signup-confirm-password').next().remove();
+  $('#signup').next().remove();
 
   // Manage AJAX calls
   let valid = validUserSignup();
