@@ -1,27 +1,24 @@
 {
-  "name": "minder",
-  "version": "1.0.0",
-  "description": "Social media website dedicated to connecting mentors and mentees.",
-  "main": "index.js",
+  "name": "myapp",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "devstart": "nodemon ./bin/www"
+  },
   "dependencies": {
+    "body-parser": "~1.18.2",
     "client-sessions": "^0.8.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
     "express": "^4.16.2",
     "mongodb": "^2.2.33",
-    "mongoose": "^4.12.4",
+    "mongoose": "^4.12.6",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
+  },
+  "devDependencies": {
     "nodemon": "^1.12.1"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eltonxue/minder.git"
-  },
-  "author": "Elton Xue",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/eltonxue/minder/issues"
-  },
-  "homepage": "https://github.com/eltonxue/minder#readme"
+  }
 }
