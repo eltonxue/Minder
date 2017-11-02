@@ -10,8 +10,9 @@ var userSchema = mongoose.Schema({
   major: String,
   minor: String,
   gpa: String,
-  tags: String,
-  location: String
+  tags: Array,
+  location: String,
+  image: Object
 });
 
 var UserModel = mongoose.model('user', userSchema);

@@ -35,7 +35,8 @@ router.post('/', function(req, res) {
     minor: req.body.minor,
     gpa: req.body.gpa,
     tags: req.body.tags,
-    location: req.body.location
+    location: req.body.location,
+    image: req.body.image
   });
 
   newUser.save(function(err, user) {

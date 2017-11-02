@@ -21,8 +21,10 @@ function postUser(name, email, password) {
     major: '(i.e. Computer Science)',
     minor: '(i.e. What is your minor?)',
     gpa: '(i.e. What is your GPA?)',
-    tags: 'Example',
-    location: '(i.e. Irvine, CA 92612)'
+    tags: ['Example'],
+    location: '(i.e. Irvine, CA 92612)',
+    image:
+      'https://www.thereminder.com/Templates/ReviewList/Review/icon-user-default.png'
   };
 
   $.get(GET_BASE_URL, function(getData, status) {
@@ -151,7 +153,7 @@ function validUserSignup() {
 $('#signup-form').on('submit', function(event) {
   event.preventDefault();
 
-  // Clear error messsages
+  // Clear success/error messsages
   $('#signup-name').next().remove();
   $('#signup-email').next().remove();
   $('#signup-password').next().remove();
@@ -170,7 +172,6 @@ $('#signup-form').on('submit', function(event) {
   }
 
   // Clear inputs
-  $('#signup-email').val('');
   $('#signup-password').val('');
   $('#signup-confirm-password').val('');
 });

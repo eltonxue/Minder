@@ -5,6 +5,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var UserModel = require('./model');
+var fs = require('fs');
 var router = express.Router();
 
 // req -> what we're RECEIVING to the server, the data
@@ -22,17 +23,27 @@ router.get('/:id', function(req, res, next) {
 
 /* PATCH user with ID */
 router.patch('/:id', function(req, res, next) {
-  UserModel.findByIdAndUpdate(req.params.id, req.body, function(err, user) {
+  var data = req.body;
+  if (req.body.image) {
+    var buffer = new Buffer(req.body.image, 'base64');
+    delete data.image;
+    fs.writeFileSync(
+      `${__dirname}/../public/images/profile/${req.params.id}.png`,
+      buffer
+    );
+
+    data.image = `/images/profile/${req.params.id}.png`;
+  }
+
+  UserModel.findByIdAndUpdate(req.params.id, data, { new: true }, function(
+    err,
+    user
+  ) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
-    // Get user again after updating because 'user' is not updated in local scope
-    UserModel.findById(req.params.id, function(err, user) {
-      if (err) {
-        res.send(err);
-      }
-      res.send(user);
-    });
+
+    res.json(user);
   });
 });
 

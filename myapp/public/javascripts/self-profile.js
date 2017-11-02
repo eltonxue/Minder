@@ -54,7 +54,7 @@ function getUserInfo() {
   updateMap(); // Updates the initial map on the screen
 }
 
-getUserInfo(); // Gathers data from API through AJAX GET call and displays it on the page
+// getUserInfo(); // Gathers data from API through AJAX GET call and displays it on the page
 
 // ************************
 // *** HELPER FUNCTIONS ***
@@ -101,7 +101,7 @@ function takeSelfie() {
   context.drawImage(video, 0, 0, width, height);
 
   // Get image URL
-  let imageDataURL = hiddenCanvas.toDataURL('image/png');
+  let imageDataURL = hiddenCanvas.toDataURL();
   return imageDataURL;
 }
 
@@ -120,12 +120,11 @@ function displayTag(value) {
 function addTag(value) {
   if (value != '') {
     displayTag(value);
+    console.log(value);
     $.get(USER_BASE_URL + sessionID, function(data, status) {
-      if (data.tags == '') {
-        updateUserInfo({ tags: value });
-      } else {
-        updateUserInfo({ tags: data.tags + ',' + value });
-      }
+      let newTags = data.tags;
+      newTags.push(value);
+      updateUserInfo({ tags: newTags });
     });
   }
 }
@@ -141,20 +140,20 @@ function appendTag(event, input) {
 function removeTag(value) {
   $.get(USER_BASE_URL + sessionID, function(data, status) {
     console.log(data);
-    let tags = data.tags.split(',');
+    let tags = data.tags;
     let index = tags.indexOf(value);
     if (index > -1) {
       // -1 means that the value does not exist in the array
       tags.splice(index, 1);
     }
 
-    let updatedTags = tags.join(',');
-    console.log(updatedTags);
-    updateUserInfo({ tags: updatedTags });
+    console.log(tags);
+    updateUserInfo({ tags: tags });
   });
 }
 
-const editPhoto = document.getElementById('edit-profile-picture');
+// const editPhoto = document.getElementById('edit-profile-picture');
+const editPhoto = $('#edit-profile-picture');
 const editDescription = $('#edit-description');
 const editEducation = $('#edit-education');
 const editTags = $('#edit-tags');
@@ -164,7 +163,9 @@ const editLocation = $('#edit-location');
 // *** EVENT LISTENERS ***
 // ***********************
 
-editPhoto.addEventListener('click', function(event) {
+$(
+  '#edit-profile-picture-container'
+).on('click', '#edit-profile-picture', function(event) {
   // Multiple browser support
   navigator.getMedia =
     navigator.getUserMedia ||
@@ -173,34 +174,31 @@ editPhoto.addEventListener('click', function(event) {
     navigator.msGetUserMedia;
 
   // Replace <img> element with new <video> element
-  let profilePicture = document.getElementById('profile-picture');
+  let profilePicture = $('#profile-picture');
 
-  let video = document.createElement('video');
-  video.id = 'profile-picture';
+  let video = $('<video></video>', { id: 'profile-picture' });
 
-  profilePicture.parentElement.replaceChild(video, profilePicture);
+  profilePicture.replaceWith(video);
 
   // Replace "Edit Photo" with "Take Photo" and "Cancel"
 
-  let cancel = document.createElement('div');
-  cancel.className = 'button-submit';
-  cancel.innerHTML = 'Cancel';
+  let cancel = $('<div></div>', { class: 'button-submit' });
+  cancel.text('Cancel');
 
-  let takePhoto = document.createElement('div');
-  takePhoto.className = 'button-submit';
-  takePhoto.innerHTML = 'Take Photo';
+  let takePhoto = $('<div></div>', { class: 'button-submit' });
+  takePhoto.text('Take Photo');
 
-  editPhoto.parentElement.replaceChild(takePhoto, editPhoto);
-  takePhoto.insertAdjacentElement('afterend', cancel);
+  editPhoto.replaceWith(takePhoto);
+  takePhoto.after(cancel);
 
   navigator.getUserMedia(
     {
       video: true
     },
     function(stream) {
-      video.src = window.URL.createObjectURL(stream);
+      video.attr('src', window.URL.createObjectURL(stream));
 
-      video.play();
+      video.get(0).play(); // jQuery equivalent of .play()
     },
     function(err) {
       console.error(err);
@@ -209,59 +207,56 @@ editPhoto.addEventListener('click', function(event) {
 
   // Take photo
 
-  takePhoto.onclick = function() {
+  takePhoto.on('click', function(event) {
     let imageURL = takeSelfie(); // returns new image URL
 
     // Buttons:
     // Replace "takePhoto" with new "usePhoto"
-    let usePhoto = document.createElement('div');
-    usePhoto.className = 'button-submit';
-    usePhoto.innerHTML = 'Use Photo';
+    let usePhoto = $('<div></div>', { class: 'button-submit' });
+    usePhoto.text('Use Photo');
 
-    takePhoto.parentElement.replaceChild(usePhoto, takePhoto);
+    takePhoto.replaceWith(usePhoto);
 
-    // Create new <img> element and preview it
-    let newProfilePicture = document.createElement('img');
-    newProfilePicture.id = 'profile-picture';
+    // Create new <img> element and PREVIEW IT
+    let newProfilePicture = $('<img></img>', {
+      id: 'profile-picture',
+      src: imageURL
+    });
 
-    newProfilePicture.setAttribute('src', imageURL);
-
-    video.parentElement.replaceChild(newProfilePicture, video);
+    video.replaceWith(newProfilePicture);
 
     // Handle "Use Photo" onclick
+    usePhoto.on('click', function(event) {
+      // Patches image URL into the API
+      let base64data = imageURL.split(',')[1];
 
-    usePhoto.onclick = function() {
+      updateUserInfo({ image: base64data });
+
       // Remove and replace buttons
-      usePhoto.parentElement.removeChild(cancel);
-      usePhoto.parentElement.replaceChild(editPhoto, usePhoto);
-    };
+      cancel.remove();
+      usePhoto.replaceWith(editPhoto);
+    });
 
     // Handle 'Cancel' onclick
-    cancel.onclick = function() {
+    cancel.on('click', function(event) {
       // Replace <video> element with old <img> element w/o changed src
-      newProfilePicture.parentElement.replaceChild(
-        profilePicture,
-        newProfilePicture
-      );
+      newProfilePicture.replaceWith(profilePicture);
 
       // Remove and replace buttons
-      usePhoto.parentElement.removeChild(cancel);
-      usePhoto.parentElement.replaceChild(editPhoto, usePhoto);
-    };
-  };
+      cancel.remove();
+      usePhoto.replaceWith(editPhoto);
+    });
+  });
 
   // Cancel photo editting
-  cancel.onclick = function() {
+  cancel.on('click', function(event) {
     // Replace <video> element with old <img> element w/o changed src
-    video.parentElement.replaceChild(profilePicture, video);
+    video.replaceWith(profilePicture);
 
     // Remove and replace buttons
-    takePhoto.parentElement.removeChild(cancel);
-    takePhoto.parentElement.replaceChild(editPhoto, takePhoto);
-  };
-
-  // Store photo
-  // Replace image src with new photo
+    cancel.remove();
+    takePhoto.replaceWith(editPhoto);
+  });
 });
 
 $('#edit-description-container').on('click', '#edit-description', function(

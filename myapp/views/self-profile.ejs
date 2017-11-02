@@ -25,14 +25,14 @@
       <li><a class="button-submit" href="logout">Logout</a></li>
     </ul>
 
-    <img id="profile-picture" src="images/elton.jpg"></img>
+    <img id="profile-picture" src="<%= user.image %>"></img>
     <canvas class="hidden"></canvas>
-    <div class="center-content">
+    <div id="edit-profile-picture-container" class="center-content">
       <div id="edit-profile-picture" class="button-submit">Edit Photo</div>
       <canvas class="hidden"></canvas>
     </div>
     <div class="center-content">
-      <h1 id="name">Elton Xue</h1>
+      <h1 id="name"><%= user.name %></h1>
     </div>
 
     <div>
@@ -41,28 +41,30 @@
         <div class="info">
           <h2 id="edit-description-container">Description <span id="edit-description" class="edit">(Edit)</span></h2>
           <div id="description-text-container">
-            <p id="description-text">Hello, my name is Elton and I'm a recent graduate who's looking to share my knowledge of programming. I mainly focus primarily on full stack web development, but have dwelled into mobile development a bit. My rates are $15/hr, which is a big steal compared to other mentors in coding!</p>
+            <p id="description-text"><%= user.description %></p>
           </div>
         </div>
         <div id="education" class="info">
           <h2 id="edit-education-container">Education <span id="edit-education" class="edit">(Edit)</span></h2>
-          <h2 id="edit-school"></strong>School: </strong><span id="school">University of California, Irvine -> Expected 2019</span></h2>
-          <p id="edit-major"><strong>Major: </strong><span id="major">Computer Science w/ a specialization in Networked Systems</span></p>
-          <p id="edit-minor"><strong>Minor: </strong><span id="minor">Statistics</span></p>
-          <p id="edit-gpa"><strong>GPA: </strong><span id="gpa">3.50</span></p>
-
+          <h2 id="edit-school"></strong>School: </strong><span id="school"><%= user.school %></span></h2>
+          <p id="edit-major"><strong>Major: </strong><span id="major"><%= user.major %></span></p>
+          <p id="edit-minor"><strong>Minor: </strong><span id="minor"><%= user.minor %></span></p>
+          <p id="edit-gpa"><strong>GPA: </strong><span id="gpa"><%= user.gpa %></span></p>
         </div>
       </div>
       <div class="center-content">
         <div class="split-page">
           <div id="tags" class="info">
             <h2 id="edit-tags-container">Tags <span id="edit-tags" class="edit">(Add)</span></h2>
+            <% for (let i = 0; i < user.tags.length; ++i) { %>
+              <span class="tag"><%= user.tags[i] %> <span class='button-submit remove-tag'>X</span></span>
+            <% } %>
           </div>
           <div id="location" class="info">
             <h2 id="edit-location-container">Location <span id="edit-location" class="edit">(Edit)</span></h2>
             <p id="edit-current">
               <strong>Current: </strong>
-              <span id="current">Irvine, CA 92612</span>
+              <span id="current"><%= user.location %></span>
               <div id="location-map"></div>
             </p>
           </div>

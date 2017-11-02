@@ -9,7 +9,7 @@ var router = express.Router();
 
 function requireLogin(req, res, next) {
   if (!req.session.user) {
-    res.redirect('/login');
+    res.redirect('/');
   } else {
     next();
   }
@@ -39,7 +39,7 @@ router.use(function(req, res, next) {
 // **************
 
 /* GET home page. */
-router.get('/login', function(req, res, next) {
+router.get('/', function(req, res, next) {
   res.render('signup-login-page');
 });
 
@@ -71,7 +71,9 @@ router.post('/login', function(req, res, next) {
 });
 
 router.get('/self-profile', requireLogin, function(req, res, next) {
-  res.render('self-profile', { user: req.user });
+  UserModel.findById(req.user._id, function(err, user) {
+    res.render('self-profile', { user: user });
+  });
 });
 
 router.get('/discovery', function(req, res, next) {
@@ -91,11 +93,8 @@ router.get('/messages', function(req, res, next) {
 });
 
 router.get('/logout', function(req, res, next) {
-  console.log(req.session);
   req.session.reset();
-  console.log('LOGGING OUT***');
-  console.log(req.session);
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 module.exports = router;
