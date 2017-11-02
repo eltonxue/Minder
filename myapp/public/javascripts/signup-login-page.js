@@ -16,13 +16,13 @@ function postUser(name, email, password) {
     name: name,
     email: email,
     password: password,
-    description: "(i.e. Hey guys! I'm Elton and I love to code!)",
-    school: '(i.e. UC Irvine - Expected 2019)',
-    major: '(i.e. Computer Science)',
-    minor: '(i.e. What is your minor?)',
-    gpa: '(i.e. What is your GPA?)',
-    tags: ['Example'],
-    location: '(i.e. Irvine, CA 92612)',
+    description: 'N/A',
+    school: 'N/A',
+    major: 'N/A',
+    minor: 'N/A',
+    gpa: 'N/A',
+    tags: [],
+    location: 'San Francisco, CA',
     image:
       'https://www.thereminder.com/Templates/ReviewList/Review/icon-user-default.png'
   };
@@ -39,15 +39,14 @@ function postUser(name, email, password) {
     }
 
     if (!exists) {
+      // First Post registers the user into the database. Second Post logs the user in.
       $.post(POST_BASE_URL, data, function(postData, status) {
-        console.log('POST Request:\nData: ' + postData + '\nStatus: ' + status);
-
-        // window.location.href = 'self-profile';
-
-        $button.attr('id', 'signup');
-        $button.attr('value', 'Signup');
-
-        $button.after('<p class="success">SIGNUP SUCCESS</p>');
+        $.post('http://localhost:3000/login', loginData, function(res, status) {
+          // Signup Successful, redirect to self-profile
+          if (res.redirect) {
+            window.location.href = res.redirect;
+          }
+        });
       });
     } else {
       $('#signup-email').after("<p class='error'>Email already exists</p>");

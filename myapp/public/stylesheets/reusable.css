@@ -6,6 +6,10 @@ html {
   font-weight: lighter;
 }
 
+footer {
+  text-align: center;
+}
+
 img,
 image,
 video {

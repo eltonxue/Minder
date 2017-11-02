@@ -3,27 +3,14 @@
 <html>
   <head>
     <title>Minder</title>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-
+    <% include ./header %>
     <link rel="stylesheet" type="text/css" href="stylesheets/profile.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/reusable.css">
-    <link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8"
-           type="text/javascript"></script>
+      type="text/javascript"></script>
   </head>
 
   <body id="page-container">
-    <ul>
-      <li><a class="button-submit" href="discovery">Discover</a></li>
-      <li><a class="button-submit" href="self-profile">My Profile</a></li>
-      <li><a class="button-submit" href="messages">Messages</a></li>
-      <li><a class="button-submit" href="discovery">Notifications</a></li>
-      <li><a class="button-submit" href="logout">Logout</a></li>
-    </ul>
+    <% include ./navbar %>
 
     <img id="profile-picture" src="<%= user.image %>"></img>
     <canvas class="hidden"></canvas>
@@ -74,6 +61,7 @@
   </body>
 
   <footer>
+    <% include ./footer %>
     <script type="text/javascript">
       let currentUser = <%- JSON.stringify(user) %>;
     </script>

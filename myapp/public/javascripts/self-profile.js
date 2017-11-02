@@ -34,27 +34,7 @@ function updateUserInfo(data) {
   });
 }
 
-function getUserInfo() {
-  $('#name').text(currentUser.name);
-  $('#description-text').text(currentUser.description);
-  $('#school').text(currentUser.school);
-  $('#major').text(currentUser.major);
-  $('#minor').text(currentUser.minor);
-  $('#gpa').text(currentUser.gpa);
-
-  // Handle displaying tags
-  var split = currentUser.tags.split(',');
-  for (let i = 0; i < split.length; ++i) {
-    if (split[i] != '') {
-      displayTag(split[i]);
-    }
-  }
-
-  $('#current').text(currentUser.location);
-  updateMap(); // Updates the initial map on the screen
-}
-
-// getUserInfo(); // Gathers data from API through AJAX GET call and displays it on the page
+updateMap();
 
 // ************************
 // *** HELPER FUNCTIONS ***

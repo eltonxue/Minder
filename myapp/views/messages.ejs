@@ -3,22 +3,11 @@
 <html>
   <head>
     <title>Minder</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <% include ./header %>
     <link rel="stylesheet" type="text/css" href="stylesheets/messages.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/reusable.css">
-    <link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet">
   </head>
-
   <body>
-    <ul>
-      <li><a class="button-submit" href="discovery">Discover</a></li>
-      <li><a class="button-submit" href="self-profile">My Profile</a></li>
-      <li><a class="button-submit" href="messages">Messages</a></li>
-      <li><a class="button-submit" href="discovery">Notifications</a></li>
-      <li><a class="button-submit" href="logout">Logout</a></li>
-    </ul>
+    <% include ./navbar %>
     <div class="center-content">
       <div class="info">
         <div class="center-content">
@@ -116,6 +105,7 @@
   </body>
 
   <footer>
+    <% include ./footer %>
     <script src="javascripts/messages.js"></script>
   </footer>
 
