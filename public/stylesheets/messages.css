@@ -1,0 +1,108 @@
+input {
+  height: 40px;
+  width: 705px;
+  font-size: 20px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  border: 1px solid darkgrey;
+  padding: 5px;
+}
+
+#send {
+  float: right;
+  width: 80px;
+  margin-top: 5px;
+}
+
+.profile-image {
+  float: left;
+  border-radius: 0px !important;
+}
+
+.message-preview {
+  text-align: center;
+  width: 220px;
+  padding: 30px 15px 0px 15px;
+  font-size: 12px;
+}
+
+.info {
+  background-color: white;
+  padding: 0px 20px 0px 20px;
+  border: 2px solid #7f6654;
+  margin-bottom: 10px;
+  width: 1000px;
+  box-shadow: 4px 4px 4px #7f6654;
+  margin-top: 30px;
+}
+
+#flex-container {
+  display: -webkit-flex;
+  display: flex;
+  width: 1000px;
+  height: 550px;
+  margin-top: 20px;
+}
+
+#users-container {
+  width: 300px;
+  height: 500px;
+  margin: 10px;
+}
+
+.users-message {
+  display: -webkit-flex;
+  display: flex;
+  height: 100px;
+  width: inherit;
+  border: 1px solid darkgrey;
+  margin: 10px 12px 10px 0px;
+}
+
+#messages-container {
+  width: 750px;
+  height: 500px;
+  margin: 10px;
+}
+
+#messages {
+  padding-right: 15px;
+  height: 420px;
+  width: 700px;
+  border: 1px solid darkgrey;
+}
+
+.message-item {
+  display: -webkit-flex;
+  display: flex;
+  width: 700px;
+  margin: 5px 0px;
+  padding: 5px 10px;
+}
+
+.profile-icon-image {
+  height: 50px;
+  width: 50px;
+  border: 1px solid darkgrey;
+}
+
+.message-text {
+  padding-top: 15px;
+  margin: 0px 10px;
+}
+
+#messages-input-container {
+  height: 50px;
+  width: 715px;
+  margin-top: 10px;
+}
+
+#flex-container ul,
+#messages {
+  margin: 0px;
+  overflow: hidden;
+  overflow-y: scroll;
+  max-height: 600px;
+}

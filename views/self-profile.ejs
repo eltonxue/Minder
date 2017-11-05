@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Minder</title>
+    <% include ./header %>
+    <link rel="stylesheet" type="text/css" href="stylesheets/profile.css">
+    <script src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8"
+      type="text/javascript"></script>
+  </head>
+
+  <body id="page-container">
+    <% include ./navbar %>
+
+    <img id="profile-picture" src="<%= user.image %>"></img>
+    <canvas class="hidden"></canvas>
+    <div id="edit-profile-picture-container" class="center-content">
+      <div id="edit-profile-picture" class="button-submit">Edit Photo</div>
+      <canvas class="hidden"></canvas>
+    </div>
+    <div class="center-content">
+      <h1 id="name"><%= user.name %></h1>
+    </div>
+
+    <div>
+    <div class="center-content">
+      <div class="split-page">
+        <div class="info">
+          <h2 id="edit-description-container">Description <span id="edit-description" class="edit">(Edit)</span></h2>
+          <div id="description-text-container">
+            <p id="description-text"><%= user.description %></p>
+          </div>
+        </div>
+        <div id="education" class="info">
+          <h2 id="edit-education-container">Education <span id="edit-education" class="edit">(Edit)</span></h2>
+          <h2 id="edit-school"></strong>School: </strong><span id="school"><%= user.school %></span></h2>
+          <p id="edit-major"><strong>Major: </strong><span id="major"><%= user.major %></span></p>
+          <p id="edit-minor"><strong>Minor: </strong><span id="minor"><%= user.minor %></span></p>
+          <p id="edit-gpa"><strong>GPA: </strong><span id="gpa"><%= user.gpa %></span></p>
+        </div>
+      </div>
+      <div class="center-content">
+        <div class="split-page">
+          <div id="tags" class="info">
+            <h2 id="edit-tags-container">Tags <span id="edit-tags" class="edit">(Add)</span></h2>
+            <% for (let i = 0; i < user.tags.length; ++i) { %>
+              <span class="tag"><%= user.tags[i] %> <span class='button-submit remove-tag'>X</span></span>
+            <% } %>
+          </div>
+          <div id="location" class="info">
+            <h2 id="edit-location-container">Location <span id="edit-location" class="edit">(Edit)</span></h2>
+            <p id="edit-current">
+              <strong>Current: </strong>
+              <span id="current"><%= user.location %></span>
+              <div id="location-map"></div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <footer>
+    <% include ./footer %>
+    <script src="javascripts/self-profile.js"></script>
+  </footer>
+
+</html>

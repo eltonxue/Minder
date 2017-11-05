@@ -1,0 +1,47 @@
+h2 {
+  font-family: 'Pacifico', sans-serif;
+  font-weight: lighter;
+  font-size: 60px;
+  margin: 10px 0px;
+  color: #313131;
+}
+
+label {
+  color: #7f6654;
+  display: inline-block;
+  width: 200px;
+  text-align: left;
+  font-size: 20px;
+  font-weight: lighter;
+  margin-right: 10px;
+  text-shadow: 1px 1px 1px white;
+}
+
+input {
+  background-color: #eee;
+  padding: 5px 10px;
+  height: 30px;
+  width: 300px;
+  margin: 15px 0px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.button-submit {
+  width: 150px;
+  height: 45px;
+  margin-top: 10px;
+}
+
+.error {
+  color: red;
+  font-weight: lighter;
+  text-shadow: 1px 1px 1px white;
+}
+
+.success {
+  color: green;
+  font-weight: lighter;
+  text-shadow: 1px 1px 1px white;
+}
