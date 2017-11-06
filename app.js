@@ -10,6 +10,7 @@ var session = require('client-sessions');
 var index = require('./routes/index');
 var user = require('./routes/user');
 var users = require('./routes/users');
+var UserModel = require('./routes/model');
 
 var app = express();
 
@@ -46,6 +47,25 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function(req, res, next) {
+  if (req.session && req.session.user) {
+    UserModel.findOne({ email: req.session.user.email }, function(err, user) {
+      if (err) {
+        res.send(err);
+      }
+      if (user) {
+        req.user = user;
+        delete req.user.password; // Delete the password from the session
+        req.session.user = user; // Refresh the session value
+        res.locals.user = user;
+      }
+      next();
+    });
+  } else {
+    next();
+  }
+});
 
 app.use('/', index);
 app.use('/user', user);

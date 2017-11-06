@@ -11,7 +11,7 @@ var router = express.Router();
 // req -> what we're RECEIVING to the server, the data
 // res -> what we're SENDING BACK to the client
 
-/* GET user with ID */
+/* GET user with session user */
 router.get('/', function(req, res, next) {
   UserModel.findById(req.session.user.id, function(err, user) {
     if (err) {
@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
-/* PATCH user with ID */
+/* PATCH user with session user */
 router.patch('/', function(req, res, next) {
   var data = req.body;
   if (req.body.image) {
@@ -33,6 +33,15 @@ router.patch('/', function(req, res, next) {
     );
 
     data.image = `/images/profile/${req.session.user.id}.png`;
+  }
+
+  if (data.location) {
+    data.location.geo.coordinates[0] = parseFloat(
+      data.location.geo.coordinates[0]
+    );
+    data.location.geo.coordinates[1] = parseFloat(
+      data.location.geo.coordinates[1]
+    );
   }
 
   UserModel.findByIdAndUpdate(

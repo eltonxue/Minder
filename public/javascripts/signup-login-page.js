@@ -12,6 +12,7 @@ function postUser(name, email, password) {
   $button.removeAttr('id');
   $button.attr('value', 'Signing up...');
 
+  // CONVERT TO OBJECT
   let data = {
     name: name,
     email: email,
@@ -22,7 +23,13 @@ function postUser(name, email, password) {
     minor: 'N/A',
     gpa: 'N/A',
     tags: [],
-    location: 'San Francisco, CA',
+    location: {
+      name: 'San Francisco, CA, USA',
+      geo: {
+        type: 'Point',
+        coordinates: [-122.1, 33.7]
+      }
+    },
     image:
       'https://www.thereminder.com/Templates/ReviewList/Review/icon-user-default.png'
   };

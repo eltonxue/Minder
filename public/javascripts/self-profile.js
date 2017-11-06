@@ -3,7 +3,7 @@
 // **********************
 
 const API_KEY = 'AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8';
-const SESSION_USER_BASE_URL = '/user/';
+const SESSION_USER_BASE_URL = '/user';
 
 // Current User -> Elton Xue
 // Gather all data necessary and display it on the screen
@@ -40,31 +40,32 @@ updateMap();
 // ************************
 
 function updateMap() {
-  let mapElement = document.getElementById('location-map');
-  let address = document.getElementById('current').innerHTML;
-  console.log(address);
+  $.get(SESSION_USER_BASE_URL, function(data, status) {
+    let mapElement = document.getElementById('location-map');
+    const address = data.location.name;
 
-  let map = new google.maps.Map(mapElement, {
-    mapTypeId: google.maps.MapTypeId.TERRAIN,
-    zoom: 11
-  });
+    let map = new google.maps.Map(mapElement, {
+      mapTypeId: google.maps.MapTypeId.TERRAIN,
+      zoom: 11
+    });
 
-  let geocoder = new google.maps.Geocoder();
+    let geocoder = new google.maps.Geocoder();
 
-  geocoder.geocode(
-    {
-      address: address
-    },
-    function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        new google.maps.Marker({
-          position: results[0].geometry.location,
-          map: map
-        });
-        map.setCenter(results[0].geometry.location);
+    geocoder.geocode(
+      {
+        address: address
+      },
+      function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          new google.maps.Marker({
+            position: results[0].geometry.location,
+            map: map
+          });
+          map.setCenter(results[0].geometry.location);
+        }
       }
-    }
-  );
+    );
+  });
 }
 
 function takeSelfie() {
@@ -365,13 +366,49 @@ $('#edit-location-container').on('click', '#edit-location', function(event) {
   editLocation.replaceWith(confirm);
 
   confirm.on('click', function(event) {
-    current.text(editCurrent.val());
+    $.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${editCurrent.val()}&key=AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8`
+    ).then(function(resp) {
+      var geoResult = resp.results[0];
+      var realLocationName = geoResult.formatted_address;
+      var coords = geoResult.geometry.location;
 
-    editCurrent.replaceWith(current);
-    confirm.replaceWith(editLocation);
+      var data = {
+        location: {
+          name: realLocationName,
+          geo: {
+            type: 'Point',
+            coordinates: [coords.lng, coords.lat]
+          }
+        }
+      };
 
-    updateUserInfo({ location: current.text() });
+      $.ajax({
+        headers: {
+          'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE'
+        },
+        url: SESSION_USER_BASE_URL,
+        type: 'PATCH',
+        data: data,
+        success: function(response, textStatus, jqXhr) {
+          console.log('Patch has been successful!');
+          console.log('Response: ' + response);
 
-    updateMap();
+          editCurrent.replaceWith(current);
+          confirm.replaceWith(editLocation);
+
+          current.text(realLocationName);
+
+          updateMap();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          // log the error to the console
+          console.log('Patch has failed. ERROR: ' + textStatus, errorThrown);
+        },
+        complete: function() {
+          console.log('Patching finished');
+        }
+      });
+    });
   });
 });

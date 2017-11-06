@@ -9,3 +9,5 @@ for (let i = 0; i < profiles.length; ++i) {
     redirect();
   };
 }
+
+axios.get('');
