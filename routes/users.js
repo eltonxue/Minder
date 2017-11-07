@@ -23,7 +23,8 @@ router.get('/', function(req, res, next) {
 
 /* POST new user with user data*/
 router.post('/', function(req, res) {
-  // let hashedPassword = UserModel.hasPassword(req.body.password);
+  let hashedPassword = UserModel.hashPassword(req.body.password);
+
   let body = req.body;
   body.location.geo.coordinates[0] = parseFloat(
     body.location.geo.coordinates[0]
@@ -34,7 +35,7 @@ router.post('/', function(req, res) {
   var newUser = new UserModel({
     name: body.name,
     email: body.email,
-    password: body.password,
+    password: hashedPassword,
     description: body.description,
     school: body.school,
     major: body.major,
@@ -54,8 +55,49 @@ router.post('/', function(req, res) {
   });
 });
 
+/* LOGGING IN */
+router.post('/login', function(req, res, next) {
+  UserModel.findOne({ email: req.body.email }, function(err, user) {
+    if (err) {
+      res.send(err);
+    }
+
+    if (!user) {
+      res.send({
+        error: 'email',
+        code: "<p class='error'>Email does not exist</p>"
+      });
+    } else {
+      let checkPassword = user.checkPassword(req.body.password);
+      if (checkPassword) {
+        console.log('SUCCESSFULLY LOGGED IN');
+        // Sets a cookie with the user's info
+        req.session.user = user;
+        res.send({ redirect: '/self-profile' });
+      } else {
+        res.send({
+          error: 'password',
+          code: "<p class='error'>Incorrect Password</p>"
+        });
+      }
+    }
+  });
+});
+
+// SEARCHING BY NAME
+router.get('/search-by-name', function(req, res) {
+  var name = req.query.name;
+  console.log(req.session.user);
+  UserModel.find({
+    name: new RegExp(`^${name}`, 'i'),
+    _id: { $ne: req.session.user._id }
+  }).then(function(users) {
+    res.json(users);
+  });
+});
+
 // SEARCHING FOR SIMILAR TAGS -> responds with a group of users
-router.get('/search', function(req, res) {
+router.get('/search-similar-tags', function(req, res) {
   var tags = req.query.tags.split(',');
   UserModel.find({
     tags: {
@@ -222,10 +264,11 @@ router.get('/random', function(req, res) {
           }
         }
 
+        let hashedPassword = UserModel.hashPassword(userInfo.login.password);
         let newUser = new UserModel({
           name: `${userInfo.name.first} ${userInfo.name.last}`,
           email: userInfo.email,
-          password: userInfo.login.password,
+          password: hashedPassword,
           description: `Hey guys, my name's ${userInfo.name.first} ${userInfo
             .name.last}`,
           school: randomSchool,

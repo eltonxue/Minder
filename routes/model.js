@@ -1,8 +1,8 @@
 var express = require('express');
 var mongoose = require('mongoose');
-// var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt');
 
-// const saltRounds = 10;
+const saltRounds = 10;
 
 var userSchema = mongoose.Schema({
   name: String,
@@ -26,17 +26,17 @@ var userSchema = mongoose.Schema({
 
 userSchema.index({ 'location.geo': '2dsphere' });
 
-// class UserClass {
-//   static hashPassword(password) {
-//     return bcrypt.hashSynch(password, saltRounds);
-//   }
-//
-//   checkPassword(password) {
-//     return bcrypt.compareSnyc(password, this.password);
-//   }
-// }
+class UserClass {
+  static hashPassword(password) {
+    return bcrypt.hashSync(password, saltRounds);
+  }
 
-// UserModel.loadClass(UserClass);
+  checkPassword(password) {
+    return bcrypt.compareSync(password, this.password);
+  }
+}
+
+userSchema.loadClass(UserClass);
 
 var UserModel = mongoose.model('user', userSchema);
 

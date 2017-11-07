@@ -92,14 +92,17 @@ input:focus {
   width: 100%;
 }
 
-#similar-tags-container,
-#locals-container,
-#randoms-container {
+.container {
   margin: 0px;
   width: 500px;
   overflow: hidden;
   overflow-y: scroll;
   max-height: 450px;
+}
+
+#search-container {
+  width: 1500px;
+  padding-left: 50px;
 }
 
 ::-webkit-scrollbar {

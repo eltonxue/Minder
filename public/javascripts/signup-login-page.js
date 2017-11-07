@@ -49,7 +49,7 @@ function postUser(name, email, password) {
       // First Post registers the user into the database. Second Post logs the user in.
       $.post(POST_BASE_URL, data, function(postData, status) {
         let loginData = { email: email, password: password };
-        $.post('/login', loginData, function(res, status) {
+        $.post('/users/login', loginData, function(res, status) {
           // Signup Successful, redirect to self-profile
           if (res.redirect) {
             window.location.href = res.redirect;
@@ -81,7 +81,7 @@ function validUserLogin() {
 
   let data = { email: email, password: password };
 
-  $.post('/login', data, function(res, status) {
+  $.post('/users/login', data, function(res, status) {
     console.log(res);
 
     if (res.error == 'email') {

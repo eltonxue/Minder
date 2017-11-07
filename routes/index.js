@@ -17,40 +17,8 @@ router.get('/', function(req, res, next) {
   res.render('signup-login-page');
 });
 
-/* LOGGING IN */
-router.post('/login', function(req, res, next) {
-  UserModel.findOne({ email: req.body.email }, function(err, user) {
-    if (err) {
-      res.send(err);
-    }
-
-    // let check = user.checkPassword(req.body.password);
-
-    if (!user) {
-      res.send({
-        error: 'email',
-        code: "<p class='error'>Email does not exist</p>"
-      });
-    } else {
-      if (req.body.password === user.password) {
-        console.log('SUCCESSFULLY LOGGED IN');
-        // Sets a cookie with the user's info
-        req.session.user = user;
-        res.send({ redirect: '/self-profile' });
-      } else {
-        res.send({
-          error: 'password',
-          code: "<p class='error'>Incorrect Password</p>"
-        });
-      }
-    }
-  });
-});
-
-router.use(auth.requireLogin);
-
 /* GET session profile page. */
-router.get('/self-profile', function(req, res, next) {
+router.get('/self-profile', auth.requireLogin, function(req, res, next) {
   res.render('self-profile', { user: req.session.user });
 });
 
