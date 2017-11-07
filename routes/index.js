@@ -47,8 +47,10 @@ router.post('/login', function(req, res, next) {
   });
 });
 
+router.use(auth.requireLogin);
+
 /* GET session profile page. */
-router.get('/self-profile', auth.requireLogin, function(req, res, next) {
+router.get('/self-profile', function(req, res, next) {
   res.render('self-profile', { user: req.session.user });
 });
 

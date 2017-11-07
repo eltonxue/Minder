@@ -69,10 +69,11 @@ input:focus {
 
 .profile {
   background-color: #bb9062;
+  padding: 10px;
   width: 100px;
-  float: left;
   margin: 10px;
   box-shadow: 5px 5px 5px #7f6654;
+  display: inline-block;
 }
 
 .profile > p {
@@ -87,6 +88,20 @@ input:focus {
 }
 
 .profile-image {
-  height: 100px;
-  width: 100px;
+  height: 120px;
+  width: 100%;
+}
+
+#similar-tags-container,
+#locals-container,
+#randoms-container {
+  margin: 0px;
+  width: 500px;
+  overflow: hidden;
+  overflow-y: scroll;
+  max-height: 450px;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
