@@ -28,8 +28,13 @@ router.get('/discovery', function(req, res, next) {
 });
 
 /* GET other user profile page. */
-router.get('/user-profile', function(req, res, next) {
-  res.render('user-profile');
+router.get('/profile-:id', function(req, res, next) {
+  UserModel.findById(req.params.id, function(err, user) {
+    if (err) {
+      res.send(err);
+    }
+    res.render('user-profile', { user: user });
+  });
 });
 
 /* GET connect page. */

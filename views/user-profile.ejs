@@ -14,9 +14,9 @@
 
   <body>
     <% include ./navbar %>
-    <img id="profile-picture" src="images/sonia.jpg" />
+    <img id="profile-picture" src="<%= user.image %>" />
     <div class="center-content">
-      <h1>Sonia Xu</h1>
+      <h1><%= user.name %></h1>
     </div>
     <div class="center-content">
       <div id="connect" class="button-submit">Connect</div>
@@ -28,25 +28,17 @@
           <h2>Description</h2>
           <div>
             <p>
-              Hi!!! I'm Sonia and I'm a recent alumni from the University
-              of California, Irvine. Currently, I'm working for Ventura Foods Co.
-              located in Brea, CA as an Accounts Receivable Clerk. As you can probably
-              tell already, I'm very into numbers.
-              So if anyone needs mentoring with anything math/economics/accounting,
-              send me a invite! Outside my professional life, I love to sleep and
-              go hiking or lifting with my boyfriend. The coolest place we've been
-              to would probably have been the Four Mile Trail in Yosemite. We had
-              to hitchhike the way back down! By the way, my rates are $100/hr because I'm expensive.
+              <%= user.description %>
             </p>
           </div>
         </div>
         <div class="info">
           <h2>Education</h2>
           <div>
-            <h2>University of California, Irvine -> Graduated 2017</h2>
-            <p><strong>Major: </strong>Economics</p>
-            <p><strong>Minor: </strong>Accounting</p>
-            <p><strong>GPA: </strong>3.40</p>
+            <h2><%= user.school %></h2>
+            <p><strong>Major: </strong><%= user.major %></p>
+            <p><strong>Minor: </strong><%= user.minor %></p>
+            <p><strong>GPA: </strong><%= user.gpa %></p>
           </div>
         </div>
       </div>
@@ -54,19 +46,15 @@
         <div class="split-page">
           <div class="info">
             <h2>Tags</h2>
-            <span class="tag">Hiking</span>
-            <span class="tag">Texting</span>
-            <span class="tag">Mirrors</span>
-            <span class="tag">Basketball</span>
-            <span class="tag">Sleeping</span>
-            <span class="tag">Steak</span>
-
+            <% for (let i = 0; i < user.tags.length; ++i) { %>
+              <span class="tag"><%= user.tags[i] %></span>
+            <% } %>
           </div>
           <div class="info">
             <h2>Location</h2>
             <p>
               <strong>Current: </strong>
-              <span id="current">La Habra, CA 90683</span>
+              <span id="current"><%= user.location.name %></span>
               <div id="location-map"></div>
             </p>
           </div>

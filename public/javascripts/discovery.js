@@ -20,6 +20,10 @@ function createProfile(user) {
 
   profile.append(image);
   profile.append(name);
+  profile.on('click', function() {
+    window.location.href = `profile-${user._id}`;
+  });
+
   return profile;
 }
 
@@ -67,9 +71,19 @@ $.get('/user', function(data, status) {
   });
 });
 
+function onSend(event, textarea) {
+  let code = event.keyCode ? event.keyCode : event.which;
+  if (code == 13) {
+    search();
+  }
+}
+$('#search').on('click', function() {
+  search();
+});
+
 // SEARCH FUNCTION BY NAME
-$.get('/user', function(data, status) {
-  $('#search').on('click', function() {
+function search() {
+  $.get('/user', function(data, status) {
     $('#search-container').parent().remove();
     let name = $('#search-bar').val().replace(' ', '+');
     $.get(`/users/search-by-name?name=${name}`, function(users, status) {
@@ -100,4 +114,4 @@ $.get('/user', function(data, status) {
       $('#randoms-container').parent().remove();
     });
   });
-});
+}

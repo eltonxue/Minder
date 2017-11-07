@@ -17,7 +17,17 @@ router.get('/', function(req, res, next) {
     if (err) {
       res.send(err);
     }
-    res.send(user);
+    res.json(user);
+  });
+});
+
+/* GET user with :id */
+router.get('/:id', function(req, res, next) {
+  UserModel.findById(req.params.id, function(err, user) {
+    if (err) {
+      res.send(err);
+    }
+    res.json(user);
   });
 });
 
