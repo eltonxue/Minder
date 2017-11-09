@@ -14,6 +14,8 @@ var userSchema = mongoose.Schema({
   minor: String,
   gpa: String,
   tags: [String],
+  connections: [String], // Array of user IDs
+  pendingConnections: [String],
   location: {
     name: String,
     geo: {
@@ -32,7 +34,8 @@ class UserClass {
   }
 
   checkPassword(password) {
-    return bcrypt.compareSync(password, this.password);
+    return password === this.password;
+    // return bcrypt.compareSync(password, this.password);
   }
 }
 

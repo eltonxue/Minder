@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('client-sessions');
+var socketio = require('socket.io');
 
 var index = require('./routes/index');
 var user = require('./routes/user');
@@ -13,6 +14,31 @@ var users = require('./routes/users');
 var UserModel = require('./routes/model');
 
 var app = express();
+
+// Socket.io
+var io = socketio();
+app.io = io;
+
+io.on('connection', function(socket) {
+  console.log('A user connected');
+
+  let sessionUser = {};
+
+  socket.on('join', function(room, user) {
+    console.log('Joined room #' + room);
+    sessionUser = user;
+    socket.join(room);
+  });
+
+  socket.on('leave', function(room) {
+    console.log('Left room #' + room);
+    socket.leave(room);
+  });
+
+  socket.on('send', function(message, room) {
+    io.sockets.in(room).emit('message', message, sessionUser);
+  });
+});
 
 // Mongoose
 // Connects to the "users" database in MongoDB
@@ -46,6 +72,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
@@ -67,9 +94,9 @@ app.use(function(req, res, next) {
   }
 });
 
-app.use('/', index);
-app.use('/user', user);
 app.use('/users', users);
+app.use('/user', user);
+app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

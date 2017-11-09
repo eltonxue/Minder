@@ -23,6 +23,8 @@ function postUser(name, email, password) {
     minor: 'N/A',
     gpa: 'N/A',
     tags: [],
+    connections: [],
+    pendingConnections: [],
     location: {
       name: 'San Francisco, CA, USA',
       geo: {

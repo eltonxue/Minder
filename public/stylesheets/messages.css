@@ -21,11 +21,11 @@ input {
   border-radius: 0px !important;
 }
 
-.message-preview {
+.name-preview {
   text-align: center;
   width: 220px;
   padding: 30px 15px 0px 15px;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .info {
@@ -59,6 +59,11 @@ input {
   width: inherit;
   border: 1px solid darkgrey;
   margin: 10px 12px 10px 0px;
+}
+
+.users-message:hover {
+  cursor: pointer;
+  background-color: lightgrey;
 }
 
 #messages-container {

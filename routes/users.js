@@ -42,6 +42,8 @@ router.post('/', function(req, res) {
     minor: body.minor,
     gpa: body.gpa,
     tags: body.tags,
+    connections: body.connections,
+    pendingConnections: body.pendingConnections,
     location: body.location,
     image: body.image
   });
@@ -276,6 +278,8 @@ router.get('/random', function(req, res) {
           minor: randomMinor,
           gpa: randomGPA,
           tags: tags,
+          connections: [],
+          pendingConnections: [],
           location: randomLocation,
           image: userInfo.picture.large
         });
@@ -285,13 +289,70 @@ router.get('/random', function(req, res) {
           }
         });
       });
-
       res.send('SUCCESS');
     })
     .catch(function(error) {
       console.error(error);
       res.send(error);
     });
+});
+
+router.get('/random-connections', function(req, res) {
+  // Generate random connections & pendingConnections
+  UserModel.find({}, function(err, users) {
+    if (err) {
+      res.send(err);
+    }
+    users.forEach(function(user) {
+      // Generate random connections
+      let n1 = Math.floor(Math.random() * users.length);
+
+      for (let i = 0; i < n1; ++i) {
+        let user1 = users[Math.floor(Math.random() * users.length)];
+        let newConnections = user.connections;
+
+        let id = user1._id;
+
+        if (newConnections.indexOf(id) == -1 && id != user._id) {
+          newConnections.push(user1._id);
+          UserModel.findByIdAndUpdate(
+            user._id,
+            { connections: newConnections },
+            function(err, user) {
+              if (err) {
+                res.send(err);
+              }
+            }
+          );
+        }
+      }
+
+      // Generate random pending connections
+      let n2 = Math.floor(Math.random() * (users.length / 4));
+
+      for (let i = 0; i < n2; ++i) {
+        let user2 = users[Math.floor(Math.random() * users.length)];
+        let newPending = user.pendingConnections;
+
+        let id = user2._id;
+
+        if (newPending.indexOf(id) == -1 && id != user._id) {
+          newPending.push(id);
+          UserModel.findByIdAndUpdate(
+            user._id,
+            { pendingConnections: newPending },
+            function(err, user) {
+              if (err) {
+                res.send(err);
+              }
+            }
+          );
+        }
+      }
+    });
+
+    res.send('SUCCESS');
+  });
 });
 
 module.exports = router;

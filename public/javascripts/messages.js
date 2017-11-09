@@ -7,29 +7,116 @@ function onSend(event, textarea) {
 
 function sendMessage() {
   // Create HTML
-  let input = document.getElementById('message-box');
-  let message = document.createElement('p');
-  message.className = 'message-text';
-  message.innerHTML = input.value;
+  let input = $('#message-box');
 
-  let profileIcon = document.createElement('img');
-  profileIcon.className = 'profile-icon-image';
-  profileIcon.src = '../images/elton.jpg';
+  // Emit to socket the text input
+  socket.emit('send', input.val(), currentRoom);
 
-  let messageItem = document.createElement('div');
-  messageItem.className = 'message-item';
-
-  messageItem.appendChild(profileIcon);
-  messageItem.appendChild(message);
-
-  document.getElementById('messages').appendChild(messageItem);
-
-  input.value = '';
-
-  let scroll = document.getElementById('messages');
-  messages.scrollTop = messages.scrollHeight;
+  input.val('');
 }
 
 document.getElementById('send').onclick = function() {
   sendMessage();
 };
+
+function displayConnections() {
+  $.get('/user', function(sessionUser, status) {
+    let connections = sessionUser.connections;
+
+    const usersContainer = $('#users-container');
+
+    $.get('/users', function(allUsers, status) {
+      connections.forEach(function(userID) {
+        var requestUser = $.grep(allUsers, function(user) {
+          return user._id === userID;
+        });
+
+        requestUser = requestUser[0];
+
+        let previewContainer = $('<li></li>');
+        let preview = $('<div></div>', { class: 'users-message' });
+
+        let img = $('<img/>', {
+          class: 'profile-image',
+          src: requestUser.image
+        });
+        let namePreview = $('<div></div>', { class: 'name-preview' });
+        namePreview.text(requestUser.name);
+
+        preview.append(img);
+        preview.append(namePreview);
+        previewContainer.append(preview);
+
+        previewContainer.on('click', function(event) {
+          // Hash ID of sessionUser and requestUser and set it to global currentRoom
+          let firstHalf = sessionUser._id.length / 2;
+          let secondHalf = requestUser._id.length / 2;
+          let newRoom =
+            sessionUser._id.substr(0, firstHalf) +
+            requestUser._id.substr(secondHalf, requestUser._id.length);
+
+          // Handles case for strings with same characters
+          newRoom = newRoom.split('');
+          newRoom.sort();
+          newRoom = newRoom.join('');
+
+          let oldRoom = currentRoom;
+
+          socket.emit('leave', oldRoom);
+
+          currentRoom = newRoom;
+
+          console.log(currentRoom);
+
+          // Emit room name
+          socket.emit('join', currentRoom, sessionUser);
+
+          $('#message-box').attr(
+            'placeholder',
+            `Chatting with ${requestUser.name}`
+          );
+          // Clear messages, add "User has entered"
+          if (newRoom != oldRoom) {
+            $('#messages').empty();
+          }
+
+          // Change background color to lightgrey
+
+          // Change background color of old room to white
+        });
+
+        usersContainer.append(previewContainer);
+      });
+    });
+  });
+}
+var socket = io.connect();
+var currentRoom = '';
+
+displayConnections();
+
+socket.on('connect', function() {
+  // Connected, let's sign-up for to receive messages for this room
+});
+
+socket.on('message', function(data, sessionUser) {
+  console.log('Session User:', sessionUser);
+  console.log('Incoming message:', data);
+
+  let message = $('<p></p>', { class: 'message-text' });
+  message.text(data);
+
+  let profileIcon = $('<img />', {
+    class: 'profile-icon-image',
+    src: sessionUser.image
+  });
+
+  let messageItem = $('<div></div>', { class: 'message-item' });
+
+  messageItem.append(profileIcon);
+  messageItem.append(message);
+
+  $('#messages').append(messageItem);
+
+  messages.scrollTop = messages.scrollHeight;
+});

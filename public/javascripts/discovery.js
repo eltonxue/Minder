@@ -17,6 +17,7 @@ function createProfile(user) {
   image.attr('class', 'profile-image');
   let name = $('<p></p>');
   name.text(user.name);
+  name.css('font-weight', 'bold');
 
   profile.append(image);
   profile.append(name);
@@ -49,7 +50,11 @@ $.get('/user', function(data, status) {
       if (users[i].email != data.email) {
         let profile = createProfile(users[i]);
         let matches = $('<p></p>');
-        matches.text('Matches: ' + users[i].tagMatches);
+        let label = $('<span></span>');
+        matches.html(
+          `Matches: <strong style="color: #496124; font-size: 25px"> ${users[i]
+            .tagMatches} </strong>`
+        );
 
         profile.append(matches);
 

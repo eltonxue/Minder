@@ -13,90 +13,17 @@
         <div class="center-content">
           <div id="flex-container">
             <ul id="users-container">
-              <li>
-                <div class="users-message">
-                  <img class="profile-image" src="images/sonia.jpg" />
-                  <div class="message-preview">Hey, hows it going? I would like to connect!</div>
-                </div>
-              </li>
-              <li>
-                <div class="users-message">
-                  <img class="profile-image" src="images/sonia.jpg" />
-                  <div class="message-preview">Hey, hows it going? I would like to connect!</div>
-                </div>
-              </li>
-              <li>
-                <div class="users-message">
-                  <img class="profile-image" src="images/sonia.jpg" />
-                  <div class="message-preview">Hey, hows it going? I would like to connect!</div>
-                </div>
-              </li>
-              <li>
-                <div class="users-message">
-                  <img class="profile-image" src="images/sonia.jpg" />
-                  <div class="message-preview">Hey, hows it going? I would like to connect!</div>
-                </div>
-              </li>
-              <li>
-                <div class="users-message">
-                  <img class="profile-image" src="images/sonia.jpg" />
-                  <div class="message-preview">Hey, hows it going? I would like to connect!</div>
-                </div>
-              </li>
-              <li>
-                <div class="users-message">
-                  <img class="profile-image" src="images/sonia.jpg" />
-                  <div class="message-preview">Hey, hows it going? I would like to connect!</div>
-                </div>
-              </li>
-              <li>
-                <div class="users-message">
-                  <img class="profile-image" src="images/sonia.jpg" />
-                  <div class="message-preview">Hey, hows it going? I would like to connect!</div>
-                </div>
-              </li>
+
             </ul>
             <div id="messages-container">
               <div id="messages">
-                <div class="message-item">
-                  <img class="profile-icon-image" src="images/sonia.jpg"/>
-                  <p class="message-text">
-                    heyyyyyy
-                  </p>
-                </div>
-                <div class="message-item">
-                  <img class="profile-icon-image" src="images/sonia.jpg"/>
-                  <p class="message-text">
-                    there's this lantern festival thing coming up and i was wondering if you wanted to go?
-                  </p>
-                </div>
-                <div class="message-item">
-                  <img class="profile-icon-image" src="images/elton.jpg"/>
-                  <p class="message-text">
-                    when and what time? I'm kinda interested
-                  </p>
-                </div>
-                <div class="message-item">
-                  <img class="profile-icon-image" src="images/sonia.jpg"/>
-                  <p class="message-text">
-                    i think it's next Monday from 12pm to 5pm? Don't quote me cuz this is from memory haha
-                  </p>
-                </div>
-                <div class="message-item">
-                  <img class="profile-icon-image" src="images/elton.jpg"/>
-                  <p class="message-text">
-                    hmmmmmmmm
-                  </p>
-                </div>
-              </div>
 
+              </div>
               <div id="messages-input-container">
-                <input id="message-box" onKeyPress="onSend(event, this)"></input>
+                <input placeholder="To get started, enter a chat with a connection on the left" id="message-box" onKeyPress="onSend(event, this)"></input>
                 <div id="send" class="button-submit">Send</div>
               </div>
-
             </div>
-
           </div>
         </div>
 
@@ -106,6 +33,7 @@
 
   <footer>
     <% include ./footer %>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="javascripts/messages.js"></script>
   </footer>
 

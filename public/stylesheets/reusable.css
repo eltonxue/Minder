@@ -69,7 +69,7 @@ input:focus {
 
 .profile {
   background-color: #bb9062;
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
   width: 100px;
   margin: 10px;
   box-shadow: 5px 5px 5px #7f6654;
@@ -88,8 +88,8 @@ input:focus {
 }
 
 .profile-image {
-  height: 120px;
-  width: 100%;
+  height: 100px;
+  width: 100px;
 }
 
 .container {
@@ -103,8 +103,4 @@ input:focus {
 #search-container {
   width: 1500px;
   padding-left: 50px;
-}
-
-::-webkit-scrollbar {
-  display: none;
 }
