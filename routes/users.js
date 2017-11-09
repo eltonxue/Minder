@@ -43,7 +43,8 @@ router.post('/', function(req, res) {
     gpa: body.gpa,
     tags: body.tags,
     connections: body.connections,
-    pendingConnections: body.pendingConnections,
+    pendingInvites: body.pendingInvites,
+    pendingRequests: body.pendingRequests,
     location: body.location,
     image: body.image
   });
@@ -279,7 +280,8 @@ router.get('/random', function(req, res) {
           gpa: randomGPA,
           tags: tags,
           connections: [],
-          pendingConnections: [],
+          pendingInvites: [],
+          pendingRequests: [],
           location: randomLocation,
           image: userInfo.picture.large
         });
@@ -298,7 +300,7 @@ router.get('/random', function(req, res) {
 });
 
 router.get('/random-connections', function(req, res) {
-  // Generate random connections & pendingConnections
+  // Generate random connections & pending connections
   UserModel.find({}, function(err, users) {
     if (err) {
       res.send(err);
@@ -309,15 +311,64 @@ router.get('/random-connections', function(req, res) {
 
       for (let i = 0; i < n1; ++i) {
         let user1 = users[Math.floor(Math.random() * users.length)];
-        let newConnections = user.connections;
+        let userConnections = user.connections;
+        let user1Connections = user1.connections;
 
+        let currentid = user._id;
         let id = user1._id;
 
-        if (newConnections.indexOf(id) == -1 && id != user._id) {
-          newConnections.push(user1._id);
+        // Add connection
+        if (userConnections.indexOf(id) == -1 && id != currentid) {
+          userConnections.push(id);
+
+          UserModel.findByIdAndUpdate(
+            currentid,
+            { connections: userConnections },
+            function(err, subUser) {
+              if (err) {
+                res.send(err);
+              }
+            }
+          );
+        }
+
+        // Add connection to other user
+        if (user1Connections.indexOf(currentid) == -1 && id != currentid) {
+          user1Connections.push(currentid);
+
+          UserModel.findByIdAndUpdate(
+            id,
+            { connections: user1Connections },
+            function(err, subUser) {
+              if (err) {
+                res.send(err);
+              }
+            }
+          );
+        }
+      }
+
+      // Generate random pending invites
+      let n2 = Math.floor(Math.random() * (users.length / 4));
+
+      for (let i = 0; i < n2; ++i) {
+        let user2 = users[Math.floor(Math.random() * users.length)];
+        let newPending = user.pendingRequests;
+        let newPendingRequests = user.pendingRequests;
+        let userConnections = user.connections;
+
+        let id = user2._id;
+
+        if (
+          userConnections.indexOf(id) == -1 &&
+          newPendingRequests.indexOf(id) == -1 &&
+          newPending.indexOf(id) == -1 &&
+          id != user._id
+        ) {
+          newPending.push(id);
           UserModel.findByIdAndUpdate(
             user._id,
-            { connections: newConnections },
+            { pendingInvites: newPending },
             function(err, user) {
               if (err) {
                 res.send(err);
@@ -327,20 +378,27 @@ router.get('/random-connections', function(req, res) {
         }
       }
 
-      // Generate random pending connections
-      let n2 = Math.floor(Math.random() * (users.length / 4));
+      // Generate random pending requests
+      let n3 = Math.floor(Math.random() * (users.length / 4));
 
-      for (let i = 0; i < n2; ++i) {
-        let user2 = users[Math.floor(Math.random() * users.length)];
-        let newPending = user.pendingConnections;
+      for (let i = 0; i < n3; ++i) {
+        let user3 = users[Math.floor(Math.random() * users.length)];
+        let newPending = user.pendingRequests;
+        let newPendingInvites = user.pendingInvites;
+        let userConnections = user.connections;
 
-        let id = user2._id;
+        let id = user3._id;
 
-        if (newPending.indexOf(id) == -1 && id != user._id) {
+        if (
+          userConnections.indexOf(id) == -1 &&
+          newPendingInvites.indexOf(id) == -1 &&
+          newPending.indexOf(id) == -1 &&
+          id != user._id
+        ) {
           newPending.push(id);
           UserModel.findByIdAndUpdate(
             user._id,
-            { pendingConnections: newPending },
+            { pendingRequests: newPending },
             function(err, user) {
               if (err) {
                 res.send(err);

@@ -24,7 +24,8 @@ function postUser(name, email, password) {
     gpa: 'N/A',
     tags: [],
     connections: [],
-    pendingConnections: [],
+    pendingInvites: [],
+    pendingRequests: [],
     location: {
       name: 'San Francisco, CA, USA',
       geo: {

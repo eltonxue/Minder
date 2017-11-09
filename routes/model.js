@@ -15,7 +15,8 @@ var userSchema = mongoose.Schema({
   gpa: String,
   tags: [String],
   connections: [String], // Array of user IDs
-  pendingConnections: [String],
+  pendingInvites: [String],
+  pendingRequests: [String],
   location: {
     name: String,
     geo: {

@@ -49,11 +49,8 @@ function displayConnections() {
 
         previewContainer.on('click', function(event) {
           // Hash ID of sessionUser and requestUser and set it to global currentRoom
-          let firstHalf = sessionUser._id.length / 2;
-          let secondHalf = requestUser._id.length / 2;
-          let newRoom =
-            sessionUser._id.substr(0, firstHalf) +
-            requestUser._id.substr(secondHalf, requestUser._id.length);
+
+          let newRoom = sessionUser._id + requestUser._id;
 
           // Handles case for strings with same characters
           newRoom = newRoom.split('');
@@ -77,7 +74,9 @@ function displayConnections() {
           );
           // Clear messages, add "User has entered"
           if (newRoom != oldRoom) {
+            socket.emit('send', 'has left the chat room.', oldRoom);
             $('#messages').empty();
+            socket.emit('send', 'has joined the chat room.', currentRoom);
           }
 
           // Change background color to lightgrey
