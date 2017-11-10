@@ -17,6 +17,7 @@ var userSchema = mongoose.Schema({
   connections: [String], // Array of user IDs
   pendingInvites: [String],
   pendingRequests: [String],
+  // messageHistory = { to (id) : [ { from (id): message } ] }
   location: {
     name: String,
     geo: {

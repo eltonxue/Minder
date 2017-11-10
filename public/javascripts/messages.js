@@ -19,80 +19,91 @@ document.getElementById('send').onclick = function() {
   sendMessage();
 };
 
-function displayConnections() {
-  $.get('/user', function(sessionUser, status) {
-    let connections = sessionUser.connections;
+function updateConnections(sessionUser, users) {
+  $('#users-container li').slice(1).remove();
+  let connections = sessionUser.connections;
+  connections = users.filter(function(user) {
+    return connections.indexOf(user._id) > -1;
+  });
 
-    const usersContainer = $('#users-container');
+  connections.forEach(function(requestUser) {
+    let previewContainer = $('<li></li>');
+    let preview = $('<div></div>', { class: 'users-message' });
 
-    $.get('/users', function(allUsers, status) {
-      connections.forEach(function(userID) {
-        var requestUser = $.grep(allUsers, function(user) {
-          return user._id === userID;
-        });
-
-        requestUser = requestUser[0];
-
-        let previewContainer = $('<li></li>');
-        let preview = $('<div></div>', { class: 'users-message' });
-
-        let img = $('<img/>', {
-          class: 'profile-image',
-          src: requestUser.image
-        });
-        let namePreview = $('<div></div>', { class: 'name-preview' });
-        namePreview.text(requestUser.name);
-
-        preview.append(img);
-        preview.append(namePreview);
-        previewContainer.append(preview);
-
-        previewContainer.on('click', function(event) {
-          // Hash ID of sessionUser and requestUser and set it to global currentRoom
-
-          let newRoom = sessionUser._id + requestUser._id;
-
-          // Handles case for strings with same characters
-          newRoom = newRoom.split('');
-          newRoom.sort();
-          newRoom = newRoom.join('');
-
-          let oldRoom = currentRoom;
-
-          socket.emit('leave', oldRoom);
-
-          currentRoom = newRoom;
-
-          console.log(currentRoom);
-
-          // Emit room name
-          socket.emit('join', currentRoom, sessionUser);
-
-          $('#message-box').attr(
-            'placeholder',
-            `Chatting with ${requestUser.name}`
-          );
-          // Clear messages, add "User has entered"
-          if (newRoom != oldRoom) {
-            socket.emit('send', 'has left the chat room.', oldRoom);
-            $('#messages').empty();
-            socket.emit('send', 'has joined the chat room.', currentRoom);
-          }
-
-          // Change background color to lightgrey
-
-          // Change background color of old room to white
-        });
-
-        usersContainer.append(previewContainer);
-      });
+    let img = $('<img/>', {
+      class: 'profile-image',
+      src: requestUser.image
     });
+    let namePreview = $('<div></div>', { class: 'name-preview' });
+    namePreview.text(requestUser.name);
+
+    preview.append(img);
+    preview.append(namePreview);
+    previewContainer.append(preview);
+
+    previewContainer.on('click', function(event) {
+      // Hash ID of sessionUser and requestUser and set it to global currentRoom
+
+      let newRoom = sessionUser._id + requestUser._id;
+
+      // Handles case for strings with same characters
+      newRoom = newRoom.split('');
+      newRoom.sort();
+      newRoom = newRoom.join('');
+
+      let oldRoom = currentRoom;
+
+      socket.emit('leave', oldRoom);
+
+      currentRoom = newRoom;
+
+      console.log(currentRoom);
+
+      // Emit room name
+      socket.emit('join', currentRoom, sessionUser);
+
+      $('#message-box').attr(
+        'placeholder',
+        `Chatting with ${requestUser.name}`
+      );
+      // Clear messages, add "User has entered"
+      if (newRoom != oldRoom) {
+        socket.emit('send', 'has left the chat room.', oldRoom);
+        $('#messages').empty();
+        socket.emit('send', 'has joined the chat room.', currentRoom);
+      }
+
+      // Change background color to lightgrey
+
+      // Change background color of old room to white
+    });
+
+    $('#users-container').append(previewContainer);
+  });
+}
+
+function displayConnections(keyword) {
+  $.get('/user', function(sessionUser, status) {
+    if (keyword === '') {
+      $.get('/users', function(allUsers, status) {
+        updateConnections(sessionUser, allUsers);
+      });
+    } else {
+      $.get(`/users/search-by-name?name=${keyword}`, function(users, status) {
+        updateConnections(sessionUser, users);
+      });
+    }
   });
 }
 var socket = io.connect();
 var currentRoom = '';
 
-displayConnections();
+displayConnections('');
+
+function onSearch(event, input) {
+  console.log(input.value);
+  displayConnections(input.value);
+}
 
 socket.on('connect', function() {
   // Connected, let's sign-up for to receive messages for this room

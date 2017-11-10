@@ -16,6 +16,12 @@ input {
   margin-top: 5px;
 }
 
+#search {
+  width: 240px;
+  height: 25px;
+  border-radius: 0;
+}
+
 .profile-image {
   float: left;
   border-radius: 0px !important;
