@@ -15,9 +15,9 @@ function sendMessage() {
   input.val('');
 }
 
-document.getElementById('send').onclick = function() {
+$('#send').click('click', function() {
   sendMessage();
-};
+});
 
 function updateConnections(sessionUser, users) {
   $('#users-container li').slice(1).remove();
@@ -27,7 +27,7 @@ function updateConnections(sessionUser, users) {
   });
 
   connections.forEach(function(requestUser) {
-    let previewContainer = $('<li></li>');
+    let previewContainer = $('<li></li>', { class: 'preview-container' });
     let preview = $('<div></div>', { class: 'users-message' });
 
     let img = $('<img/>', {
@@ -53,24 +53,19 @@ function updateConnections(sessionUser, users) {
 
       let oldRoom = currentRoom;
 
-      socket.emit('leave', oldRoom);
-
-      currentRoom = newRoom;
-
-      console.log(currentRoom);
-
-      // Emit room name
-      socket.emit('join', currentRoom, sessionUser);
-
-      $('#message-box').attr(
-        'placeholder',
-        `Chatting with ${requestUser.name}`
-      );
-      // Clear messages, add "User has entered"
       if (newRoom != oldRoom) {
-        socket.emit('send', 'has left the chat room.', oldRoom);
-        $('#messages').empty();
-        socket.emit('send', 'has joined the chat room.', currentRoom);
+        socket.emit('leave', oldRoom);
+
+        currentRoom = newRoom;
+
+        $('#message-box').attr(
+          'placeholder',
+          `Chatting with ${requestUser.name}`
+        );
+        // Clear messages, add "User has entered"
+
+        socket.emit('join', currentRoom, sessionUser, requestUser);
+        joinRoom(currentRoom);
       }
 
       // Change background color to lightgrey
@@ -95,30 +90,14 @@ function displayConnections(keyword) {
     }
   });
 }
-var socket = io.connect();
-var currentRoom = '';
 
-displayConnections('');
-
-function onSearch(event, input) {
-  console.log(input.value);
-  displayConnections(input.value);
-}
-
-socket.on('connect', function() {
-  // Connected, let's sign-up for to receive messages for this room
-});
-
-socket.on('message', function(data, sessionUser) {
-  console.log('Session User:', sessionUser);
-  console.log('Incoming message:', data);
-
+function displayMessage(msg) {
   let message = $('<p></p>', { class: 'message-text' });
-  message.text(data);
+  message.text(msg.message);
 
   let profileIcon = $('<img />', {
     class: 'profile-icon-image',
-    src: sessionUser.image
+    src: msg.sender.image
   });
 
   let messageItem = $('<div></div>', { class: 'message-item' });
@@ -129,4 +108,35 @@ socket.on('message', function(data, sessionUser) {
   $('#messages').append(messageItem);
 
   messages.scrollTop = messages.scrollHeight;
+}
+
+var socket = io.connect();
+var currentPreview = $('<li></li>');
+var currentRoom = '';
+
+displayConnections('');
+
+function onSearch(event, input) {
+  displayConnections(input.value);
+}
+
+function joinRoom(room) {
+  $.get(`/users/search-by-room?room=${room}`).then(function(data) {
+    $('#messages').empty();
+    const sessionUser = data.sessionUser;
+    const messages = data.messages;
+    messages.forEach(function(msg) {
+      displayMessage(msg);
+    });
+  });
+}
+
+socket.on('connect', function() {
+  // Connected, let's sign-up for to receive messages for this room
+});
+
+socket.on('message', function(msg) {
+  // console.log(currentRoom);
+  // joinRoom(currentRoom);
+  displayMessage(msg);
 });

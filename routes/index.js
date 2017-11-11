@@ -1,6 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var UserModel = require('./model');
+var UserModel = require('./user-model');
 var auth = require('./utils');
 var router = express.Router();
 

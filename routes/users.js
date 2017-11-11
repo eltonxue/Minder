@@ -5,7 +5,9 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var axios = require('axios');
-var UserModel = require('./model');
+var crypto = require('crypto');
+var UserModel = require('./user-model');
+var ChatModel = require('./chat-model');
 var router = express.Router();
 
 // req -> what we're RECEIVING to the server, the data
@@ -85,6 +87,26 @@ router.post('/login', function(req, res, next) {
       }
     }
   });
+});
+
+// SEARCH FOR ROOM MESSAGES
+router.get('/search-by-room', function(req, res) {
+  let hashedRoom = crypto
+    .createHash('md5')
+    .update(req.query.room)
+    .digest('hex');
+  ChatModel.find({ room: hashedRoom })
+    .then(function(data) {
+      let messages = data;
+      messages.sort(function(a, b) {
+        return a.date > b.date;
+      });
+      res.json({ sessionUser: req.session.user, messages });
+      // io.sockets.emit('joined', messages, sender);
+    })
+    .catch(function(err) {
+      res.send(err);
+    });
 });
 
 // SEARCHING BY NAME

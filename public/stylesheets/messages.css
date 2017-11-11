@@ -86,9 +86,8 @@ input {
 }
 
 .message-item {
-  display: -webkit-flex;
   display: flex;
-  width: 700px;
+  width: 100%;
   margin: 5px 0px;
   padding: 5px 10px;
 }
@@ -100,8 +99,11 @@ input {
 }
 
 .message-text {
-  padding-top: 15px;
+  display: flex;
+  padding: 15px;
   margin: 0px 10px;
+  border-radius: 15px;
+  background-color: #d6c1a4;
 }
 
 #messages-input-container {

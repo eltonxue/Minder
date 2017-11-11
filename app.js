@@ -7,11 +7,13 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('client-sessions');
 var socketio = require('socket.io');
+var crypto = require('crypto');
 
 var index = require('./routes/index');
 var user = require('./routes/user');
 var users = require('./routes/users');
-var UserModel = require('./routes/model');
+var UserModel = require('./routes/user-model');
+var ChatModel = require('./routes/chat-model');
 
 var app = express();
 
@@ -22,21 +24,40 @@ app.io = io;
 io.on('connection', function(socket) {
   console.log('A user connected');
 
-  let sessionUser = {};
+  let sender = {};
+  let receiver = {};
 
-  socket.on('join', function(room, user) {
-    console.log('Joined room #' + room);
-    sessionUser = user;
-    socket.join(room);
+  socket.on('join', function(room, from, to) {
+    let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
+    console.log('Joined room #' + hashedRoom);
+    sender = from;
+    receiver = to;
+    socket.join(hashedRoom);
   });
 
   socket.on('leave', function(room) {
-    console.log('Left room #' + room);
-    socket.leave(room);
+    let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
+    console.log('Left room #' + hashedRoom);
+    socket.leave(hashedRoom);
   });
 
   socket.on('send', function(message, room) {
-    io.sockets.in(room).emit('message', message, sessionUser);
+    // SAVE MESSAGE INTO CHAT MODEL
+    let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
+
+    ChatModel.create({
+      date: Math.floor(Date.now()),
+      sender: { id: sender._id, name: sender.name, image: sender.image },
+      recipient: {
+        id: receiver._id,
+        name: receiver.name,
+        image: receiver.image
+      },
+      message,
+      room: hashedRoom
+    }).then(function(msg) {
+      io.sockets.in(hashedRoom).emit('message', msg, sender);
+    });
   });
 });
 
