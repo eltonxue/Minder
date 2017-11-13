@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Minder</title>
+    <% include ./header %>
+    <link rel="stylesheet" type="text/css" href="stylesheets/connections.css">
+  </head>
+  <body>
+    <% include ./navbar %>
+    <div id="main-container" class="center-content">
+      <div class="match-info">
+        <h2>Your Connections (<%= user.connections.length %>)</h2>
+        <div id='your-connections-container' class="container">
+
+        </div>
+      </div>
+      <div class="match-info">
+        <h2>Pending Requests (<%= user.pendingRequests.length %>)</h2>
+        <div id="pending-requests-container" class="container">
+          <div class="profile pending pending-request" data-id="1234">
+            <img class="profile-image" src="../images/elton.jpg"/>
+            <p>Elton Xue</p>
+            <div class="button accept">Accept</div>
+            <div class="button deny">Deny</div>
+          </div>
+        </div>
+      </div>
+      <div class="match-info">
+        <h2>Pending Invites (<%= user.pendingInvites.length %>)</h2>
+        <div id="pending-invites-container" class="container">
+          <div class="profile pending pending-invite">
+            <img class="profile-image" src="../images/elton.jpg"/>
+            <p>Elton Xue</p>
+            <div class="button cancel">Cancel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <footer>
+    <% include ./footer %>
+    <script src="javascripts/connections.js"></script>
+  </footer>
+
+</html>

@@ -13,11 +13,10 @@ var userSchema = mongoose.Schema({
   major: String,
   minor: String,
   gpa: String,
-  tags: [String],
-  connections: [String], // Array of user IDs
-  pendingInvites: [String],
-  pendingRequests: [String],
-  // messageHistory = { to (id) : [ { from (id): message } ] }
+  tags: Array,
+  connections: Array, // Array of user IDs
+  pendingInvites: Array,
+  pendingRequests: Array,
   location: {
     name: String,
     geo: {

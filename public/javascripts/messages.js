@@ -67,10 +67,6 @@ function updateConnections(sessionUser, users) {
         socket.emit('join', currentRoom, sessionUser, requestUser);
         joinRoom(currentRoom);
       }
-
-      // Change background color to lightgrey
-
-      // Change background color of old room to white
     });
 
     $('#users-container').append(previewContainer);
@@ -131,12 +127,12 @@ function joinRoom(room) {
   });
 }
 
-socket.on('connect', function() {
-  // Connected, let's sign-up for to receive messages for this room
-});
-
 socket.on('message', function(msg) {
   // console.log(currentRoom);
   // joinRoom(currentRoom);
   displayMessage(msg);
+});
+
+socket.on('connect', function() {
+  // Connected, let's sign-up for to receive messages for this room
 });

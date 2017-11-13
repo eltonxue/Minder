@@ -35,7 +35,20 @@ router.get('/profile-:id', function(req, res, next) {
     if (err) {
       res.send(err);
     }
-    res.render('user-profile', { user: user });
+    UserModel.find({})
+      .then(function(users) {
+        let connections = [];
+        for (let i = 0; i < users.length; ++i) {
+          let index = user.connections.indexOf(users[i]._id);
+          if (index > -1) {
+            connections.push(users[i]);
+          }
+        }
+        res.render('user-profile', { user: user, connections: connections });
+      })
+      .catch(function(err) {
+        res.send(err);
+      });
   });
 });
 
@@ -47,6 +60,11 @@ router.get('/connect', function(req, res, next) {
 /* GET messages page. */
 router.get('/messages', function(req, res, next) {
   res.render('messages');
+});
+
+/* GET connections page. */
+router.get('/connections', function(req, res, next) {
+  res.render('connections', { user: req.session.user });
 });
 
 /* LOGGING OUT */

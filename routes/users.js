@@ -260,7 +260,7 @@ router.get('/random', function(req, res) {
 
   axios
     .get(
-      'https://randomuser.me/api/?inc=login,name,email,picture,location&results=100'
+      'https://randomuser.me/api/?inc=login,name,email,picture,location&results=50'
     )
     .then(function(response) {
       response.data.results.forEach(function(userInfo) {
@@ -327,7 +327,10 @@ router.get('/random-connections', function(req, res) {
     if (err) {
       res.send(err);
     }
+
     users.forEach(function(user) {
+      const currentid = user._id;
+
       // Generate random connections
       let n1 = Math.floor(Math.random() * users.length);
 
@@ -336,7 +339,6 @@ router.get('/random-connections', function(req, res) {
         let userConnections = user.connections;
         let user1Connections = user1.connections;
 
-        let currentid = user._id;
         let id = user1._id;
 
         // Add connection
@@ -371,26 +373,38 @@ router.get('/random-connections', function(req, res) {
       }
 
       // Generate random pending invites
-      let n2 = Math.floor(Math.random() * (users.length / 4));
+      let n2 = Math.floor(Math.random() * users.length);
 
       for (let i = 0; i < n2; ++i) {
         let user2 = users[Math.floor(Math.random() * users.length)];
-        let newPending = user.pendingRequests;
-        let newPendingRequests = user.pendingRequests;
+        let newPendingInvites = user.pendingInvites;
+        let newPendingRequests = user2.pendingRequests;
         let userConnections = user.connections;
 
-        let id = user2._id;
+        const id = user2._id;
 
         if (
           userConnections.indexOf(id) == -1 &&
-          newPendingRequests.indexOf(id) == -1 &&
-          newPending.indexOf(id) == -1 &&
-          id != user._id
+          newPendingInvites.indexOf(id) == -1 &&
+          newPendingRequests.indexOf(currentid) == -1 &&
+          id != currentid
         ) {
-          newPending.push(id);
+          newPendingInvites.push(id);
+          newPendingRequests.push(currentid);
+
           UserModel.findByIdAndUpdate(
-            user._id,
-            { pendingInvites: newPending },
+            currentid,
+            { pendingInvites: newPendingInvites },
+            function(err, user) {
+              if (err) {
+                res.send(err);
+              }
+            }
+          );
+
+          UserModel.findByIdAndUpdate(
+            id,
+            { pendingRequests: newPendingRequests },
             function(err, user) {
               if (err) {
                 res.send(err);
@@ -401,26 +415,38 @@ router.get('/random-connections', function(req, res) {
       }
 
       // Generate random pending requests
-      let n3 = Math.floor(Math.random() * (users.length / 4));
+      let n3 = Math.floor(Math.random() * users.length);
 
       for (let i = 0; i < n3; ++i) {
         let user3 = users[Math.floor(Math.random() * users.length)];
-        let newPending = user.pendingRequests;
-        let newPendingInvites = user.pendingInvites;
+        let newPendingRequests = user.pendingInvites;
+        let newPendingInvites = user3.pendingInvites;
         let userConnections = user.connections;
 
         let id = user3._id;
 
         if (
           userConnections.indexOf(id) == -1 &&
+          newPendingRequests.indexOf(id) == -1 &&
           newPendingInvites.indexOf(id) == -1 &&
-          newPending.indexOf(id) == -1 &&
-          id != user._id
+          id != currentid
         ) {
-          newPending.push(id);
+          newPendingRequests.push(id);
+          newPendingInvites.push(currentid);
+
           UserModel.findByIdAndUpdate(
-            user._id,
-            { pendingRequests: newPending },
+            currentid,
+            { pendingRequests: newPendingRequests },
+            function(err, user) {
+              if (err) {
+                res.send(err);
+              }
+            }
+          );
+
+          UserModel.findByIdAndUpdate(
+            id,
+            { pendingInvites: newPendingInvites },
             function(err, user) {
               if (err) {
                 res.send(err);

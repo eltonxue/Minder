@@ -18,7 +18,8 @@ function updateUserInfo(data) {
     },
     url: SESSION_USER_BASE_URL,
     type: 'PATCH',
-    data: data,
+    data: JSON.stringify(data),
+    contentType: 'application/json',
     success: function(response, textStatus, jqXhr) {
       console.log('Patch has been successful!');
       console.log('Response: ' + response);

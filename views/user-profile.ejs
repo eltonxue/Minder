@@ -64,62 +64,13 @@
     <div class="center-content">
       <div class="match-info info">
           <h1>Connections</h1>
-          <div>
-            <div class="profile">
-              <img class="profile-image" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-            </div>
-            <div class="profile">
-              <img class="profile-image" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-            </div>
-            <div class="profile">
-              <img class="profile-image" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-            </div>
-            <div class="profile">
-              <img class="profile-image" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-            </div>
-            <div class="profile">
-              <img class="profile-image" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-            </div>
-            <div class="profile">
-              <img class="profile-image" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-            </div>
-        </div>
-      </div>
-      <div class="center-content">
-        <div class="match-info info">
-            <h1>Similar Profiles</h1>
-            <div>
-              <div class="profile">
-                <img class="profile-image" src="images/sonia.jpg">
-                <p>Sonia Xu</p>
+          <div class="container">
+            <% for (let i = 0; i < connections.length; ++i) { %>
+              <div class="profile" data-id="<%= connections[i]._id %>">
+                <img class="profile-image" src="<%= connections[i].image %>">
+                <p><%= connections[i].name %></p>
               </div>
-              <div class="profile">
-                <img class="profile-image" src="images/sonia.jpg">
-                <p>Sonia Xu</p>
-              </div>
-              <div class="profile">
-                <img class="profile-image" src="images/sonia.jpg">
-                <p>Sonia Xu</p>
-              </div>
-              <div class="profile">
-                <img class="profile-image" src="images/sonia.jpg">
-                <p>Sonia Xu</p>
-              </div>
-              <div class="profile">
-                <img class="profile-image" src="images/sonia.jpg">
-                <p>Sonia Xu</p>
-              </div>
-              <div class="profile">
-                <img class="profile-image" src="images/sonia.jpg">
-                <p>Sonia Xu</p>
-              </div>
-          </div>
+            <% } %>
         </div>
       </div>
   </body>

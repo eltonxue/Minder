@@ -38,18 +38,11 @@ function updateMap() {
   );
 }
 
-document.getElementById('connect').onclick = function() {
+$('#connect').on('click', function() {
   window.location.href = 'connect';
-};
+});
 
-let profiles = document.querySelectorAll('.profile');
-
-let redirect = function() {
-  window.location.href = 'user-profile';
-};
-
-for (let i = 0; i < profiles.length; ++i) {
-  profiles[i].onclick = function() {
-    redirect();
-  };
-}
+$('.container').on('click', '.profile', function(event) {
+  const userID = $(this).data('id');
+  window.location.href = `profile-${userID}`;
+});
