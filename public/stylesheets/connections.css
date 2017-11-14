@@ -1,5 +1,5 @@
 h2 {
-  color: #7f6654;
+  color: #485e5e;
   text-align: left;
   font-size: 30px;
   font-weight: lighter;
@@ -11,46 +11,10 @@ p {
   font-weight: bold;
 }
 
-.button {
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-  text-align: center;
-  margin: 5px;
-}
-
-.button:hover {
-  cursor: pointer;
-  color: white;
-}
-
 .profile:hover {
   cursor: auto;
 }
 
 .profile-image:hover {
   cursor: pointer;
-}
-
-.accept {
-  background-color: #61c744;
-}
-
-.deny {
-  background-color: #ba3730;
-}
-
-.cancel {
-  background-color: #58b0d9;
-}
-
-.pending-request {
-}
-
-.pending:hover {
-  color: black;
-}
-
-::-webkit-scrollbar {
-  display: none;
 }

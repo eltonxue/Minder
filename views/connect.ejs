@@ -4,59 +4,22 @@
   <head>
     <title>Minder</title>
     <% include ./header %>
-    <link rel="stylesheet" type="text/css" href="stylesheets/reusable.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/connect.css">
   <body>
     <% include ./navbar %>
     <div class="center-content">
       <div>
-          <h2>Send a Message!</h2>
-          <div class="center-content">
-            <textarea placeholder="Hello, I would like to connect with you."></textarea>
-          </div>
-          <div class="center-content">
-            <div id="back" class="button-submit">Back</div>
-            <div id="invite" class="button-submit">Invite</div>
-          </div>
+        <h2>Connect with <strong><%= user.name %></strong>?</h2>
+        <div id="button-container" data-id="<%= connectid %>"class="center-content">
+          <div id="back" class="button-submit">Back</div>
+          <div id="connect" class="button-submit">Connect</div>
+        </div>
       </div>
     <div class="center-content">
       <div>
-          <h2>Pending Invites</h2>
-          <div id="pending-invites">
-            <div class="profile">
-              <img class="profile-image pending-invite" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-              <div class="center-content">
-                <div class="button-submit cancel-invite">Cancel</div>
-              </div>
-            </div>
-            <div class="profile">
-              <img class="profile-image pending-invite" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-              <div class="center-content">
-                <div class="button-submit cancel-invite">Cancel</div>
-              </div>
-            </div>
-            <div class="profile">
-              <img class="profile-image pending-invite" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-              <div class="center-content">
-                <div class="button-submit cancel-invite">Cancel</div>
-              </div>
-            </div>
-            <div class="profile">
-              <img class="profile-image pending-invite" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-              <div class="center-content">
-                <div class="button-submit cancel-invite">Cancel</div>
-              </div>
-            </div>
-            <div class="profile">
-              <img class="profile-image pending-invite" src="images/sonia.jpg">
-              <p>Sonia Xu</p>
-              <div class="center-content">
-                <div class="button-submit cancel-invite">Cancel</div>
-              </div>
-            </div>
+        <h2>Your Pending Invites (<%= user.pendingInvites.length %>)</h2>
+        <div id="pending-invites-container" class="container">
+
         </div>
       </div>
     </div>

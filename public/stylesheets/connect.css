@@ -1,19 +1,10 @@
-textarea {
-  resize: none;
-  height: 200px;
-  width: 700px;
-  border: none;
-  font-size: 25px;
-  padding: 10px;
-}
-
 p {
   text-align: center;
-  font-weight: 400;
+  font-weight: bold;
 }
 
 h2 {
-  color: #7f6654;
+  color: #485e5e;
   text-align: left;
   font-size: 25px;
   font-weight: lighter;
@@ -21,38 +12,24 @@ h2 {
 }
 
 #back {
-  width: 50px;
+  margin-right: 10px;
   float: left;
-  margin: 20px;
 }
 
-#invite {
-  width: 50px;
+#connect {
+  margin-left: 10px;
   float: right;
-  margin: 20px;
 }
 
-.profile {
-  width: 150px !important;
-  background-color: #bb9062;
+#confirmation {
+  color: green;
 }
 
-.profile-image {
-  width: 150px !important;
-  height: 150px !important;
+.profile:hover {
+  cursor: auto;
+  color: black;
 }
 
-#pending-invites {
-  width: 860px;
-}
-
-.cancel-invite {
-  width: 70px;
-  padding: 5px !important;
-  font-size: 10px;
-  text-align: center;
-}
-
-.cancel-invite:hover {
-  background-color: #444 !important;
+.profile-image:hover {
+  cursor: pointer;
 }

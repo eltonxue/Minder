@@ -13,7 +13,6 @@ updateMap(); // Updates the initial map on the screen
 function updateMap() {
   let mapElement = document.getElementById('location-map');
   let address = document.getElementById('current').innerHTML;
-  console.log(address);
 
   let map = new google.maps.Map(mapElement, {
     mapTypeId: google.maps.MapTypeId.TERRAIN,
@@ -39,7 +38,7 @@ function updateMap() {
 }
 
 $('#connect').on('click', function() {
-  window.location.href = 'connect';
+  window.location.href = `connect-${$(this).data('id')}`;
 });
 
 $('.container').on('click', '.profile', function(event) {

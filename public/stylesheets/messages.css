@@ -6,7 +6,7 @@ input {
   padding: 0;
   border: none;
   border-radius: 10px;
-  border: 1px solid darkgrey;
+  border: 1px solid #658585;
   padding: 5px;
 }
 
@@ -37,10 +37,10 @@ input {
 .info {
   background-color: white;
   padding: 0px 20px 0px 20px;
-  border: 2px solid #7f6654;
+  border: 2px solid #739696;
   margin-bottom: 10px;
   width: 1000px;
-  box-shadow: 4px 4px 4px #7f6654;
+  box-shadow: 4px 4px 4px #739696;
   margin-top: 30px;
 }
 
@@ -63,13 +63,13 @@ input {
   display: flex;
   height: 100px;
   width: inherit;
-  border: 1px solid darkgrey;
+  border: 1px solid #658585;
   margin: 10px 12px 10px 0px;
 }
 
 .users-message:hover {
   cursor: pointer;
-  background-color: lightgrey;
+  background-color: #d1eced;
 }
 
 #messages-container {
@@ -82,7 +82,7 @@ input {
   padding-right: 15px;
   height: 420px;
   width: 700px;
-  border: 1px solid darkgrey;
+  border: 1px solid #658585;
 }
 
 .message-item {
@@ -92,10 +92,15 @@ input {
   padding: 5px 10px;
 }
 
+.message-sender-name {
+  font-weight: bold;
+  color: #739696;
+  margin-right: 7px;
+}
+
 .profile-icon-image {
   height: 50px;
   width: 50px;
-  border: 1px solid darkgrey;
 }
 
 .message-text {
@@ -103,7 +108,11 @@ input {
   padding: 15px;
   margin: 0px 10px;
   border-radius: 15px;
-  background-color: #d6c1a4;
+  background-color: #d1eced;
+}
+
+.message-text:hover {
+  background-color: #93c4c4;
 }
 
 #messages-input-container {

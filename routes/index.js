@@ -44,7 +44,11 @@ router.get('/profile-:id', function(req, res, next) {
             connections.push(users[i]);
           }
         }
-        res.render('user-profile', { user: user, connections: connections });
+        res.render('user-profile', {
+          sessionUser: req.session.user,
+          user: user,
+          connections: connections
+        });
       })
       .catch(function(err) {
         res.send(err);
@@ -53,8 +57,8 @@ router.get('/profile-:id', function(req, res, next) {
 });
 
 /* GET connect page. */
-router.get('/connect', function(req, res, next) {
-  res.render('connect');
+router.get('/connect-:id', function(req, res, next) {
+  res.render('connect', { user: req.session.user, connectid: req.params.id });
 });
 
 /* GET messages page. */

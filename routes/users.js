@@ -102,7 +102,6 @@ router.get('/search-by-room', function(req, res) {
         return a.date > b.date;
       });
       res.json({ sessionUser: req.session.user, messages });
-      // io.sockets.emit('joined', messages, sender);
     })
     .catch(function(err) {
       res.send(err);

@@ -90,8 +90,6 @@ router.patch('/', function(req, res, next) {
     );
   }
 
-  console.log(req.body);
-
   UserModel.findByIdAndUpdate(
     req.session.user.id,
     data,

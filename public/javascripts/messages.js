@@ -10,7 +10,9 @@ function sendMessage() {
   let input = $('#message-box');
 
   // Emit to socket the text input
-  socket.emit('send', input.val(), currentRoom);
+  if (input.val().trim()) {
+    socket.emit('send', input.val(), currentRoom);
+  }
 
   input.val('');
 }
@@ -89,7 +91,11 @@ function displayConnections(keyword) {
 
 function displayMessage(msg) {
   let message = $('<p></p>', { class: 'message-text' });
-  message.text(msg.message);
+  message.html(
+    `<span class="message-sender-name">(${msg.sender.name.split(
+      ' '
+    )[0]})</span>${msg.message}`
+  );
 
   let profileIcon = $('<img />', {
     class: 'profile-icon-image',

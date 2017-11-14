@@ -1,5 +1,5 @@
 html {
-  background-image: url("../images/books.jpg");
+  background-image: url("../images/background.jpg");
   background-position: stretch;
   font-family: 'Didact Gothic', sans-serif;
   font-size: 18px;
@@ -52,11 +52,12 @@ input:focus {
   color: white;
   font-size: 20px;
   border-radius: 5px;
-  background-color: #7f6654;
+  background-color: #90bdbd;
 }
 
 .button-submit:hover {
-  background-color: #bb9062;
+  background-color: #739696;
+
   cursor: pointer;
 }
 
@@ -68,11 +69,11 @@ input:focus {
 }
 
 .profile {
-  background-color: #bb9062;
+  background-color: #90bdbd;
   padding: 10px 10px 0px 10px;
   width: 100px;
   margin: 10px;
-  box-shadow: 5px 5px 5px #7f6654;
+  box-shadow: 5px 5px 5px #739696;
   display: inline-block;
 }
 
@@ -90,6 +91,39 @@ input:focus {
 .profile-image {
   height: 100px;
   width: 100px;
+}
+
+.button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+  margin: 5px;
+}
+
+.button:hover {
+  cursor: pointer;
+  color: white;
+}
+
+.accept {
+  background-color: #a5e6f7;
+}
+
+.deny {
+  background-color: #306086;
+}
+
+.cancel {
+  background-color: #8dcef2;
+}
+
+.pending:hover {
+  color: black;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 .container {

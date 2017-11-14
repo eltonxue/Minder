@@ -19,7 +19,16 @@
       <h1><%= user.name %></h1>
     </div>
     <div class="center-content">
-      <div id="connect" class="button-submit">Connect</div>
+      <% if (sessionUser.connections.indexOf(user._id) > -1) { %>
+        <div id="remove" data-id="<%= user._id %>" class="button-submit">Remove Connection</div>
+      <% } else if (sessionUser.pendingRequests.indexOf(user._id) > -1) { %>
+        <div id="accept" data-id="<%= user._id %>" class="button-submit">Accept</div>
+        <div id="deny" data-id="<%= user._id %>" class="button-submit">Deny</div>
+      <% } else if (sessionUser.pendingInvites.indexOf(user._id) > -1) { %>
+        <div id="cancel" data-id="<%= user._id %>" class="button-submit">Cancel Request</div>
+      <% } else { %>
+        <div id="connect" data-id="<%= user._id %>" class="button-submit">Connect</div>
+      <% } %>
     </div>
     <div
     <div class="center-content">
