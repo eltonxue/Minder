@@ -53,7 +53,7 @@ function acceptRequest(profile) {
         }
       });
 
-      let newProfile = createProfileLink(otherUser);
+      let newProfile = createProfile(otherUser);
 
       connectionsContainer.append(newProfile);
     });
@@ -176,15 +176,6 @@ function createInviteProfile(user) {
   return profile;
 }
 
-function createProfileLink(user) {
-  let profile = createProfile(user);
-  profile.on('click', function() {
-    window.location.href = `profile-${user._id}`;
-  });
-
-  return profile;
-}
-
 function createProfile(user) {
   let profile = $('<div></div>', { class: 'profile' });
   profile.attr('data-id', user._id);
@@ -206,7 +197,7 @@ function displayProfiles() {
   $.get(`/user/connections`, function(connections, status) {
     const { userConnections, pendingRequests, pendingInvites } = connections;
     for (let i = 0; i < userConnections.length; ++i) {
-      let profile = createProfileLink(userConnections[i]);
+      let profile = createProfile(userConnections[i]);
       $('#your-connections-container').append(profile);
     }
     for (let i = 0; i < pendingRequests.length; ++i) {
@@ -223,14 +214,30 @@ function displayProfiles() {
 
 displayProfiles();
 
-$('#pending-requests-container').on('click', '.accept', function(event) {
+const yourConnectionsContainer = $('#your-connections-container');
+const pendingRequestsContainer = $('#pending-requests-container');
+const pendingInvitesContainer = $('#pending-invites-container');
+
+pendingRequestsContainer.on('click', '.accept', function(event) {
   acceptRequest($(this).parent());
 });
 
-$('#pending-requests-container').on('click', '.deny', function(event) {
+pendingRequestsContainer.on('click', '.deny', function(event) {
   denyRequest($(this).parent());
 });
 
-$('#pending-invites-container').on('click', '.cancel', function(event) {
+pendingInvitesContainer.on('click', '.cancel', function(event) {
   cancelInvite($(this).parent());
+});
+
+yourConnectionsContainer.on('click', '.profile-image', function(event) {
+  window.location.href = `profile-${$(this).parent().data('id')}`;
+});
+
+pendingRequestsContainer.on('click', '.profile-image', function(event) {
+  window.location.href = `profile-${$(this).parent().data('id')}`;
+});
+
+pendingInvitesContainer.on('click', '.profile-image', function(event) {
+  window.location.href = `profile-${$(this).parent().data('id')}`;
 });
