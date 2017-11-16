@@ -52,6 +52,14 @@ h1 {
   border-radius: 50%;
 }
 
+.button-delete {
+  background-color: red;
+}
+
+.button-delete:hover {
+  background-color: darkred;
+}
+
 #location-map {
   height: 300px;
   width: 500px;

@@ -15,6 +15,7 @@ var users = require('./routes/users');
 var action = require('./routes/action');
 var UserModel = require('./routes/user-model');
 var ChatModel = require('./routes/chat-model');
+var SocketHandler = require('./socket-handler');
 
 var app = express();
 
@@ -23,43 +24,8 @@ var io = socketio();
 app.io = io;
 
 io.on('connection', function(socket) {
-  console.log('A user connected');
-
-  let sender = {};
-  let receiver = {};
-
-  socket.on('join', function(room, from, to) {
-    let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
-    console.log('Joined room #' + hashedRoom);
-    sender = from;
-    receiver = to;
-    socket.join(hashedRoom);
-  });
-
-  socket.on('leave', function(room) {
-    let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
-    console.log('Left room #' + hashedRoom);
-    socket.leave(hashedRoom);
-  });
-
-  socket.on('send', function(message, room) {
-    // SAVE MESSAGE INTO CHAT MODEL
-    let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
-
-    ChatModel.create({
-      date: Math.floor(Date.now()),
-      sender: { id: sender._id, name: sender.name, image: sender.image },
-      recipient: {
-        id: receiver._id,
-        name: receiver.name,
-        image: receiver.image
-      },
-      message,
-      room: hashedRoom
-    }).then(function(msg) {
-      io.sockets.in(hashedRoom).emit('message', msg, sender);
-    });
-  });
+  let socketHandler = new SocketHandler();
+  socketHandler.handleMessaging(io, socket);
 });
 
 // Mongoose

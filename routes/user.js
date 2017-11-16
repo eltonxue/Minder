@@ -139,6 +139,16 @@ router.patch('/:id', function(req, res, next) {
   });
 });
 
+/* DELETE session user from database */
+router.delete('/', function(req, res, next) {
+  UserModel.findByIdAndRemove(req.session.user.id, function(err, user) {
+    if (err) {
+      res.send(err);
+    }
+    res.send(user);
+  });
+});
+
 /* DELETE user with ID */
 router.delete('/:id', function(req, res, next) {
   UserModel.findByIdAndRemove(req.params.id, function(err, user) {

@@ -413,3 +413,42 @@ $('#edit-location-container').on('click', '#edit-location', function(event) {
     });
   });
 });
+
+const deleteProfileContainer = $('#delete-profile-container');
+
+deleteProfileContainer.on('click', '#delete-profile', function(event) {
+  let deleteButton = $(this);
+  $(this).remove();
+
+  let confirmation = $('<h2></h2>');
+  confirmation.text('Are you sure you want to delete your account?');
+
+  let yes = $('<div></div>', { class: 'button-submit button-delete' });
+  yes.text('Yes, delete my account!');
+
+  yes.on('click', function() {
+    $.ajax({
+      url: '/user',
+      type: 'DELETE',
+      success: function(user) {
+        $.get('/logout', function(response, status) {
+          window.location.href = '/';
+        });
+      }
+    });
+  });
+
+  let no = $('<div></div>', { class: 'button-submit button-delete' });
+  no.text('No, take me back!');
+
+  no.on('click', function() {
+    confirmation.remove();
+    yes.remove();
+    no.remove();
+    deleteProfileContainer.append(deleteButton);
+  });
+
+  deleteProfileContainer.append(confirmation);
+  deleteProfileContainer.append(yes);
+  deleteProfileContainer.append(no);
+});
