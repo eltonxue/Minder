@@ -18,7 +18,7 @@
     <div class="center-content">
       <h1><%= user.name %></h1>
     </div>
-    <div class="center-content">
+    <div id="button-container" class="center-content">
       <% if (sessionUser.connections.indexOf(user._id) > -1) { %>
         <div id="remove" data-id="<%= user._id %>" class="button-submit">Remove Connection</div>
       <% } else if (sessionUser.pendingRequests.indexOf(user._id) > -1) { %>

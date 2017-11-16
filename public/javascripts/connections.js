@@ -1,156 +1,87 @@
 // LOADING INITIAL SUGGESTIONS
 
+const connectionsContainer = $('#your-connections-container');
+const requestsContainer = $('#pending-requests-container');
+const invitesContainer = $('#pending-invites-container');
+
 function acceptRequest(profile) {
   const otherUserID = profile.data('id');
-  const connectionsContainer = $('#your-connections-container');
 
-  $.get('/user', function(sessionUser, status) {
-    const sessionUserID = sessionUser._id;
-
-    // Add to session user's connections
-    let newConnections = sessionUser.connections;
-    newConnections.push(otherUserID);
-
-    // Delete from session user's requests
-    let newPendingRequests = sessionUser.pendingRequests;
-    console.log(newPendingRequests);
-    newPendingRequests.splice(newPendingRequests.indexOf(otherUserID), 1);
-    console.log(newPendingRequests);
-
-    $.ajax({
-      url: '/user',
-      type: 'PATCH',
-      data: JSON.stringify({
-        connections: newConnections,
-        pendingRequests: newPendingRequests
-      }),
-      contentType: 'application/json'
-    });
-
-    $.get(`/user/${otherUserID}`, function(otherUser, status) {
-      // Add to other user's connections
-      let otherNewConnections = otherUser.connections;
-      otherNewConnections.push(sessionUserID);
-
-      // Delete from other user's invites
-      let otherNewPendingInvites = otherUser.pendingInvites;
-      otherNewPendingInvites.splice(
-        otherNewPendingInvites.indexOf(sessionUserID),
-        1
-      );
-
-      $.ajax({
-        url: `/user/${otherUserID}`,
-        type: 'PATCH',
-        data: JSON.stringify({
-          connections: otherNewConnections,
-          pendingInvites: otherNewPendingInvites
-        }),
-        contentType: 'application/json',
-        success: function(response, textStatus, jqXhr) {
-          console.log('Successful Patch!');
-          console.log(response);
-        }
-      });
+  $.ajax({
+    url: '/action/accept',
+    type: 'PATCH',
+    data: JSON.stringify({
+      id: otherUserID
+    }),
+    contentType: 'application/json',
+    success: function(otherUser, textStatus, jqXhr) {
+      console.log('Successful Patch!');
+      console.log(otherUser);
 
       let newProfile = createProfile(otherUser);
-
       connectionsContainer.append(newProfile);
-    });
 
-    let yourConnectionsHeader = connectionsContainer.prev();
-    yourConnectionsHeader.text(`Your Connections (${newConnections.length})`);
+      profile.remove();
 
-    let pendingRequestsHeader = $('#pending-requests-container').prev();
-    pendingRequestsHeader.text(
-      `Pending Requests (${newPendingRequests.length})`
-    );
+      let yourConnectionsHeader = connectionsContainer.prev();
+      yourConnectionsHeader.text(
+        `Your Connections (${connectionsContainer.children().length})`
+      );
+
+      let pendingRequestsHeader = requestsContainer.prev();
+      pendingRequestsHeader.text(
+        `Pending Requests (${requestsContainer.children().length})`
+      );
+    }
   });
-
-  // Delete from DOM
-  profile.remove();
 }
 
 function denyRequest(profile) {
   const otherUserID = profile.data('id');
-  $.get('/user', function(sessionUser, status) {
-    const sessionUserID = sessionUser._id;
-    // Delete from session user's requests
-    let newPendingRequests = sessionUser.pendingRequests;
-    newPendingRequests.splice(newPendingRequests.indexOf(otherUserID), 1);
 
-    $.ajax({
-      url: '/user',
-      type: 'PATCH',
-      data: JSON.stringify({ pendingRequests: newPendingRequests }),
-      contentType: 'application/json'
-    });
+  $.ajax({
+    url: '/action/deny',
+    type: 'PATCH',
+    data: JSON.stringify({
+      id: otherUserID
+    }),
+    contentType: 'application/json',
+    success: function(otherUser, textStatus, jqXhr) {
+      console.log('Successful Patch!');
+      console.log(otherUser);
 
-    $.get(`/user/${otherUserID}`, function(otherUser, status) {
-      // Delete from other user's invites
-      let otherNewPendingInvites = otherUser.pendingInvites;
-      otherNewPendingInvites.splice(
-        otherNewPendingInvites.indexOf(sessionUserID),
-        1
+      profile.remove();
+
+      let pendingRequestsHeader = requestsContainer.prev();
+      pendingRequestsHeader.text(
+        `Pending Requests (${requestsContainer.children().length})`
       );
-
-      $.ajax({
-        url: `/user/${otherUserID}`,
-        type: 'PATCH',
-        data: JSON.stringify({
-          pendingInvites: otherNewPendingInvites
-        }),
-        contentType: 'application/json'
-      });
-    });
-    let pendingRequestsHeader = $('#pending-requests-container').prev();
-    pendingRequestsHeader.text(
-      `Pending Requests (${newPendingRequests.length})`
-    );
+    }
   });
-
-  // Delete from DOM
-  profile.remove();
 }
 
 function cancelInvite(profile) {
   const otherUserID = profile.data('id');
-  $.get('/user', function(sessionUser, status) {
-    const sessionUserID = sessionUser._id;
 
-    // Delete from session user's invites
-    let newPendingInvites = sessionUser.pendingInvites;
-    newPendingInvites.splice(newPendingInvites.indexOf(otherUserID), 1);
+  $.ajax({
+    url: '/action/cancel',
+    type: 'PATCH',
+    data: JSON.stringify({
+      id: otherUserID
+    }),
+    contentType: 'application/json',
+    success: function(otherUser, textStatus, jqXhr) {
+      console.log('Successful Patch!');
+      console.log(otherUser);
 
-    $.ajax({
-      url: '/user',
-      type: 'PATCH',
-      data: JSON.stringify({ pendingInvites: newPendingInvites }),
-      contentType: 'application/json'
-    });
+      profile.remove();
 
-    $.get(`/user/${otherUserID}`, function(otherUser, status) {
-      // Delete from other user's requests
-      let otherNewPendingRequests = otherUser.pendingRequests;
-      otherNewPendingRequests.splice(
-        otherNewPendingRequests.indexOf(sessionUserID),
-        1
+      let pendingInvitesHeader = invitesContainer.prev();
+      pendingInvitesHeader.text(
+        `Pending Invites (${invitesContainer.children().length})`
       );
-
-      $.ajax({
-        url: `/user/${otherUserID}`,
-        type: 'PATCH',
-        data: JSON.stringify({
-          pendingRequests: otherNewPendingRequests
-        }),
-        contentType: 'application/json'
-      });
-    });
-    let pendingInvitesHeader = $('#pending-invites-container').prev();
-    pendingInvitesHeader.text(`Pending Requests (${newPendingInvites.length})`);
+    }
   });
-  // Delete from DOM
-  profile.remove();
 }
 
 function createRequestProfile(user) {
@@ -202,7 +133,6 @@ function displayProfiles() {
     }
     for (let i = 0; i < pendingRequests.length; ++i) {
       let profile = createRequestProfile(pendingRequests[i]);
-      console.log(pendingRequests);
       $('#pending-requests-container').append(profile);
     }
     for (let i = 0; i < pendingInvites.length; ++i) {

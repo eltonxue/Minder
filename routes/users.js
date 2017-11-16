@@ -126,6 +126,9 @@ router.get('/search-similar-tags', function(req, res) {
   UserModel.find({
     tags: {
       $in: tags
+    },
+    _id: {
+      $nin: req.session.user.connections
     }
   })
     .lean()
@@ -175,13 +178,20 @@ router.get('/near', function(req, res) {
 
 // GETTING RANDOM USERS GLOBALLY
 router.get('/global', function(req, res) {
-  UserModel.find({}, function(err, users) {
-    let globalUsers = [];
-    for (let i = 0; i < parseInt(req.query.results); ++i) {
-      globalUsers.push(users[Math.round(Math.random() * users.length)]);
+  UserModel.find(
+    {
+      _id: {
+        $nin: req.session.user.connections
+      }
+    },
+    function(err, users) {
+      let globalUsers = [];
+      for (let i = 0; i < parseInt(req.query.results); ++i) {
+        globalUsers.push(users[Math.round(Math.random() * users.length)]);
+      }
+      res.json(globalUsers);
     }
-    res.json(globalUsers);
-  });
+  );
 });
 
 /* GET generated random users and save to database*/
