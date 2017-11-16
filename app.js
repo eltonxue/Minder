@@ -13,6 +13,7 @@ var index = require('./routes/index');
 var user = require('./routes/user');
 var users = require('./routes/users');
 var action = require('./routes/action');
+var random = require('./routes/random');
 var UserModel = require('./routes/user-model');
 var ChatModel = require('./routes/chat-model');
 var SocketHandler = require('./socket-handler');
@@ -82,6 +83,7 @@ app.use(function(req, res, next) {
   }
 });
 
+app.use('/random', random);
 app.use('/action', action);
 app.use('/users', users);
 app.use('/user', user);
