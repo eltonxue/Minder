@@ -78,7 +78,7 @@ function sendInvite(id) {
 
         socket.emit('confirm', sessionUser, otherUser);
 
-        // window.location.href = 'connections';
+        window.location.href = 'connections';
       }
     });
   });
