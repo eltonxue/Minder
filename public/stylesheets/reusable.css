@@ -55,9 +55,37 @@ input:focus {
   background-color: #90bdbd;
 }
 
+#notification-container {
+  position: absolute;
+  display: none; /* Should be display: flex */
+  right: 0;
+  z-index: 1;
+  padding: 5px;
+  font-size: 20px;
+  border: 1px solid #739696;
+  background-color: #cbeaea;
+  box-shadow: 4px 4px 4px #739696;
+  border-radius: 5px;
+  width: 380px;
+  height: 100px;
+  justify-content: flex-start;
+  align-items: center;
+  opacity: 0;
+}
+
+.notification-user-icon {
+  height: 100%;
+  width: 25%;
+}
+
+.notification-user-name {
+  margin: 0px 20px;
+  width: 40%;
+  font-size: 16px;
+}
+
 .button-submit:hover {
   background-color: #739696;
-
   cursor: pointer;
 }
 
@@ -116,6 +144,12 @@ input:focus {
 
 .cancel {
   background-color: #8dcef2;
+}
+
+.close {
+  padding: 0px 5px 2px 5px;
+  background-color: grey;
+  font-size: 14px;
 }
 
 .pending:hover {

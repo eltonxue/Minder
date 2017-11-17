@@ -17,7 +17,7 @@ function sendMessage() {
   input.val('');
 }
 
-$('#send').click('click', function() {
+$('#send').on('click', function() {
   sendMessage();
 });
 
@@ -112,7 +112,6 @@ function displayMessage(msg) {
   messages.scrollTop = messages.scrollHeight;
 }
 
-var socket = io.connect();
 var currentPreview = $('<li></li>');
 var currentRoom = '';
 
@@ -134,11 +133,5 @@ function joinRoom(room) {
 }
 
 socket.on('message', function(msg) {
-  // console.log(currentRoom);
-  // joinRoom(currentRoom);
   displayMessage(msg);
-});
-
-socket.on('connect', function() {
-  // Connected, let's sign-up for to receive messages for this room
 });

@@ -64,21 +64,23 @@ function displayProfiles() {
 function sendInvite(id) {
   const otherUserID = id;
 
-  $.ajax({
-    url: '/action/send',
-    type: 'PATCH',
-    data: JSON.stringify({
-      id: otherUserID
-    }),
-    contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
+  $.get('/user', function(sessionUser, status) {
+    $.ajax({
+      url: '/action/send',
+      type: 'PATCH',
+      data: JSON.stringify({
+        id: otherUserID
+      }),
+      contentType: 'application/json',
+      success: function(otherUser, textStatus, jqXhr) {
+        console.log('Successful Patch!');
+        console.log(otherUser);
 
-      setTimeout(function() {
-        window.location.href = 'connections';
-      }, 500);
-    }
+        socket.emit('confirm', sessionUser, otherUser);
+
+        // window.location.href = 'connections';
+      }
+    });
   });
 }
 

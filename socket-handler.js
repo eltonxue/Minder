@@ -21,7 +21,6 @@ class SocketHandler {
     socket.on('leave', function(room) {
       let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
       console.log('Left room #' + hashedRoom);
-
       socket.leave(hashedRoom);
     });
     socket.on('send', function(message, room) {
@@ -45,6 +44,25 @@ class SocketHandler {
       }).then(function(msg) {
         io.sockets.in(hashedRoom).emit('message', msg, sender);
       });
+    });
+  }
+
+  handleNotifications(io, socket) {
+    socket.on('confirm', function(sessionUser, otherUser) {
+      let room = sessionUser._id + otherUser._id;
+
+      // Handles case for strings with same characters
+      room = room.split('');
+      room.sort();
+      room = room.join('');
+      console.log(room);
+
+      let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
+      socket.join(hashedRoom);
+      console.log(`push the notification for: ${otherUser.name}`);
+      // io.sockets.in(hashedRoom).emit('push', otherUser);
+      const from = sessionUser;
+      socket.broadcast.emit('push', from, otherUser);
     });
   }
 }

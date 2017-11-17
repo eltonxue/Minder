@@ -27,6 +27,7 @@ app.io = io;
 io.on('connection', function(socket) {
   let socketHandler = new SocketHandler();
   socketHandler.handleMessaging(io, socket);
+  socketHandler.handleNotifications(io, socket);
 });
 
 // Mongoose
