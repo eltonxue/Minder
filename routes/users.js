@@ -128,14 +128,14 @@ router.get('/search-similar-tags', function(req, res) {
       $in: tags
     },
     _id: {
-      $nin: req.session.user.connections
+      $nin: req.session.user.connections,
+      $ne: req.session.user.id
     }
   })
     .lean()
     .exec()
     .then(function(users) {
       users.forEach(function(user) {
-        // user = user.toObject();
         let count = 0;
         tags.forEach(function(tag) {
           if (user.tags.includes(tag)) {
@@ -172,6 +172,8 @@ router.get('/near', function(req, res) {
     })
     .where('_id')
     .nin(req.session.user.connections)
+    .where('_id')
+    .ne(req.session.user.id)
     .then(function(docs) {
       console.log(docs);
       res.json(docs);
@@ -183,7 +185,8 @@ router.get('/global', function(req, res) {
   UserModel.find(
     {
       _id: {
-        $nin: req.session.user.connections
+        $nin: req.session.user.connections,
+        $ne: req.session.user.id
       }
     },
     function(err, users) {

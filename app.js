@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('client-sessions');
-var socketio = require('socket.io');
+// var socketio = require('socket.io');
 var crypto = require('crypto');
 
 var index = require('./routes/index');
@@ -16,19 +16,8 @@ var action = require('./routes/action');
 var random = require('./routes/random');
 var UserModel = require('./routes/user-model');
 var ChatModel = require('./routes/chat-model');
-var SocketHandler = require('./socket-handler');
 
 var app = express();
-
-// Socket.io
-var io = socketio();
-app.io = io;
-
-io.on('connection', function(socket) {
-  let socketHandler = new SocketHandler();
-  socketHandler.handleMessaging(io, socket);
-  socketHandler.handleNotifications(io, socket);
-});
 
 // Mongoose
 // Connects to the "users" database in MongoDB

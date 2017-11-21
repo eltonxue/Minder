@@ -8,26 +8,26 @@
 
     <link rel="stylesheet" type="text/css" href="stylesheets/profile.css">
 
-    <script src="http://maps.google.com/maps/api/js?libraries=places&key=AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8"
+    <script src="https://maps.google.com/maps/api/js?libraries=places&key=AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8"
            type="text/javascript"></script>
   </head>
 
   <body>
     <% include ./navbar %>
-    <img id="profile-picture" src="<%= user.image %>" />
+    <img id="profile-picture" src="<%= otherUser.image %>" />
     <div class="center-content">
-      <h1><%= user.name %></h1>
+      <h1><%= otherUser.name %></h1>
     </div>
     <div id="button-container" class="center-content">
-      <% if (sessionUser.connections.indexOf(user._id) > -1) { %>
-        <div id="remove" data-id="<%= user._id %>" class="button-submit">Remove Connection</div>
-      <% } else if (sessionUser.pendingRequests.indexOf(user._id) > -1) { %>
-        <div id="accept" data-id="<%= user._id %>" class="button-submit">Accept</div>
-        <div id="deny" data-id="<%= user._id %>" class="button-submit">Deny</div>
-      <% } else if (sessionUser.pendingInvites.indexOf(user._id) > -1) { %>
-        <div id="cancel" data-id="<%= user._id %>" class="button-submit">Cancel Request</div>
+      <% if (user.connections.indexOf(otherUser._id) > -1) { %>
+        <div id="remove" data-id="<%= otherUser._id %>" class="button-submit">Remove Connection</div>
+      <% } else if (user.pendingRequests.indexOf(otherUser._id) > -1) { %>
+        <div id="accept" data-id="<%= otherUser._id %>" class="button-submit">Accept</div>
+        <div id="deny" data-id="<%= otherUser._id %>" class="button-submit">Deny</div>
+      <% } else if (user.pendingInvites.indexOf(otherUser._id) > -1) { %>
+        <div id="cancel" data-id="<%= otherUser._id %>" class="button-submit">Cancel Request</div>
       <% } else { %>
-        <div id="connect" data-id="<%= user._id %>" class="button-submit">Connect</div>
+        <div id="connect" data-id="<%= otherUser._id %>" class="button-submit">Connect</div>
       <% } %>
     </div>
     <div
@@ -37,17 +37,17 @@
           <h2>Description</h2>
           <div>
             <p>
-              <%= user.description %>
+              <%= otherUser.description %>
             </p>
           </div>
         </div>
         <div class="info">
           <h2>Education</h2>
           <div>
-            <h2><%= user.school %></h2>
-            <p><strong>Major: </strong><%= user.major %></p>
-            <p><strong>Minor: </strong><%= user.minor %></p>
-            <p><strong>GPA: </strong><%= user.gpa %></p>
+            <h2><%= otherUser.school %></h2>
+            <p><strong>Major: </strong><%= otherUser.major %></p>
+            <p><strong>Minor: </strong><%= otherUser.minor %></p>
+            <p><strong>GPA: </strong><%= otherUser.gpa %></p>
           </div>
         </div>
       </div>
@@ -55,15 +55,15 @@
         <div class="split-page">
           <div class="info">
             <h2>Tags</h2>
-            <% for (let i = 0; i < user.tags.length; ++i) { %>
-              <span class="tag"><%= user.tags[i] %></span>
+            <% for (let i = 0; i < otherUser.tags.length; ++i) { %>
+              <span class="tag"><%= otherUser.tags[i] %></span>
             <% } %>
           </div>
           <div class="info">
             <h2>Location</h2>
             <p>
               <strong>Current: </strong>
-              <span id="current"><%= user.location.name %></span>
+              <span id="current"><%= otherUser.location.name %></span>
               <div id="location-map"></div>
             </p>
           </div>

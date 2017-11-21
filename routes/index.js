@@ -45,8 +45,7 @@ router.get('/profile-:id', function(req, res, next) {
           }
         }
         res.render('user-profile', {
-          sessionUser: req.session.user,
-          user: user,
+          otherUser: user,
           connections: connections
         });
       })

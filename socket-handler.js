@@ -3,9 +3,7 @@ var crypto = require('crypto');
 var ChatModel = require('./routes/chat-model');
 
 class SocketHandler {
-  constructor() {
-    console.log('A user connected');
-  }
+  constructor() {}
 
   handleMessaging(io, socket) {
     let sender = {};
@@ -24,7 +22,8 @@ class SocketHandler {
       socket.leave(hashedRoom);
     });
     socket.on('send', function(message, room) {
-      // SAVE MESSAGE INTO CHAT MODEL
+      var socketio = require('./socketio');
+
       let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
 
       ChatModel.create({
@@ -42,27 +41,28 @@ class SocketHandler {
         message,
         room: hashedRoom
       }).then(function(msg) {
-        io.sockets.in(hashedRoom).emit('message', msg, sender);
+        io.sockets.in(hashedRoom).emit('message', msg);
+
+        const otherUserSocket = socketio.sockets()[msg.recipient.id];
+        if (otherUserSocket) {
+          otherUserSocket.emit('push_message', msg);
+        }
       });
     });
   }
 
   handleNotifications(io, socket) {
     socket.on('confirm', function(sessionUser, otherUser) {
-      let room = sessionUser._id + otherUser._id;
+      var socketio = require('./socketio');
 
-      // Handles case for strings with same characters
-      room = room.split('');
-      room.sort();
-      room = room.join('');
-      console.log(room);
-
-      let hashedRoom = crypto.createHash('md5').update(room).digest('hex');
-      socket.join(hashedRoom);
       console.log(`push the notification for: ${otherUser.name}`);
-      // io.sockets.in(hashedRoom).emit('push', otherUser);
       const from = sessionUser;
-      socket.broadcast.emit('push', from, otherUser);
+      const otherUserSocket = socketio.sockets()[otherUser._id];
+
+      if (otherUserSocket) {
+        console.log(otherUserSocket.id);
+        otherUserSocket.emit('push_friend_request', from);
+      }
     });
   }
 }

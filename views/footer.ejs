@@ -1,3 +1,10 @@
 <p>© Copyright 2017 Minder</p>
 <script src="/socket.io/socket.io.js"></script>
+<script>
+var socket = io({
+  query: {
+    id: '<%= user._id %>'
+  }
+});
+</script>
 <script src="javascripts/notifications.js"></script>

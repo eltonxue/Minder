@@ -12,6 +12,7 @@ for (let i = 0; i < profiles.length; ++i) {
 
 function createProfile(user) {
   let profile = $('<div></div>', { class: 'profile' });
+  profile.attr('data-id', user._id);
   let image = $('<img>');
   image.attr('src', user.image);
   image.attr('class', 'profile-image');
@@ -29,48 +30,48 @@ function createProfile(user) {
 }
 
 // LOADING INITIAL SUGGESTIONS
-$.get('/user', function(data, status) {
+$.get('/user', function(sessionUser, status) {
   // POPULATE LOCALS
-  const lng = data.location.geo.coordinates[0];
-  const lat = data.location.geo.coordinates[1];
+  const lng = sessionUser.location.geo.coordinates[0];
+  const lat = sessionUser.location.geo.coordinates[1];
   $.get(`users/near?lat=${lat}&lng=${lng}`, function(users, status) {
     for (let i = 0; i < users.length; ++i) {
-      if (users[i].email != data.email) {
-        let profile = createProfile(users[i]);
+      let profile = createProfile(users[i]);
 
-        $('#locals-container').append(profile);
-      }
+      $('#locals-container').append(profile);
     }
   });
 
   // POPULATE SIMILAR TAGS
-  const tags = data.tags.join(',');
+  const tags = sessionUser.tags.join(',');
   $.get(`users/search-similar-tags?tags=${tags}`, function(users, status) {
     for (let i = 0; i < users.length; ++i) {
-      if (users[i].email != data.email) {
-        let profile = createProfile(users[i]);
-        let matches = $('<p></p>');
-        let label = $('<span></span>');
-        matches.html(
-          `Matches: <strong style="color: #496124; font-size: 25px"> ${users[i]
-            .tagMatches} </strong>`
-        );
+      let profile = createProfile(users[i]);
+      let matches = $('<p></p>');
+      let label = $('<span></span>');
+      matches.html(
+        `Matches: <strong style="color: #496124; font-size: 25px"> ${users[i]
+          .tagMatches} </strong>`
+      );
 
-        profile.append(matches);
+      profile.append(matches);
 
-        $('#similar-tags-container').append(profile);
-      }
+      $('#similar-tags-container').append(profile);
     }
   });
 
   // POPULATE RANDOM
-  const n = 20;
+  const n = 30;
   $.get(`users/global?results=${n}`, function(users, status) {
-    for (let i = 0; i < users.length; ++i) {
-      if (users[i].email != data.email) {
-        let profile = createProfile(users[i]);
+    let randoms = [];
 
-        $('#randoms-container').append(profile);
+    for (let i = 0; i < users.length; ++i) {
+      if (users[i]) {
+        if (randoms.indexOf(users[i]._id) == -1) {
+          let profile = createProfile(users[i]);
+          randoms.push(users[i]._id);
+          $('#randoms-container').append(profile);
+        }
       }
     }
   });
@@ -88,7 +89,7 @@ $('#search').on('click', function() {
 
 // SEARCH FUNCTION BY NAME
 function search() {
-  $.get('/user', function(data, status) {
+  $.get('/user', function(sessionUser, status) {
     $('#search-container').parent().remove();
     let name = $('#search-bar').val().replace(' ', '+');
     $.get(`/users/search-by-name?name=${name}`, function(users, status) {
@@ -101,7 +102,7 @@ function search() {
       });
 
       for (let i = 0; i < users.length; ++i) {
-        if (users[i].email != data.email) {
+        if (users[i].email != sessionUser.email) {
           let profile = createProfile(users[i]);
 
           searchContainer.append(profile);
