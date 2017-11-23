@@ -28,25 +28,23 @@ function updateConnections(sessionUser, users) {
     return connections.indexOf(user._id) > -1;
   });
 
-  connections.forEach(function(requestUser) {
+  connections.forEach(function(recipient) {
     let previewContainer = $('<li></li>', { class: 'preview-container' });
-    let preview = $('<div></div>', { class: 'users-message' });
+    let preview = $('<div></div>', { class: 'preview' });
 
     let img = $('<img/>', {
       class: 'profile-image',
-      src: requestUser.image
+      src: recipient.image
     });
     let namePreview = $('<div></div>', { class: 'name-preview' });
-    namePreview.text(requestUser.name);
+    namePreview.text(recipient.name);
 
     preview.append(img);
     preview.append(namePreview);
-    previewContainer.append(preview);
 
     previewContainer.on('click', function(event) {
-      // Hash ID of sessionUser and requestUser and set it to global currentRoom
-
-      let newRoom = sessionUser._id + requestUser._id;
+      // Hash ID of sessionUser and recipient and set it to global currentRoom
+      let newRoom = sessionUser._id + recipient._id;
 
       // Handles case for strings with same characters
       newRoom = newRoom.split('');
@@ -56,36 +54,48 @@ function updateConnections(sessionUser, users) {
       let oldRoom = currentRoom;
 
       if (newRoom != oldRoom) {
+        if (currentPreview) {
+          currentPreview.removeClass('preview-current');
+        }
+
+        preview.addClass('preview-current');
+
         socket.emit('leave', oldRoom);
 
         currentRoom = newRoom;
+        currentPreview = preview;
+        currentRecipientID = recipient._id;
+
+        $('#users-container li:first').after(previewContainer);
+        $('#users-container').scrollTop(0);
 
         $('#message-box').attr(
           'placeholder',
-          `Chatting with ${requestUser.name}`
+          `Chatting with ${recipient.name}`
         );
-        // Clear messages, add "User has entered"
 
-        socket.emit('join', currentRoom, sessionUser, requestUser);
+        socket.emit('join', currentRoom, sessionUser, recipient);
         joinRoom(currentRoom);
       }
     });
 
-    $('#users-container').append(previewContainer);
+    if (recipient._id == currentRecipientID) {
+      preview.addClass('preview-current');
+      currentPreview = preview;
+      previewContainer.append(currentPreview);
+      $('#users-container li:first').after(previewContainer);
+    } else {
+      previewContainer.append(preview);
+      $('#users-container').append(previewContainer);
+    }
   });
 }
 
-function displayConnections(keyword) {
+function searchConnections(keyword) {
   $.get('/user', function(sessionUser, status) {
-    if (keyword === '') {
-      $.get('/users', function(allUsers, status) {
-        updateConnections(sessionUser, allUsers);
-      });
-    } else {
-      $.get(`/users/search-by-name?name=${keyword}`, function(users, status) {
-        updateConnections(sessionUser, users);
-      });
-    }
+    $.get(`/users/search-by-name?name=${keyword}`, function(users, status) {
+      updateConnections(sessionUser, users);
+    });
   });
 }
 
@@ -107,18 +117,29 @@ function displayMessage(msg) {
   messageItem.append(profileIcon);
   messageItem.append(message);
 
-  $('#messages').append(messageItem);
+  let messagesList = $('#messages');
+  messagesList.append(messageItem);
+
+  messagesList.css('height', 'unset');
+
+  let height = messagesList.css('height');
+  height = parseInt(height.substring(0, height.indexOf('px')));
+
+  if (height >= 390) {
+    messagesList.css('height', '405px');
+  }
 
   messages.scrollTop = messages.scrollHeight;
 }
 
-var currentPreview = $('<li></li>');
 var currentRoom = '';
+var currentPreview = '';
+var currentRecipientID = '';
 
-displayConnections('');
+searchConnections('');
 
 function onSearch(event, input) {
-  displayConnections(input.value);
+  searchConnections(input.value);
 }
 
 function joinRoom(room) {

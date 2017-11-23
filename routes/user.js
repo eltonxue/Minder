@@ -4,7 +4,7 @@
 
 var express = require('express');
 var mongoose = require('mongoose');
-var UserModel = require('./user-model');
+var UserModel = require('../schemas/user');
 var fs = require('fs');
 var router = express.Router();
 
@@ -15,7 +15,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   UserModel.findById(req.session.user.id, function(err, user) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
     res.json(user);
   });
@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
 router.get('/connections', function(req, res, next) {
   UserModel.findById(req.session.user.id, function(err, user) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
     UserModel.find({})
       .then(function(users) {
@@ -52,7 +52,7 @@ router.get('/connections', function(req, res, next) {
         res.json(connections);
       })
       .catch(function(err) {
-        res.send(err);
+        return res.send(err);
       });
   });
 });
@@ -61,7 +61,7 @@ router.get('/connections', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
   UserModel.findById(req.params.id, function(err, user) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
     res.json(user);
   });
@@ -143,7 +143,7 @@ router.patch('/:id', function(req, res, next) {
 router.delete('/', function(req, res, next) {
   UserModel.findByIdAndRemove(req.session.user.id, function(err, user) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
     res.send(user);
   });
@@ -153,7 +153,7 @@ router.delete('/', function(req, res, next) {
 router.delete('/:id', function(req, res, next) {
   UserModel.findByIdAndRemove(req.params.id, function(err, user) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
     res.send(user);
   });

@@ -6,8 +6,8 @@ var express = require('express');
 var mongoose = require('mongoose');
 var axios = require('axios');
 var crypto = require('crypto');
-var UserModel = require('./user-model');
-var ChatModel = require('./chat-model');
+var UserModel = require('../schemas/user');
+var ChatModel = require('../schemas/chat');
 var router = express.Router();
 
 // req -> what we're RECEIVING to the server, the data
@@ -17,7 +17,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   UserModel.find({}, function(err, users) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
     res.send(users);
   });
@@ -53,7 +53,7 @@ router.post('/', function(req, res) {
 
   newUser.save(function(err, user) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
 
     res.json(user);
@@ -64,7 +64,7 @@ router.post('/', function(req, res) {
 router.post('/login', function(req, res, next) {
   UserModel.findOne({ email: req.body.email }, function(err, user) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
 
     if (!user) {
@@ -104,14 +104,13 @@ router.get('/search-by-room', function(req, res) {
       res.json({ sessionUser: req.session.user, messages });
     })
     .catch(function(err) {
-      res.send(err);
+      return res.send(err);
     });
 });
 
 // SEARCHING BY NAME
 router.get('/search-by-name', function(req, res) {
   var name = req.query.name;
-  console.log(req.session.user);
   UserModel.find({
     name: new RegExp(`^${name}`, 'i'),
     _id: { $ne: req.session.user._id }
@@ -154,7 +153,7 @@ router.get('/search-similar-tags', function(req, res) {
       res.json(users);
     })
     .catch(function(err) {
-      res.send(err);
+      return res.send(err);
     });
 });
 

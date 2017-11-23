@@ -1,6 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var UserModel = require('./user-model');
+var UserModel = require('../schemas/user');
 var router = express.Router();
 
 router.patch('/remove', function(req, res, next) {
@@ -28,6 +28,7 @@ router.patch('/remove', function(req, res, next) {
       if (err) {
         return res.send(err);
       }
+
       res.json(user);
     }
   );

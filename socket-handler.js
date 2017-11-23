@@ -1,6 +1,6 @@
 var express = require('express');
 var crypto = require('crypto');
-var ChatModel = require('./routes/chat-model');
+var ChatModel = require('./schemas/chat');
 
 class SocketHandler {
   constructor() {}

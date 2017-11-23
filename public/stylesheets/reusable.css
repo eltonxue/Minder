@@ -6,6 +6,10 @@ html {
   font-weight: lighter;
 }
 
+body {
+  margin-top: 75px;
+}
+
 footer {
   text-align: center;
 }
@@ -37,6 +41,22 @@ a {
 textarea:focus,
 input:focus {
   outline: none;
+}
+
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#navbar > li > a {
+  box-shadow: 4px 4px 4px #739696;
+  margin-right: 5px;
+  font-weight: bolder;
+}
+#navbar > li > a:hover {
+  color: black;
+  background-color: #b4dbdc;
 }
 
 .center-content {
@@ -90,8 +110,9 @@ input:focus {
 }
 
 .button-submit:hover {
-  background-color: #739696;
   cursor: pointer;
+  color: black;
+  background-color: #b4dbdc;
 }
 
 .match-info {
@@ -170,10 +191,6 @@ input:focus {
   color: black;
 }
 
-::-webkit-scrollbar {
-  display: none;
-}
-
 .container {
   margin: 0px;
   width: 500px;
@@ -185,4 +202,8 @@ input:focus {
 #search-container {
   width: 1500px;
   padding-left: 50px;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

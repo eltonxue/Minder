@@ -1,8 +1,8 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var axios = require('axios');
-var UserModel = require('./user-model');
-var ChatModel = require('./chat-model');
+var UserModel = require('../schemas/user');
+var ChatModel = require('../schemas/chat');
 var router = express.Router();
 
 /* GET generated random users and save to database*/
@@ -129,7 +129,7 @@ router.get('/', function(req, res) {
         });
         newUser.save(function(err, user) {
           if (err) {
-            res.send(err);
+            return res.send(err);
           }
         });
       });
@@ -201,7 +201,7 @@ router.get('/connections', function(req, res) {
 router.get('/pending-connections', function(req, res) {
   UserModel.find({}, function(err, users) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
     users.forEach(function(currentUser) {
       const currentid = currentUser._id;
@@ -241,7 +241,7 @@ router.get('/pending-connections', function(req, res) {
             { new: true },
             function(err, newCurrentUser) {
               if (err) {
-                res.send(err);
+                return res.send(err);
               }
             }
           );
@@ -250,7 +250,7 @@ router.get('/pending-connections', function(req, res) {
             { pendingRequests: newPendingRequests },
             function(err, newOtherUser) {
               if (err) {
-                res.send(err);
+                return res.send(err);
               }
             }
           );

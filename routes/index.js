@@ -1,7 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var UserModel = require('./user-model');
-var auth = require('./utils');
+var UserModel = require('../schemas/user');
+var auth = require('../utils/utils');
 var router = express.Router();
 
 // ******************
@@ -33,7 +33,7 @@ router.get('/discovery', function(req, res, next) {
 router.get('/profile-:id', function(req, res, next) {
   UserModel.findById(req.params.id, function(err, user) {
     if (err) {
-      res.send(err);
+      return res.send(err);
     }
     UserModel.find({})
       .then(function(users) {
@@ -50,7 +50,7 @@ router.get('/profile-:id', function(req, res, next) {
         });
       })
       .catch(function(err) {
-        res.send(err);
+        return res.send(err);
       });
   });
 });

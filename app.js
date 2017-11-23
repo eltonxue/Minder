@@ -14,8 +14,8 @@ var user = require('./routes/user');
 var users = require('./routes/users');
 var action = require('./routes/action');
 var random = require('./routes/random');
-var UserModel = require('./routes/user-model');
-var ChatModel = require('./routes/chat-model');
+var UserModel = require('./schemas/user');
+var ChatModel = require('./schemas/chat');
 
 var app = express();
 
@@ -58,7 +58,7 @@ app.use(function(req, res, next) {
   if (req.session && req.session.user) {
     UserModel.findOne({ email: req.session.user.email }, function(err, user) {
       if (err) {
-        res.send(err);
+        return res.send(err);
       }
       if (user) {
         req.user = user;
