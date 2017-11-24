@@ -95,9 +95,6 @@ socket.on('push_friend_request', function(from) {
 });
 
 socket.on('push_message', function(msg) {
-  if (window.location.href.indexOf('/messages') !== -1) {
-    return;
-  }
   console.log(`message notification from: ${msg.sender.name} `);
 
   notificationContainer.css('display', 'none');
@@ -149,4 +146,8 @@ socket.on('push_message', function(msg) {
 
   notificationContainer.css('display', 'flex');
   notificationContainer.animate({ opacity: 1, marginRight: 50 }, 500);
+});
+
+socket.on('push_unread', function(unreadCount) {
+  $('#unread-count').text(`Messages (${unreadCount})`);
 });

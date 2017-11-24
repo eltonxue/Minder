@@ -1,6 +1,7 @@
 var express = require('express');
 var crypto = require('crypto');
 var ChatModel = require('./schemas/chat');
+var UserModel = require('./schemas/user');
 
 class SocketHandler {
   constructor() {}
@@ -40,14 +41,52 @@ class SocketHandler {
         },
         message,
         room: hashedRoom
-      }).then(function(msg) {
-        io.sockets.in(hashedRoom).emit('message', msg);
+      })
+        .then(function(msg) {
+          io.sockets.in(hashedRoom).emit('message', msg);
 
-        const otherUserSocket = socketio.sockets()[msg.recipient.id];
-        if (otherUserSocket) {
-          otherUserSocket.emit('push_message', msg);
-        }
-      });
+          const senderID = msg.sender.id;
+          const recipientID = msg.recipient.id;
+          const otherUserSocket = socketio.sockets()[recipientID];
+
+          if (otherUserSocket) {
+            otherUserSocket.emit('push_message', msg);
+          }
+
+          UserModel.findById(recipientID)
+            .then(function(recipient) {
+              let { unreadMessages } = recipient;
+              if (!unreadMessages) {
+                unreadMessages = {};
+              }
+              if (senderID in unreadMessages) {
+                unreadMessages[senderID] += 1;
+              } else {
+                unreadMessages[senderID] = 1;
+              }
+
+              UserModel.findByIdAndUpdate(
+                recipientID,
+                { unreadMessages },
+                { new: true }
+              ).then(function(user) {
+                if (otherUserSocket) {
+                  otherUserSocket.emit(
+                    'push_unread',
+                    Object.values(user.unreadMessages).reduce(function(a, b) {
+                      return a + b;
+                    }, 0)
+                  );
+                }
+              });
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
     });
   }
 

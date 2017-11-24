@@ -1,7 +1,11 @@
 <ul id="navbar">
   <li><a class="button-submit" href="discovery">Discover</a></li>
   <li><a class="button-submit" href="self-profile">My Profile</a></li>
-  <li><a class="button-submit" href="messages">Messages</a></li>
+  <li>
+    <a id="unread-count" class="button-submit" href="messages">Messages
+      (<%= Object.values(user.unreadMessages).reduce(function(a, b) {return a + b}, 0) %>)
+    </a>
+  </li>
   <li><a class="button-submit" href="connections">Connections</a></li>
   <li><a class="button-submit" href="logout">Logout</a></li>
 </ul>

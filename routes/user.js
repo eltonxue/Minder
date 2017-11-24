@@ -23,38 +23,34 @@ router.get('/', function(req, res, next) {
 
 // GET SESSION USER CONNECTIONS
 router.get('/connections', function(req, res, next) {
-  UserModel.findById(req.session.user.id, function(err, user) {
-    if (err) {
-      return res.send(err);
-    }
-    UserModel.find({})
-      .then(function(users) {
-        let connections = {
-          userConnections: [],
-          pendingRequests: [],
-          pendingInvites: []
-        };
-        for (let i = 0; i < users.length; ++i) {
-          let index = user.connections.indexOf(users[i]._id);
-          if (index > -1) {
-            connections.userConnections.push(users[i]);
-          }
-          index = user.pendingRequests.indexOf(users[i]._id);
-          if (index > -1) {
-            connections.pendingRequests.push(users[i]);
-          }
-          index = user.pendingInvites.indexOf(users[i]._id);
-          if (index > -1) {
-            connections.pendingInvites.push(users[i]);
-          }
-        }
+  UserModel.find({})
+    .then(function(users) {
+      let connections = {
+        userConnections: [],
+        pendingRequests: [],
+        pendingInvites: []
+      };
 
-        res.json(connections);
-      })
-      .catch(function(err) {
-        return res.send(err);
-      });
-  });
+      for (let i = 0; i < users.length; ++i) {
+        let index = req.session.user.connections.indexOf(users[i]._id);
+        if (index > -1) {
+          connections.userConnections.push(users[i]);
+        }
+        index = req.session.user.pendingRequests.indexOf(users[i]._id);
+        if (index > -1) {
+          connections.pendingRequests.push(users[i]);
+        }
+        index = req.session.user.pendingInvites.indexOf(users[i]._id);
+        if (index > -1) {
+          connections.pendingInvites.push(users[i]);
+        }
+      }
+
+      res.json(connections);
+    })
+    .catch(function(err) {
+      return res.send(err);
+    });
 });
 
 /* GET user with :id */

@@ -32,6 +32,8 @@ function updateConnections(sessionUser, users) {
     let previewContainer = $('<li></li>', { class: 'preview-container' });
     let preview = $('<div></div>', { class: 'preview' });
 
+    preview.attr('data-id', recipient._id);
+
     let img = $('<img/>', {
       class: 'profile-image',
       src: recipient.image
@@ -44,10 +46,7 @@ function updateConnections(sessionUser, users) {
 
     previewContainer.on('click', function(event) {
       // Hash ID of sessionUser and recipient and set it to global currentRoom
-      let newRoom = sessionUser._id + recipient._id;
-
-      // Handles case for strings with same characters
-      newRoom = newRoom.split('');
+      let newRoom = [sessionUser._id, recipient._id];
       newRoom.sort();
       newRoom = newRoom.join('');
 
@@ -66,9 +65,6 @@ function updateConnections(sessionUser, users) {
         currentPreview = preview;
         currentRecipientID = recipient._id;
 
-        $('#users-container li:first').after(previewContainer);
-        $('#users-container').scrollTop(0);
-
         $('#message-box').attr(
           'placeholder',
           `Chatting with ${recipient.name}`
@@ -83,7 +79,7 @@ function updateConnections(sessionUser, users) {
       preview.addClass('preview-current');
       currentPreview = preview;
       previewContainer.append(currentPreview);
-      $('#users-container li:first').after(previewContainer);
+      $('#users-container').append(previewContainer);
     } else {
       previewContainer.append(preview);
       $('#users-container').append(previewContainer);
@@ -96,6 +92,92 @@ function searchConnections(keyword) {
     $.get(`/users/search-by-name?name=${keyword}`, function(users, status) {
       updateConnections(sessionUser, users);
     });
+  });
+}
+
+function displayUnreadMessages() {
+  $.get('/user', function(sessionUser, status) {
+    if (sessionUser.unreadMessages) {
+      $.get(
+        `/users/search-by-ids?ids=${Object.keys(
+          sessionUser.unreadMessages
+        ).join(',')}`,
+        function(unreadUsers, status) {
+          unreadUsers.forEach(function(user) {
+            const sessionUserID = sessionUser._id;
+            const otherUserID = user._id;
+            let info = $('<div></div>');
+            info.html(
+              `<strong>${user.name}</strong> | Unread Messages <strong>(${sessionUser
+                .unreadMessages[
+                otherUserID
+              ]})</strong><br/><i>Click to Clear</i>`
+            );
+
+            let profileIcon = $('<img />', {
+              src: user.image
+            });
+
+            let unreadMessageContainer = $('<li></li>', {
+              class: 'unread-message'
+            });
+
+            unreadMessageContainer.append(profileIcon);
+            unreadMessageContainer.append(info);
+
+            unreadMessageContainer.on('click', function(event) {
+              let newRoom = [sessionUserID, otherUserID];
+              newRoom.sort();
+              newRoom = newRoom.join('');
+
+              currentRoom = newRoom;
+              currentRecipientID = otherUserID;
+
+              $('#message-box').attr(
+                'placeholder',
+                `Chatting with ${user.name}`
+              );
+
+              socket.emit('join', currentRoom, sessionUser, user);
+              joinRoom(currentRoom);
+
+              let previewsList = $('.preview');
+              for (let i = 0; i < previewsList.length; ++i) {
+                let preview = $(previewsList[i]);
+                if (preview.data('id') == otherUserID) {
+                  preview.addClass('preview-current');
+                  currentPreview = preview;
+                }
+              }
+
+              let unreadMessages = sessionUser.unreadMessages;
+              console.log(unreadMessages[otherUserID]);
+              const text = $('#unread-count').text();
+              const start = text.indexOf('(');
+              const end = text.indexOf(')');
+              const unread = parseInt(text.substring(start + 1, end));
+
+              let unreadCount = unread - unreadMessages[otherUserID];
+              $('#unread-count').html(`Messages (${unreadCount})`);
+
+              delete unreadMessages[otherUserID];
+
+              $.ajax({
+                url: '/user',
+                type: 'PATCH',
+                data: JSON.stringify({ unreadMessages }),
+                contentType: 'application/json',
+                success: function(user) {
+                  console.log(user);
+                }
+              });
+            });
+
+            $('#messages').append(unreadMessageContainer);
+          });
+        }
+      );
+    }
   });
 }
 
@@ -112,12 +194,12 @@ function displayMessage(msg) {
     src: msg.sender.image
   });
 
-  let messageItem = $('<div></div>', { class: 'message-item' });
+  let messageItem = $('<li></li>', { class: 'message-item' });
 
   messageItem.append(profileIcon);
   messageItem.append(message);
 
-  let messagesList = $('#messages');
+  const messagesList = $('#messages');
   messagesList.append(messageItem);
 
   messagesList.css('height', 'unset');
@@ -137,6 +219,7 @@ var currentPreview = '';
 var currentRecipientID = '';
 
 searchConnections('');
+displayUnreadMessages();
 
 function onSearch(event, input) {
   searchConnections(input.value);

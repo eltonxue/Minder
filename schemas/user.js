@@ -24,7 +24,8 @@ var userSchema = mongoose.Schema({
       coordinates: { type: Array } // SHOULD BE LNG, LAT
     }
   },
-  image: String
+  image: String,
+  unreadMessages: { type: Object } // Object of user IDs : # messages
 });
 
 userSchema.index({ 'location.geo': '2dsphere' });

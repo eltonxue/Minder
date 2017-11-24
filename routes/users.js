@@ -48,7 +48,8 @@ router.post('/', function(req, res) {
     pendingInvites: body.pendingInvites,
     pendingRequests: body.pendingRequests,
     location: body.location,
-    image: body.image
+    image: body.image,
+    unreadMessages: body.unreadMessages
   });
 
   newUser.save(function(err, user) {
@@ -102,6 +103,21 @@ router.get('/search-by-room', function(req, res) {
         return a.date > b.date;
       });
       res.json({ sessionUser: req.session.user, messages });
+    })
+    .catch(function(err) {
+      return res.send(err);
+    });
+});
+
+// SEARCHING BY IDS
+router.get('/search-by-ids', function(req, res) {
+  var ids = req.query.ids.split(',');
+  ids = ids.map(function(id) {
+    return mongoose.Types.ObjectId(id);
+  });
+  UserModel.find({ _id: { $in: ids } })
+    .then(function(users) {
+      res.json(users);
     })
     .catch(function(err) {
       return res.send(err);

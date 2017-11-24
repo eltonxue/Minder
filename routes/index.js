@@ -21,7 +21,7 @@ router.use(auth.requireLogin);
 
 /* GET session profile page. */
 router.get('/self-profile', function(req, res, next) {
-  res.render('self-profile', { user: req.session.user });
+  res.render('self-profile');
 });
 
 /* GET discovery page. */
@@ -57,7 +57,7 @@ router.get('/profile-:id', function(req, res, next) {
 
 /* GET connect page. */
 router.get('/connect-:id', function(req, res, next) {
-  res.render('connect', { user: req.session.user, connectid: req.params.id });
+  res.render('connect', { connectid: req.params.id });
 });
 
 /* GET messages page. */
@@ -67,7 +67,7 @@ router.get('/messages', function(req, res, next) {
 
 /* GET connections page. */
 router.get('/connections', function(req, res, next) {
-  res.render('connections', { user: req.session.user });
+  res.render('connections');
 });
 
 /* LOGGING OUT */

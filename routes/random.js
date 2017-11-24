@@ -125,7 +125,8 @@ router.get('/', function(req, res) {
           pendingInvites: [],
           pendingRequests: [],
           location: randomLocation,
-          image: userInfo.picture.large
+          image: userInfo.picture.large,
+          unreadMessages: {}
         });
         newUser.save(function(err, user) {
           if (err) {

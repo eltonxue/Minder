@@ -34,7 +34,8 @@ function postUser(name, email, password) {
       }
     },
     image:
-      'https://www.thereminder.com/Templates/ReviewList/Review/icon-user-default.png'
+      'https://www.thereminder.com/Templates/ReviewList/Review/icon-user-default.png',
+    unreadMessages: {}
   };
 
   $.get(GET_BASE_URL, function(getData, status) {

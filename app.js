@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('client-sessions');
-// var socketio = require('socket.io');
 var crypto = require('crypto');
 
 var index = require('./routes/index');

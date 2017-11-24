@@ -67,7 +67,8 @@ input {
   margin: 10px 12px 10px 0px;
 }
 
-.preview:hover {
+.preview:hover,
+.unread-message:hover {
   cursor: pointer;
   background-color: #d1eced;
 }
@@ -96,10 +97,11 @@ input {
 
 #messages {
   position: absolute;
-  bottom: 0px;
-  padding-right: 15px;
+  bottom: 5px;
+  padding-right: 20px;
   width: 700px;
   overflow: auto;
+  height: 405px;
 }
 
 .message-item {
@@ -131,9 +133,39 @@ input {
   background-color: #93c4c4;
 }
 
+#unread-messages-title {
+  margin: 0px;
+  padding: 5px;
+  font-size: 25x;
+  text-align: center;
+  border: 1px solid #658585;
+  margin-bottom: 5px;
+  background-color: #e2e2e2;
+}
+.unread-message {
+  display: flex;
+  justify-content: flex-start;
+  border: 1px solid #658585;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.unread-message > img {
+  margin: 2px;
+  height: 120px;
+  width: 120px;
+}
+.unread-message > div {
+  text-align: center;
+  width: 100%;
+  padding: 40px 15px 0px 15px;
+  font-weight: lighter;
+  font-size: 22px;
+}
+
 #messages-input-container {
   position: absolute;
-  bottom: 25px;
+  bottom: 20px;
   height: 50px;
   width: 715px;
   margin-top: 10px;
