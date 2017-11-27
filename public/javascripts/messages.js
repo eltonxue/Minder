@@ -21,77 +21,80 @@ $('#send').on('click', function() {
   sendMessage();
 });
 
-function updateConnections(sessionUser, users) {
-  $('#users-container li').slice(1).remove();
-  let connections = sessionUser.connections;
-  connections = users.filter(function(user) {
-    return connections.indexOf(user._id) > -1;
-  });
-
-  connections.forEach(function(recipient) {
-    let previewContainer = $('<li></li>', { class: 'preview-container' });
-    let preview = $('<div></div>', { class: 'preview' });
-
-    preview.attr('data-id', recipient._id);
-
-    let img = $('<img/>', {
-      class: 'profile-image',
-      src: recipient.image
+function updateConnections(users) {
+  $.get('/user', function(sessionUser, status) {
+    $('#users-container li').slice(1).remove();
+    let connections = sessionUser.connections;
+    connections = users.filter(function(user) {
+      return connections.indexOf(user._id) > -1;
     });
-    let namePreview = $('<div></div>', { class: 'name-preview' });
-    namePreview.text(recipient.name);
 
-    preview.append(img);
-    preview.append(namePreview);
+    connections.forEach(function(recipient) {
+      let previewContainer = $('<li></li>', { class: 'preview-container' });
+      let preview = $('<div></div>', { class: 'preview' });
 
-    previewContainer.on('click', function(event) {
-      // Hash ID of sessionUser and recipient and set it to global currentRoom
-      let newRoom = [sessionUser._id, recipient._id];
-      newRoom.sort();
-      newRoom = newRoom.join('');
+      preview.attr('data-id', recipient._id);
 
-      let oldRoom = currentRoom;
+      let img = $('<img/>', {
+        class: 'profile-image',
+        src: recipient.image
+      });
+      let namePreview = $('<div></div>', { class: 'name-preview' });
+      namePreview.text(recipient.name);
 
-      if (newRoom != oldRoom) {
-        if (currentPreview) {
-          currentPreview.removeClass('preview-current');
+      preview.append(img);
+      preview.append(namePreview);
+
+      previewContainer.on('click', function(event) {
+        // Hash ID of sessionUser and recipient and set it to global currentRoom
+        let newRoom = [sessionUser._id, recipient._id];
+        newRoom.sort();
+        newRoom = newRoom.join('');
+
+        let oldRoom = currentRoom;
+
+        // If session user clicks joins another room
+        if (newRoom != oldRoom) {
+          if (currentPreview) {
+            currentPreview.removeClass('preview-current');
+          }
+
+          preview.addClass('preview-current');
+
+          socket.emit('leave', oldRoom);
+
+          currentRoom = newRoom;
+          currentPreview = preview;
+          currentRecipientID = recipient._id;
+
+          $('#message-box').attr(
+            'placeholder',
+            `Chatting with ${recipient.name}`
+          );
+          $.get('/user', function(sessionUser, status) {
+            socket.emit('join', currentRoom, sessionUser, recipient);
+          });
+
+          joinRoom(currentRoom);
         }
+      });
 
+      if (recipient._id == currentRecipientID) {
         preview.addClass('preview-current');
-
-        socket.emit('leave', oldRoom);
-
-        currentRoom = newRoom;
         currentPreview = preview;
-        currentRecipientID = recipient._id;
-
-        $('#message-box').attr(
-          'placeholder',
-          `Chatting with ${recipient.name}`
-        );
-
-        socket.emit('join', currentRoom, sessionUser, recipient);
-        joinRoom(currentRoom);
+        previewContainer.append(currentPreview);
+        $('#users-container').append(previewContainer);
+      } else {
+        previewContainer.append(preview);
+        $('#users-container').append(previewContainer);
       }
     });
-
-    if (recipient._id == currentRecipientID) {
-      preview.addClass('preview-current');
-      currentPreview = preview;
-      previewContainer.append(currentPreview);
-      $('#users-container').append(previewContainer);
-    } else {
-      previewContainer.append(preview);
-      $('#users-container').append(previewContainer);
-    }
   });
 }
 
 function searchConnections(keyword) {
-  $.get('/user', function(sessionUser, status) {
-    $.get(`/users/search-by-name?name=${keyword}`, function(users, status) {
-      updateConnections(sessionUser, users);
-    });
+  $.get(`/users/search-by-name?name=${keyword}`, function(users, status) {
+    updateConnections(users);
   });
 }
 
@@ -151,12 +154,12 @@ function displayUnreadMessages() {
               }
 
               let unreadMessages = sessionUser.unreadMessages;
-              console.log(unreadMessages[otherUserID]);
               const text = $('#unread-count').text();
               const start = text.indexOf('(');
               const end = text.indexOf(')');
               const unread = parseInt(text.substring(start + 1, end));
 
+              // Subtract unread messages count
               let unreadCount = unread - unreadMessages[otherUserID];
               $('#unread-count').html(`Messages (${unreadCount})`);
 
@@ -166,10 +169,7 @@ function displayUnreadMessages() {
                 url: '/user',
                 type: 'PATCH',
                 data: JSON.stringify({ unreadMessages }),
-                contentType: 'application/json',
-                success: function(user) {
-                  console.log(user);
-                }
+                contentType: 'application/json'
               });
             });
 
@@ -183,11 +183,7 @@ function displayUnreadMessages() {
 
 function displayMessage(msg) {
   let message = $('<p></p>', { class: 'message-text' });
-  message.html(
-    `<span class="message-sender-name">(${msg.sender.name.split(
-      ' '
-    )[0]})</span>${msg.message}`
-  );
+  message.text(msg.message);
 
   let profileIcon = $('<img />', {
     class: 'profile-icon-image',
@@ -196,8 +192,15 @@ function displayMessage(msg) {
 
   let messageItem = $('<li></li>', { class: 'message-item' });
 
-  messageItem.append(profileIcon);
-  messageItem.append(message);
+  if (msg.sender.id != currentRecipientID) {
+    messageItem.attr('class', 'message-item sender');
+    messageItem.append(message);
+    messageItem.append(profileIcon);
+  } else {
+    messageItem.attr('class', 'message-item recipient');
+    messageItem.append(profileIcon);
+    messageItem.append(message);
+  }
 
   const messagesList = $('#messages');
   messagesList.append(messageItem);

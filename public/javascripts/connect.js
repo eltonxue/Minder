@@ -8,10 +8,7 @@ function cancelInvite(profile) {
       id: otherUserID
     }),
     contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-
+    success: function(otherUser) {
       profile.remove();
 
       const invitesContainer = $('#pending-invites-container');
@@ -72,10 +69,7 @@ function sendInvite(id) {
         id: otherUserID
       }),
       contentType: 'application/json',
-      success: function(otherUser, textStatus, jqXhr) {
-        console.log('Successful Patch!');
-        console.log(otherUser);
-
+      success: function(otherUser) {
         socket.emit('confirm', sessionUser, otherUser);
 
         window.location.href = 'connections';

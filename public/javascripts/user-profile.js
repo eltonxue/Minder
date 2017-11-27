@@ -4,11 +4,7 @@
 
 API_KEY = 'AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8';
 
-updateMap(); // Updates the initial map on the screen
-
-// ***************
-// *** DIVIDER ***
-// ***************
+updateMap();
 
 function updateMap() {
   let mapElement = document.getElementById('location-map');
@@ -46,11 +42,7 @@ function removeConnection(id) {
     data: JSON.stringify({
       id: otherUserID
     }),
-    contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-    }
+    contentType: 'application/json'
   });
 }
 
@@ -63,11 +55,7 @@ function acceptConnection(id) {
     data: JSON.stringify({
       id: otherUserID
     }),
-    contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-    }
+    contentType: 'application/json'
   });
 }
 
@@ -80,11 +68,7 @@ function denyConnection(id) {
     data: JSON.stringify({
       id: otherUserID
     }),
-    contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-    }
+    contentType: 'application/json'
   });
 }
 
@@ -97,19 +81,21 @@ function cancelConnection(id) {
     data: JSON.stringify({
       id: otherUserID
     }),
-    contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-    }
+    contentType: 'application/json'
   });
 }
 
-$('#button-container').on('click', '#connect', function() {
+$('.container').on('click', '.profile', function(event) {
+  window.location.href = `profile-${$(this).data('id')}`;
+});
+
+const buttonContainer = $('#button-container');
+
+buttonContainer.on('click', '#connect', function() {
   window.location.href = `connect-${$(this).data('id')}`;
 });
 
-$('#button-container').on('click', '#remove', function() {
+buttonContainer.on('click', '#remove', function() {
   const id = $(this).data('id');
   removeConnection(id);
   let connectButton = $('<div></div>', {
@@ -118,22 +104,22 @@ $('#button-container').on('click', '#remove', function() {
   });
   connectButton.attr('data-id', id);
   connectButton.text('Connect');
-  $('#button-container').append(connectButton);
+  buttonContainer.append(connectButton);
   $(this).remove();
 });
 
-$('#button-container').on('click', '#accept', function() {
+buttonContainer.on('click', '#accept', function() {
   const id = $(this).data('id');
   acceptConnection(id);
   let removeButton = $('<div></div>', { id: 'remove', class: 'button-submit' });
   removeButton.attr('data-id', id);
-  $('#button-container').append(removeButton);
+  buttonContainer.append(removeButton);
   removeButton.text('Remove Connection');
   $(this).next().remove();
   $(this).remove();
 });
 
-$('#button-container').on('click', '#deny', function() {
+buttonContainer.on('click', '#deny', function() {
   const id = $(this).data('id');
   denyConnection(id);
 
@@ -143,12 +129,12 @@ $('#button-container').on('click', '#deny', function() {
   });
   connectButton.attr('data-id', id);
   connectButton.text('Connect');
-  $('#button-container').append(connectButton);
+  buttonContainer.append(connectButton);
   $(this).prev().remove();
   $(this).remove();
 });
 
-$('#button-container').on('click', '#cancel', function() {
+buttonContainer.on('click', '#cancel', function() {
   const id = $(this).data('id');
   cancelConnection(id);
 
@@ -158,11 +144,7 @@ $('#button-container').on('click', '#cancel', function() {
   });
   connectButton.attr('data-id', id);
   connectButton.text('Connect');
-  $('#button-container').append(connectButton);
+  buttonContainer.append(connectButton);
   $(this).prev().remove();
   $(this).remove();
-});
-
-$('.container').on('click', '.profile', function(event) {
-  window.location.href = `profile-${$(this).data('id')}`;
 });

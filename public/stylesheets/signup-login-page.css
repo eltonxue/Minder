@@ -6,6 +6,10 @@ h2 {
   color: #313131;
 }
 
+body {
+  margin-top: 20px;
+}
+
 label {
   color: black;
   display: inline-block;
@@ -18,7 +22,7 @@ label {
 }
 
 input {
-  background-color: #eee;
+  background-color: white;
   padding: 5px 10px;
   height: 30px;
   width: 300px;
@@ -44,4 +48,12 @@ input {
   color: green;
   font-weight: lighter;
   text-shadow: 1px 1px 1px white;
+}
+
+#authentication {
+  background-color: #cbeaea;
+  padding: 20px 40px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  box-shadow: 0px 0px 50px #739696;
 }

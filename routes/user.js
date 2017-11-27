@@ -11,17 +11,18 @@ var router = express.Router();
 // req -> what we're RECEIVING to the server, the data
 // res -> what we're SENDING BACK to the client
 
-/* GET user with session user */
+// GETS CURRENT SESSION USER
 router.get('/', function(req, res, next) {
-  UserModel.findById(req.session.user.id, function(err, user) {
-    if (err) {
+  UserModel.findById(req.session.user.id)
+    .then(function(user) {
+      res.json(user);
+    })
+    .catch(function(err) {
       return res.send(err);
-    }
-    res.json(user);
-  });
+    });
 });
 
-// GET SESSION USER CONNECTIONS
+// GET SESSION USER'S CONNECTIONS
 router.get('/connections', function(req, res, next) {
   UserModel.find({})
     .then(function(users) {
@@ -53,17 +54,18 @@ router.get('/connections', function(req, res, next) {
     });
 });
 
-/* GET user with :id */
+// GET USER BY ID
 router.get('/:id', function(req, res, next) {
-  UserModel.findById(req.params.id, function(err, user) {
-    if (err) {
+  UserModel.findById(req.params.id)
+    .then(function(user) {
+      res.json(user);
+    })
+    .catch(function(err) {
       return res.send(err);
-    }
-    res.json(user);
-  });
+    });
 });
 
-/* PATCH user with session user */
+// PATCH SESSION USER WITH PASSED DATA
 router.patch('/', function(req, res, next) {
   var data = req.body;
   if (req.body.image) {
@@ -73,7 +75,6 @@ router.patch('/', function(req, res, next) {
       `${__dirname}/../public/images/profile/${req.session.user.id}.png`,
       buffer
     );
-
     data.image = `/images/profile/${req.session.user.id}.png`;
   }
 
@@ -86,21 +87,16 @@ router.patch('/', function(req, res, next) {
     );
   }
 
-  UserModel.findByIdAndUpdate(
-    req.session.user.id,
-    data,
-    { new: true },
-    function(err, user) {
-      if (err) {
-        return res.send(err);
-      }
-
+  UserModel.findByIdAndUpdate(req.session.user.id, data, { new: true })
+    .then(function(user) {
       res.json(user);
-    }
-  );
+    })
+    .catch(function(err) {
+      return res.send(err);
+    });
 });
 
-/* PATCH user with id user */
+// PATCH SPECIFIED USER (with given ID)
 router.patch('/:id', function(req, res, next) {
   var data = req.body;
   if (req.body.image) {
@@ -123,19 +119,16 @@ router.patch('/:id', function(req, res, next) {
     );
   }
 
-  UserModel.findByIdAndUpdate(req.params.id, data, { new: true }, function(
-    err,
-    user
-  ) {
-    if (err) {
+  UserModel.findByIdAndUpdate(req.params.id, data, { new: true })
+    .then(function(user) {
+      res.json(user);
+    })
+    .catch(function(err) {
       return res.send(err);
-    }
-
-    res.json(user);
-  });
+    });
 });
 
-/* DELETE session user from database */
+// DELETE SESSION USER FROM USER DATABASE
 router.delete('/', function(req, res, next) {
   UserModel.findByIdAndRemove(req.session.user.id, function(err, user) {
     if (err) {
@@ -145,7 +138,7 @@ router.delete('/', function(req, res, next) {
   });
 });
 
-/* DELETE user with ID */
+// DELETE SPECIFIED USER (with given ID) FROM USER DATABASE
 router.delete('/:id', function(req, res, next) {
   UserModel.findByIdAndRemove(req.params.id, function(err, user) {
     if (err) {

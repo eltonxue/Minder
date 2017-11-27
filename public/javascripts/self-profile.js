@@ -3,10 +3,6 @@
 // **********************
 
 const API_KEY = 'AIzaSyAp1-GKiZX19UcOZjRaTLlurgboIyS6UT8';
-const SESSION_USER_BASE_URL = '/user';
-
-// Current User -> Elton Xue
-// Gather all data necessary and display it on the screen
 
 // currentUser = user data that is currently in session
 // const sessionID = currentUser._id;
@@ -16,7 +12,7 @@ function updateUserInfo(data) {
     headers: {
       'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE'
     },
-    url: SESSION_USER_BASE_URL,
+    url: '/user',
     type: 'PATCH',
     data: JSON.stringify(data),
     contentType: 'application/json',
@@ -41,7 +37,7 @@ updateMap();
 // ************************
 
 function updateMap() {
-  $.get(SESSION_USER_BASE_URL, function(data, status) {
+  $.get('/user', function(data, status) {
     let mapElement = document.getElementById('location-map');
     const address = data.location.name;
 
@@ -98,18 +94,7 @@ function displayTag(value) {
   $('#tags').append(newTag);
 }
 
-function addTag(value) {
-  if (value != '') {
-    displayTag(value);
-    console.log(value);
-    $.get(SESSION_USER_BASE_URL, function(data, status) {
-      let newTags = data.tags;
-      newTags.push(value);
-      updateUserInfo({ tags: newTags });
-    });
-  }
-}
-
+// Handles if user presses 'enter'
 function appendTag(event, input) {
   let code = event.keyCode ? event.keyCode : event.which;
   if (code == 13) {
@@ -118,22 +103,28 @@ function appendTag(event, input) {
   }
 }
 
+function addTag(value) {
+  if (value != '') {
+    displayTag(value);
+    $.get('/user', function(data, status) {
+      let newTags = data.tags;
+      newTags.push(value);
+      updateUserInfo({ tags: newTags });
+    });
+  }
+}
+
 function removeTag(value) {
-  $.get(SESSION_USER_BASE_URL, function(data, status) {
-    console.log(data);
+  $.get('/user', function(data, status) {
     let tags = data.tags;
     let index = tags.indexOf(value);
     if (index > -1) {
-      // -1 means that the value does not exist in the array
       tags.splice(index, 1);
     }
-
-    console.log(tags);
     updateUserInfo({ tags: tags });
   });
 }
 
-// const editPhoto = document.getElementById('edit-profile-picture');
 const editPhoto = $('#edit-profile-picture');
 const editDescription = $('#edit-description');
 const editEducation = $('#edit-education');
@@ -388,7 +379,7 @@ $('#edit-location-container').on('click', '#edit-location', function(event) {
         headers: {
           'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE'
         },
-        url: SESSION_USER_BASE_URL,
+        url: '/user',
         type: 'PATCH',
         data: data,
         success: function(response, textStatus, jqXhr) {
@@ -431,7 +422,7 @@ deleteProfileContainer.on('click', '#delete-profile', function(event) {
       url: '/user',
       type: 'DELETE',
       success: function(user) {
-        $.get('/logout', function(response, status) {
+        $.get('/users/logout', function(response, status) {
           window.location.href = '/';
         });
       }

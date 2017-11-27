@@ -1,13 +1,8 @@
-let profiles = document.querySelectorAll('.profile');
-
-let redirect = function() {
-  window.location.href = 'user-profile';
-};
-
-for (let i = 0; i < profiles.length; ++i) {
-  profiles[i].onclick = function() {
-    redirect();
-  };
+function onSend(event, textarea) {
+  let code = event.keyCode ? event.keyCode : event.which;
+  if (code == 13) {
+    search();
+  }
 }
 
 function createProfile(user) {
@@ -77,17 +72,7 @@ $.get('/user', function(sessionUser, status) {
   });
 });
 
-function onSend(event, textarea) {
-  let code = event.keyCode ? event.keyCode : event.which;
-  if (code == 13) {
-    search();
-  }
-}
-$('#search').on('click', function() {
-  search();
-});
-
-// SEARCH FUNCTION BY NAME
+// SEARCH USERS BY NAME
 function search() {
   $.get('/user', function(sessionUser, status) {
     $('#search-container').parent().remove();
@@ -121,3 +106,7 @@ function search() {
     });
   });
 }
+
+$('#search').on('click', function() {
+  search();
+});

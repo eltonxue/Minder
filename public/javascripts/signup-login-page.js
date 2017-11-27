@@ -1,18 +1,16 @@
 // ************
-// *** AJAX ***
+// *** POST ***
 // ************
 
-const GET_BASE_URL = '/users';
-const POST_BASE_URL = '/users';
-const PATCH_BASE_URL = '/user';
-const DELETE_BASE_URL = '/user';
-
+// Creates a new user and adds them to the user database
 function postUser(name, email, password) {
+  // Disable signup button
   $button = $('#signup');
   $button.removeAttr('id');
   $button.attr('value', 'Signing up...');
+  $button.attr('disabled', true);
 
-  // CONVERT TO OBJECT
+  // Initializes a new user given user information
   let data = {
     name: name,
     email: email,
@@ -38,32 +36,33 @@ function postUser(name, email, password) {
     unreadMessages: {}
   };
 
-  $.get(GET_BASE_URL, function(getData, status) {
-    console.log('GET Request:\nData: ' + getData + '\nStatus: ' + status);
+  // Check if the email is already in the user database
+  $.get('/users', function(allUsers) {
     let exists = false;
-
-    for (let i = 0; i < getData.length; ++i) {
-      if (getData[i].email == email) {
+    allUsers.forEach(function(user) {
+      if (user.email === email) {
         exists = true;
-        break;
       }
-    }
+    });
 
+    // If the user does not exist, add them to the user database and log them in
+    // If not, display email already exists error
     if (!exists) {
-      // First Post registers the user into the database. Second Post logs the user in.
-      $.post(POST_BASE_URL, data, function(postData, status) {
-        let loginData = { email: email, password: password };
+      $.post('/users', data, function(user) {
+        let loginData = { email, password };
         $.post('/users/login', loginData, function(res, status) {
-          // Signup Successful, redirect to self-profile
           if (res.redirect) {
+            // Redirect to /self-profile
             window.location.href = res.redirect;
           }
         });
       });
     } else {
+      // Enable signup button
       $('#signup-email').after("<p class='error'>Email already exists</p>");
       $button.attr('id', 'signup');
       $button.attr('value', 'Signup');
+      $button.attr('disabled', false);
     }
   });
 }
@@ -78,30 +77,31 @@ function validUserLogin() {
 
   let flag = true;
 
-  // Remove login button
+  // Disable login button
   $button = $('#login');
   $button.removeAttr('id');
   $button.attr('value', 'Logging in...');
+  $button.attr('disabled', true);
 
   let data = { email: email, password: password };
 
   $.post('/users/login', data, function(res, status) {
-    console.log(res);
-
     if (res.error == 'email') {
       $('#login-email').after(res.code);
     } else if (res.error == 'password') {
       $('#login-password').after(res.code);
     }
 
-    // Login Successful, redirect to self-profile
+    // Login successful, redirect to /self-profile
     if (res.redirect) {
       window.location.href = res.redirect;
     }
   });
 
+  // Enable login button
   $button.attr('id', 'login');
   $button.attr('value', 'Login');
+  $button.attr('disabled', false);
 }
 
 $('#login-form').submit(function(event) {
@@ -111,7 +111,7 @@ $('#login-form').submit(function(event) {
   $('#login-email').next().remove();
   $('#login-password').next().remove();
 
-  // Manage AJAX calls
+  // Check if login information is valid
   let valid = validUserLogin();
 
   // Clear inputs

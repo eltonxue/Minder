@@ -2,9 +2,9 @@ var express = require('express');
 var mongoose = require('mongoose');
 
 var messageSchema = mongoose.Schema({
-  date: String,
-  sender: { id: String, name: String, image: String },
-  recipient: { id: String, name: String, image: String },
+  date: Number, // Date in unix timestamps
+  sender: Object,
+  recipient: Object,
   message: String,
   room: String
 });

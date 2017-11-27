@@ -1,5 +1,3 @@
-// LOADING INITIAL SUGGESTIONS
-
 const connectionsContainer = $('#your-connections-container');
 const requestsContainer = $('#pending-requests-container');
 const invitesContainer = $('#pending-invites-container');
@@ -14,10 +12,7 @@ function acceptRequest(profile) {
       id: otherUserID
     }),
     contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-
+    success: function(otherUser) {
       let newProfile = createProfile(otherUser);
       connectionsContainer.append(newProfile);
 
@@ -46,10 +41,7 @@ function denyRequest(profile) {
       id: otherUserID
     }),
     contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-
+    success: function(otherUser) {
       profile.remove();
 
       let pendingRequestsHeader = requestsContainer.prev();
@@ -70,10 +62,7 @@ function cancelInvite(profile) {
       id: otherUserID
     }),
     contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-
+    success: function(otherUser) {
       profile.remove();
 
       let pendingInvitesHeader = invitesContainer.prev();

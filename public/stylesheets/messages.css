@@ -106,14 +106,23 @@ input {
 
 .message-item {
   display: flex;
-  width: 100%;
-  padding: 5px 10px;
+  padding: 5px 2px;
 }
 
-.message-sender-name {
-  font-weight: bold;
-  color: #739696;
-  margin-right: 7px;
+.sender {
+  justify-content: flex-end;
+}
+
+.recipient {
+  justify-content: flex-start;
+}
+
+.sender > p {
+  background-color: #d1eced;
+}
+
+.recipient > p {
+  background-color: #ddd;
 }
 
 .profile-icon-image {
@@ -126,7 +135,6 @@ input {
   padding: 15px;
   margin: 0px 10px;
   border-radius: 15px;
-  background-color: #d1eced;
 }
 
 .message-text:hover {

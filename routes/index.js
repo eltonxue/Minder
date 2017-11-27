@@ -4,10 +4,6 @@ var UserModel = require('../schemas/user');
 var auth = require('../utils/utils');
 var router = express.Router();
 
-// ******************
-// *** MIDDLEWARE ***
-// ******************
-
 // **************
 // *** ROUTES ***
 // **************
@@ -16,6 +12,10 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('signup-login-page');
 });
+
+// ******************
+// *** MIDDLEWARE ***
+// ******************
 
 router.use(auth.requireLogin);
 
@@ -68,12 +68,6 @@ router.get('/messages', function(req, res, next) {
 /* GET connections page. */
 router.get('/connections', function(req, res, next) {
   res.render('connections');
-});
-
-/* LOGGING OUT */
-router.get('/logout', function(req, res, next) {
-  req.session.reset();
-  res.redirect('/');
 });
 
 module.exports = router;

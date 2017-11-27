@@ -5,7 +5,7 @@ var UserModel = require('../schemas/user');
 var ChatModel = require('../schemas/chat');
 var router = express.Router();
 
-/* GET generated random users and save to database*/
+// GENERATE RANDOM USERS INTO THE USER DATABASE
 router.get('/', function(req, res) {
   const randomTags = [
     'basketball',
@@ -142,11 +142,9 @@ router.get('/', function(req, res) {
     });
 });
 
+// GENERATE RANDOM CONNECTIONS FOR EACH EXISTING USER IN USER DATABASE
 router.get('/connections', function(req, res) {
-  console.log('connections inside');
-  // Generate random connections & pending connections
   UserModel.find({}, function(err, users) {
-    console.log('connections callback');
     if (err) {
       return res.send(err);
     }
@@ -199,6 +197,7 @@ router.get('/connections', function(req, res) {
   });
 });
 
+// GENERATE PENDING REQUESTS AND INVITES FOR EACH EXISTING USER IN THE USER DATABASE
 router.get('/pending-connections', function(req, res) {
   UserModel.find({}, function(err, users) {
     if (err) {

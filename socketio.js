@@ -7,9 +7,9 @@ module.exports = {
     io = require('socket.io')(server);
     io.on('connection', function(socket) {
       let userId = socket.handshake.query.id;
-      console.log(socket.id);
       sockets[userId] = socket;
       console.log(`User ID: ${userId} has connected.`);
+      console.log(`Socket ID: ${socket.id}`);
 
       let socketHandler = new SocketHandler();
 

@@ -13,7 +13,7 @@ var router = express.Router();
 // req -> what we're RECEIVING to the server, the data
 // res -> what we're SENDING BACK to the client
 
-/* GET users listing. */
+// GET ALL USERS
 router.get('/', function(req, res, next) {
   UserModel.find({}, function(err, users) {
     if (err) {
@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
-/* POST new user with user data*/
+// POST NEW USER TO USER DATABASE
 router.post('/', function(req, res) {
   let hashedPassword = UserModel.hashPassword(req.body.password);
 
@@ -56,46 +56,51 @@ router.post('/', function(req, res) {
     if (err) {
       return res.send(err);
     }
-
     res.json(user);
   });
 });
 
-/* LOGGING IN */
+// LOGGING IN
 router.post('/login', function(req, res, next) {
-  UserModel.findOne({ email: req.body.email }, function(err, user) {
-    if (err) {
-      return res.send(err);
-    }
-
-    if (!user) {
-      res.send({
-        error: 'email',
-        code: "<p class='error'>Email does not exist</p>"
-      });
-    } else {
-      let checkPassword = user.checkPassword(req.body.password);
-      if (checkPassword) {
-        console.log('SUCCESSFULLY LOGGED IN');
-        // Sets a cookie with the user's info
-        req.session.user = user;
-        res.send({ redirect: '/self-profile' });
-      } else {
+  UserModel.findOne({ email: req.body.email })
+    .then(function(user) {
+      if (!user) {
         res.send({
-          error: 'password',
-          code: "<p class='error'>Incorrect Password</p>"
+          error: 'email',
+          code: "<p class='error'>Email does not exist</p>"
         });
+      } else {
+        let checkPassword = user.checkPassword(req.body.password);
+        if (checkPassword) {
+          // Sets a cookie with the user's info
+          req.session.user = user;
+          res.send({ redirect: '/self-profile' });
+        } else {
+          res.send({
+            error: 'password',
+            code: "<p class='error'>Incorrect Password</p>"
+          });
+        }
       }
-    }
-  });
+    })
+    .catch(function(err) {
+      return res.send(err);
+    });
 });
 
-// SEARCH FOR ROOM MESSAGES
+// LOGGING OUT
+router.get('/logout', function(req, res, next) {
+  req.session.reset();
+  res.redirect('/');
+});
+
+// SEARCH MESSAGES DATABASE BY ROOM
 router.get('/search-by-room', function(req, res) {
   let hashedRoom = crypto
     .createHash('md5')
     .update(req.query.room)
     .digest('hex');
+
   ChatModel.find({ room: hashedRoom })
     .then(function(data) {
       let messages = data;
@@ -109,7 +114,7 @@ router.get('/search-by-room', function(req, res) {
     });
 });
 
-// SEARCHING BY IDS
+// SEARCH USER DATABASE BY IDS
 router.get('/search-by-ids', function(req, res) {
   var ids = req.query.ids.split(',');
   ids = ids.map(function(id) {
@@ -124,18 +129,22 @@ router.get('/search-by-ids', function(req, res) {
     });
 });
 
-// SEARCHING BY NAME
+// SEARCH USER DATABASE BY NAME
 router.get('/search-by-name', function(req, res) {
   var name = req.query.name;
   UserModel.find({
     name: new RegExp(`^${name}`, 'i'),
     _id: { $ne: req.session.user._id }
-  }).then(function(users) {
-    res.json(users);
-  });
+  })
+    .then(function(users) {
+      res.json(users);
+    })
+    .catch(function(err) {
+      return res.send(err);
+    });
 });
 
-// SEARCHING FOR SIMILAR TAGS -> responds with a group of users
+// SEARCH USER DATABASE BY SIMILAR TAGS
 router.get('/search-similar-tags', function(req, res) {
   var tags = req.query.tags.split(',');
   UserModel.find({
@@ -173,7 +182,7 @@ router.get('/search-similar-tags', function(req, res) {
     });
 });
 
-// GETTING USERS USING GEOJSON
+// SEARCHING USER DATABASE BY GEOJSON (nearby users)
 router.get('/near', function(req, res) {
   var lat = parseFloat(req.query.lat);
   var lng = parseFloat(req.query.lng);
@@ -189,29 +198,32 @@ router.get('/near', function(req, res) {
     .nin(req.session.user.connections)
     .where('_id')
     .ne(req.session.user.id)
-    .then(function(docs) {
-      console.log(docs);
-      res.json(docs);
+    .then(function(users) {
+      res.json(users);
+    })
+    .catch(function(err) {
+      res.send(err);
     });
 });
 
-// GETTING RANDOM USERS GLOBALLY
+// SEARCHING USER DATABASE BY GLOBAL (global users)
 router.get('/global', function(req, res) {
-  UserModel.find(
-    {
-      _id: {
-        $nin: req.session.user.connections,
-        $ne: req.session.user.id
-      }
-    },
-    function(err, users) {
+  UserModel.find({
+    _id: {
+      $nin: req.session.user.connections,
+      $ne: req.session.user.id
+    }
+  })
+    .then(function(users) {
       let globalUsers = [];
       for (let i = 0; i < parseInt(req.query.results); ++i) {
         globalUsers.push(users[Math.round(Math.random() * users.length)]);
       }
       res.json(globalUsers);
-    }
-  );
+    })
+    .catch(function(err) {
+      return res.send(err);
+    });
 });
 
 module.exports = router;

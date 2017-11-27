@@ -7,11 +7,7 @@ function acceptConnection(id) {
     data: JSON.stringify({
       id: otherUserID
     }),
-    contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-    }
+    contentType: 'application/json'
   });
 }
 
@@ -24,11 +20,7 @@ function denyConnection(id) {
     data: JSON.stringify({
       id: otherUserID
     }),
-    contentType: 'application/json',
-    success: function(otherUser, textStatus, jqXhr) {
-      console.log('Successful Patch!');
-      console.log(otherUser);
-    }
+    contentType: 'application/json'
   });
 }
 
@@ -64,7 +56,6 @@ socket.on('push_friend_request', function(from) {
   let accept = $('<div></div>', { class: 'button accept' });
   accept.text('Accept');
   accept.on('click', function() {
-    console.log(from);
     acceptConnection(from._id);
     removeNotification();
   });

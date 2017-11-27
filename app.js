@@ -60,7 +60,7 @@ app.use(function(req, res, next) {
         return res.send(err);
       }
       if (user) {
-        req.user = user;
+        req.user = user.toObject();
         delete req.user.password; // Delete the password from the session
         req.session.user = user; // Refresh the session value
         res.locals.user = user;
