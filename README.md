@@ -21,3 +21,28 @@ Then, visit http://localhost:3000
 
 In total, there should be 3 terminals open.
 
+# Technologies Used
+
+Front-end:
+- HTML/CSS
+- Javascript/jQuery
+- EJS Templating
+
+Back-end:
+- Node.js
+- ExpressJS
+- MongoDB (MongooseJS)
+
+Packages:
+- Axios
+- Client sessions
+- Web sockets
+- Nodemon
+- Bcrypt
+- Ngrok
+
+APIs:
+- Google Maps API
+- Random User Generator API
+
+
